@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysDictDataMapper">
+
+    <resultMap type="com.ruoyi.common.core.domain.entity.SysDictDataEntity" id="SysDictDataResult">
+        <id property="id" column="id"/>
+        <result property="sort" column="sort"/>
+        <result property="label" column="label"/>
+        <result property="value" column="value"/>
+        <result property="type" column="type"/>
+        <result property="cssClass" column="css_class"/>
+        <result property="listClass" column="list_class"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="enable" column="enable"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectDictDataVo">
+        select id,
+               "sort",
+               label,
+               "value",
+               type,
+               css_class,
+               list_class,
+               is_default,
+               enable,
+               create_by,
+               create_time,
+               remark
+        from "system".sys_dict_data
+    </sql>
+
+    <select id="selectDictDataList" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity"
+            resultMap="SysDictDataResult">
+        <include refid="selectDictDataVo"/>
+        <where>
+            <if test="type != null and type != ''">
+                AND "type" = #{type}
+            </if>
+            <if test="label != null and label != ''">
+                AND label like concat('%', #{label}, '%')
+            </if>
+            <if test="enable != null">
+                AND enable = #{enable}
+            </if>
+        </where>
+        order by "sort" asc
+    </select>
+
+    <select id="selectDictDataByType" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity"
+            resultMap="SysDictDataResult">
+        <include refid="selectDictDataVo"/>
+        where enable = true and "type" = #{type} order by sort asc
+    </select>
+
+    <select id="selectDictLabel" resultType="String">
+        select label
+        from "system".sys_dict_data
+        where "type" = #{type}
+          and "value" = #{value}
+    </select>
+
+    <select id="selectDictDataById" parameterType="String" resultMap="SysDictDataResult">
+        <include refid="selectDictDataVo"/>
+        where id = #{id}::uuid
+    </select>
+
+    <select id="countDictDataByType" resultType="Integer">
+        select count(1)
+        from "system".sys_dict_data
+        where type = #{type}
+    </select>
+
+    <delete id="deleteDictDataById" parameterType="String">
+        delete
+        from "system".sys_dict_data
+        where id = #{id}::uuid
+    </delete>
+
+    <delete id="deleteDictDataByIds" parameterType="String">
+        delete from "system".sys_dict_data where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+    <update id="updateDictData" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity">
+        update "system".sys_dict_data
+        <set>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="label != null and label != ''">label = #{label},</if>
+            <if test="value != null and value != ''">"value" = #{value},</if>
+            <if test="type != null and type != ''">"type" = #{type},</if>
+            <if test="cssClass != null">css_class = #{cssClass},</if>
+            <if test="listClass != null">list_class = #{listClass},</if>
+            <if test="isDefault != null and isDefault != ''">is_default = #{isDefault},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = now()
+        </set>
+        where dict_code = #{dictCode}
+    </update>
+
+    <update id="updateDictDataType" parameterType="String">
+        update "system".sys_dict_data
+        set type = #{newDictType}
+        where type = #{oldDictType}
+    </update>
+
+    <insert id="insertDictData" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity">
+        insert into "system".sys_dict_data(
+        <if test="sort != null">sort,</if>
+        <if test="label != null and label != ''">label,</if>
+        <if test="value != null and value != ''">"value",</if>
+        <if test="type != null and type != ''">"type",</if>
+        <if test="cssClass != null and cssClass != ''">css_class,</if>
+        <if test="listClass != null and listClass != ''">list_class,</if>
+        <if test="isDefault != null and isDefault != ''">is_default,</if>
+        <if test="enable != null">enable,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="sort != null">#{sort},</if>
+        <if test="label != null and label != ''">#{label},</if>
+        <if test="value != null and value != ''">#{value},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="cssClass != null and cssClass != ''">#{cssClass},</if>
+        <if test="listClass != null and listClass != ''">#{listClass},</if>
+        <if test="isDefault != null and isDefault != ''">#{isDefault},</if>
+        <if test="enable != null">#{enable},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        now()
+        )
+    </insert>
+
+</mapper> 

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysPostMapper">
+
+    <resultMap type="com.ruoyi.system.domain.SysPostEntity" id="SysPostResult">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="sort" column="sort"/>
+        <result property="enable" column="enable"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPostVo">
+        select id,
+               code,
+               name,
+               sort,
+               enable,
+               create_by,
+               create_time,
+               remark
+        from "system".sys_post
+    </sql>
+
+    <select id="selectPostList" parameterType="com.ruoyi.system.domain.SysPostEntity" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+        <where>
+            <if test="code != null and code != ''">
+                AND code like concat('%', #{code}, '%')
+            </if>
+            <if test="enable != null and enable != ''">
+                AND enable = #{enable}
+            </if>
+            <if test="name != null and name != ''">
+                AND "name" like concat('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPostAll" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+    </select>
+
+    <select id="selectPostById" parameterType="String" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+        where id = #{postId}
+    </select>
+
+    <select id="selectPostListByUserId" parameterType="String" resultType="String">
+        select p.id
+        from "system".sys_post p
+                 left join sys_user_post up on up.post_id = p.id
+                 left join sys_user u on u.id = up.user_id
+        where u.id = #{userId}
+    </select>
+
+    <select id="selectPostsByUserName" parameterType="String" resultMap="SysPostResult">
+        select p.id, p.name, p.code
+        from "system".sys_post p
+                 left join sys_user_post up on up.post_id = p.id
+                 left join sys_user u on u.id = up.user_id
+        where u.name = #{userName}
+    </select>
+
+    <select id="checkPostNameUnique" parameterType="String" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+        where "name"=#{postName} limit 1
+    </select>
+
+    <select id="checkPostCodeUnique" parameterType="String" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+        where code=#{code} limit 1
+    </select>
+
+    <update id="updatePost" parameterType="com.ruoyi.system.domain.SysPostEntity">
+        update "system".sys_post
+        <set>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="name != null and name != ''">"name" = #{name},</if>
+            <if test="sort != null and sort != ''">sort = #{sort},</if>
+            <if test="enable != null and enable != ''">enable = #{enable},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = now()
+        </set>
+        where post_id = #{postId}
+    </update>
+
+    <insert id="insertPost" parameterType="com.ruoyi.system.domain.SysPostEntity" useGeneratedKeys="true"
+            keyProperty="postId">
+        insert into "system".sys_post(
+        <if test="id != null and id != ''">id,</if>
+        <if test="code != null and code != ''">code,</if>
+        <if test="name != null and name != ''">name,</if>
+        <if test="sort != null and sort != ''">sort,</if>
+        <if test="enable != null and enable != ''">enable,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != ''">#{id}::uuid,</if>
+        <if test="code != null and code != ''">#{code},</if>
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="sort != null and sort != ''">#{sort},</if>
+        <if test="enable != null and enable != ''">#{enable},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        now()
+        )
+    </insert>
+
+    <delete id="deletePostById" parameterType="String">
+        delete
+        from "system".sys_post
+        where id = #{postId}
+    </delete>
+
+    <delete id="deletePostByIds" parameterType="String">
+        delete from "system".sys_post where id in
+        <foreach collection="array" item="postId" open="(" separator="," close=")">
+            #{postId}
+        </foreach>
+    </delete>
+
+</mapper> 

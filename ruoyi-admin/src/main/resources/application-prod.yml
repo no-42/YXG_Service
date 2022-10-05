@@ -1,0 +1,16 @@
+# 数据源配置
+spring:
+  datasource:
+    # 主库数据源
+    master:
+      url: jdbc:postgresql://81.69.249.91:5432/shop
+      username: postgres
+      password: 5ZwHkMb3yXZ7DAxIvqWmyI1K
+    # 从库数据源
+    slave:
+      # 从数据源开关/默认关闭
+      enabled: false
+      url:
+      username:
+      password:
+    type: com.zaxxer.hikari.HikariDataSource

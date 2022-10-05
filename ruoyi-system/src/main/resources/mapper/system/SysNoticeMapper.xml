@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysNoticeMapper">
+
+    <resultMap type="com.ruoyi.system.domain.SysNoticeEntity" id="SysNoticeResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="enable" column="enable"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectNoticeVo">
+        select id,
+               title,
+               type,
+               content,
+               enable,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from "system".sys_notice
+    </sql>
+
+    <select id="selectNoticeById" parameterType="String" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        where id = #{noticeId}
+    </select>
+
+    <select id="selectNoticeList" parameterType="com.ruoyi.system.domain.SysNoticeEntity" resultMap="SysNoticeResult">
+        <include refid="selectNoticeVo"/>
+        <where>
+            <if test="title != null and title != ''">
+                AND title like concat('%', #{title}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND "type" = #{type}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by like concat('%', #{createBy}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertNotice" parameterType="com.ruoyi.system.domain.SysNoticeEntity">
+        insert into "system".sys_notice (
+        <if test="title != null and title != '' ">title,</if>
+        <if test="type != null and type != '' ">type,</if>
+        <if test="content != null and content != '' ">content,</if>
+        <if test="enable != null and enable != '' ">enable,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="title != null and title != ''">#{title},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="content != null and content != ''">#{content},</if>
+        <if test="enable != null and enable != ''">#{enable},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        now()
+        )
+    </insert>
+
+    <update id="updateNotice" parameterType="com.ruoyi.system.domain.SysNoticeEntity">
+        update "system".sys_notice
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="type != null and type != ''">"type" = #{type},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="enable != null and enable != ''">enable = #{enable},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = now()
+        </set>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteNoticeById" parameterType="String">
+        delete
+        from "system".sys_notice
+        where id = #{noticeId}
+    </delete>
+
+    <delete id="deleteNoticeByIds" parameterType="String">
+        delete from "system".sys_notice where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+</mapper>

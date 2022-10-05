@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.quartz.mapper.SysJobMapper">
+
+    <resultMap type="com.ruoyi.quartz.domain.SysJob" id="SysJobResult">
+        <id property="id" column="job_id"/>
+        <result property="name" column="name"/>
+        <result property="group" column="group"/>
+        <result property="invokeTarget" column="invoke_target"/>
+        <result property="cronExpression" column="cron_expression"/>
+        <result property="misfirePolicy" column="misfire_policy"/>
+        <result property="concurrent" column="concurrent"/>
+        <result property="enable" column="enable"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectJobVo">
+        select id,
+               "name",
+               "group",
+               invoke_target,
+               cron_expression,
+               misfire_policy,
+               concurrent,
+               enable,
+               create_by,
+               create_time,
+               remark
+        from "system".sys_job
+    </sql>
+
+    <select id="selectJobList" parameterType="com.ruoyi.quartz.domain.SysJob" resultMap="SysJobResult">
+        <include refid="selectJobVo"/>
+        <where>
+            <if test="name != null and name != ''">
+                AND "name" like concat('%', #{name}, '%')
+            </if>
+            <if test="jobGroup != null and jobGroup != ''">
+                AND "group" = #{group}
+            </if>
+            <if test="enable != null">
+                AND enable = #{enable}
+            </if>
+            <if test="invokeTarget != null and invokeTarget != ''">
+                AND invoke_target like concat('%', #{invokeTarget}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectJobAll" resultMap="SysJobResult">
+        <include refid="selectJobVo"/>
+    </select>
+
+    <select id="selectJobById" parameterType="String" resultMap="SysJobResult">
+        <include refid="selectJobVo"/>
+        where id = #{id}::uuid
+    </select>
+
+    <delete id="deleteJobById" parameterType="String">
+        delete
+        from "system".sys_job
+        where id = #{id}::uuid
+    </delete>
+
+    <delete id="deleteJobByIds" parameterType="String">
+        delete from "system".sys_job where id in
+        <foreach collection="ids" item="jobId" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+
+    <update id="updateJob" parameterType="com.ruoyi.quartz.domain.SysJob">
+        update "system".sys_job
+        <set>
+            <if test="name != null and name != ''">"name" = #{name},</if>
+            <if test="group != null and group != ''">"group" = #{group},</if>
+            <if test="invokeTarget != null and invokeTarget != ''">invoke_target = #{invokeTarget},</if>
+            <if test="cronExpression != null and cronExpression != ''">cron_expression = #{cronExpression},</if>
+            <if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy = #{misfirePolicy},</if>
+            <if test="concurrent != null and concurrent != ''">concurrent = #{concurrent},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = now()
+        </set>
+        where id = #{id}::uuid
+    </update>
+
+    <insert id="insertJob" parameterType="com.ruoyi.quartz.domain.SysJob" useGeneratedKeys="true" keyProperty="jobId">
+        insert into "system".sys_job(
+        <if test="id != null and id != ''">id,</if>
+        <if test="name != null and name != ''">"name",</if>
+        <if test="group != null and group != ''">"group",</if>
+        <if test="invokeTarget != null and invokeTarget != ''">invoke_target,</if>
+        <if test="cronExpression != null and cronExpression != ''">cron_expression,</if>
+        <if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy,</if>
+        <if test="concurrent != null and concurrent != ''">concurrent,</if>
+        <if test="enable != null">enable,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != ''">#{id}::uuid,</if>
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="group != null and group != ''">#{group},</if>
+        <if test="invokeTarget != null and invokeTarget != ''">#{invokeTarget},</if>
+        <if test="cronExpression != null and cronExpression != ''">#{cronExpression},</if>
+        <if test="misfirePolicy != null and misfirePolicy != ''">#{misfirePolicy},</if>
+        <if test="concurrent != null and concurrent != ''">#{concurrent},</if>
+        <if test="enable != null">#{enable},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        now()
+        )
+    </insert>
+
+</mapper> 

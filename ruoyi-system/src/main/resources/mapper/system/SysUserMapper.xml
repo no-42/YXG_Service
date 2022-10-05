@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysUserMapper">
+
+    <resultMap type="com.ruoyi.common.core.domain.entity.SysUserEntity" id="SysUserResult">
+        <id property="id" column="id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="enable" column="enable"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <association property="dept" column="dept_id" columnPrefix="dept_"
+                     javaType="com.ruoyi.common.core.domain.entity.SysDeptEntity" resultMap="deptResult"/>
+        <collection property="roles" javaType="java.util.List" columnPrefix="role_" resultMap="RoleResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="com.ruoyi.common.core.domain.entity.SysDeptEntity">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="name" column="name"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="enable" column="enable"/>
+    </resultMap>
+
+    <resultMap id="RoleResult" type="com.ruoyi.common.core.domain.entity.SysRoleEntity">
+        <id property="id" column="role_id"/>
+        <result property="name" column="role_name"/>
+        <result property="key" column="role_key"/>
+        <result property="sort" column="role_sort"/>
+        <result property="dataScope" column="role_data_scope"/>
+        <result property="enable" column="role_enable"/>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select u.id,
+               u.dept_id,
+               u.user_name,
+               u.nick_name,
+               u.email,
+               u.avatar,
+               u.phone,
+               u.password,
+               u.sex,
+               u.enable,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_by,
+               u.create_time,
+               u.remark,
+               d.id         as dept_id,
+               d.parent_id  as dept_parent_id,
+               d.ancestors  as dept_ancestors,
+               d.name       as dept_name,
+               d.order_num  as dept_order_num,
+               d.leader     as dept_leade,
+               d.enable     as dept_enable,
+               r.id         as role_id,
+               r.name       as role_name,
+               r.key       as role_key,
+               r.sort       as role_sort,
+               r.data_scope as role_data_scope,
+               r.enable     as role_enable
+        from "system".sys_user u
+                 left join "system".sys_dept d on u.id = d.id
+                 left join "system".sys_user_role ur on u.id = ur.user_id
+                 left join "system".sys_role r on r.id = ur.role_id
+    </sql>
+
+    <select id="selectUserList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
+            resultMap="SysUserResult">
+        select u.id,
+        u.dept_id,
+        u.nick_name,
+        u.user_name,
+        u.email,
+        u.avatar,
+        u.phone,
+        u.sex,
+        u.enable,
+        u.del_flag,
+        u.login_ip,
+        u.login_date,
+        u.create_by,
+        u.create_time,
+        u.remark,
+        d.name as dept_name,
+        d.leader as dept_leader
+        from "system".sys_user u
+        left join "system".sys_dept d on u.dept_id = d.id
+        where u.del_flag = '0'
+        <if test="id != null and id != 0">
+            AND u.id = #{d}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="enable != null">
+            AND u.status = #{status}
+        </if>
+        <if test="phone != null and phone != ''">
+            AND u.phone like concat('%', #{phone}, '%')
+        </if>
+        <!--        <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
+        <!--            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
+        <!--        </if>-->
+        <!--        <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
+        <!--            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
+        <!--        </if>-->
+        <if test="deptId != null and deptId != ''">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.id FROM "system".sys_dept t WHERE find_in_set(#{deptId},
+            ancestors) ))
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectAllocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
+            resultMap="SysUserResult">
+        select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phone, u.enable, u.create_time
+        from "system".sys_user u
+        left join "system".sys_dept d on u.dept_id = d.id
+        left join "system".sys_user_role ur on u.user_id = ur.user_id
+        left join "system".sys_role r on r.id = ur.role_id
+        where u.del_flag = false and r.role_id = #{roleId}
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND u.phone like concat('%', #{phone}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectUnallocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
+            resultMap="SysUserResult">
+        select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phone, u.enable, u.create_time
+        from "system".sys_user u
+        left join "system".sys_dept d on u.dept_id = d.dept_id
+        left join "system".sys_user_role ur on u.user_id = ur.user_id
+        left join "system".sys_role r on r.id = ur.role_id
+        where u.del_flag = false and (r.id != #{roleId} or r.id IS NULL)
+        and u.id not in (select u.id from "system".sys_user u inner join "system".sys_user_role ur on u.id = ur.user_id and
+        ur.role_id = #{roleId})
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND u.phone like concat('%', #{phone}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.user_name = #{userName} and u.del_flag = false
+    </select>
+
+    <select id="selectUserById" parameterType="String" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.id = #{userId}::uuid
+    </select>
+
+    <select id="checkUserNameUnique" parameterType="String" resultType="int">
+        select count(1)
+        from "system".sys_user
+        where user_name = #{userName}
+          and del_flag = false limit 1
+    </select>
+
+    <select id="checkPhoneUnique" parameterType="String" resultMap="SysUserResult">
+        select user_id, phone
+        from "system".sys_user
+        where phone = #{phone}
+          and del_flag = false limit 1
+    </select>
+
+    <select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
+        select user_id, email
+        from "system".sys_user
+        where email = #{email}
+          and del_flag = false limit 1
+    </select>
+
+    <insert id="insertUser" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity" useGeneratedKeys="true"
+            keyProperty="userId">
+        insert into "system".sys_user(
+        <if test="id != null and id != ''">id,</if>
+        <if test="deptId != null and deptId != 0">dept_id,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="nickName != null and nickName != ''">nick_name,</if>
+        <if test="email != null and email != ''">email,</if>
+        <if test="avatar != null and avatar != ''">avatar,</if>
+        <if test="phone != null and phone != ''">phone,</if>
+        <if test="sex != null and sex != ''">sex,</if>
+        <if test="password != null and password != ''">password,</if>
+        <if test="enable != null">enable,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="id != null and id != ''">#{id}::uuid,</if>
+        <if test="deptId != null and deptId != ''">#{deptId},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="nickName != null and nickName != ''">#{nickName},</if>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="avatar != null and avatar != ''">#{avatar},</if>
+        <if test="phone != null and phone != ''">#{phone},</if>
+        <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="password != null and password != ''">#{password},</if>
+        <if test="enable != null">#{enable},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        now()
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity">
+        update "system".sys_user
+        <set>
+            <if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="phone != null ">phone = #{phone},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = now()
+        </set>
+        where id = #{id}::uuid
+    </update>
+
+
+    <update id="updateUserAvatar" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity">
+        update "system".sys_user
+        set avatar = #{avatar}
+        where user_name = #{userName}
+    </update>
+
+    <update id="resetUserPwd" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity">
+        update "system".sys_user
+        set password = #{password}
+        where user_name = #{userName}
+    </update>
+
+    <delete id="deleteUserById" parameterType="String">
+        update "system".sys_user
+        set del_flag = true
+        where id = #{id}::uuid
+    </delete>
+
+    <delete id="deleteUserByIds" parameterType="String">
+        update "system".sys_user set del_flag = true where id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}::uuid
+        </foreach>
+    </delete>
+
+</mapper> 
