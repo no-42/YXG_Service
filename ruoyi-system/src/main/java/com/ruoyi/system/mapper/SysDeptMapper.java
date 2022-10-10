@@ -74,11 +74,11 @@ public interface SysDeptMapper extends BaseMapper<SysDeptEntity> {
     /**
      * 校验部门名称是否唯一
      *
-     * @param deptName 部门名称
+     * @param name 部门名称
      * @param parentId 父部门ID
      * @return 结果
      */
-    SysDeptEntity checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") String parentId);
+    SysDeptEntity checkDeptNameUnique(@Param("name") String name, @Param("parentId") String parentId);
 
     /**
      * 新增部门信息

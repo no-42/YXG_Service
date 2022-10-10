@@ -89,7 +89,7 @@
 
     <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="任务编号" width="100" align="center" prop="id"/>
+<!--      <el-table-column label="任务编号" width="100" align="center" prop="id"/>-->
       <el-table-column label="任务名称" align="center" prop="name" :show-overflow-tooltip="true"/>
       <el-table-column label="任务组名" align="center" prop="group">
         <template #default="scope">
@@ -102,8 +102,6 @@
         <template #default="scope">
           <el-switch
               v-model="scope.row.enable"
-              active-value="true"
-              inactive-value="false"
               @change="handleStatusChange(scope.row)"
           ></el-switch>
         </template>
@@ -235,8 +233,8 @@
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.enable">
-                <el-radio-button label="true">开启</el-radio-button>
-                <el-radio-button label="false">关闭</el-radio-button>
+                <el-radio-button :label="true">开启</el-radio-button>
+                <el-radio-button :label="false">关闭</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -273,8 +271,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="任务状态：">
-              <div v-if="form.status == 0">正常</div>
-              <div v-else-if="form.status == 1">失败</div>
+              <div v-if="form.enable">正常</div>
+              <div v-else>失败</div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -303,6 +301,8 @@
 </template>
 
 <script setup name="Job">
+import {ref, getCurrentInstance, reactive, toRefs} from "vue"
+import {useRouter} from 'vue-router'
 import {listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus} from "@/api/monitor/job";
 
 const router = useRouter();
@@ -329,7 +329,7 @@ const data = reactive({
     pageSize: 10,
     name: undefined,
     group: undefined,
-    status: undefined
+    enable: undefined
   },
   rules: {
     name: [{required: true, message: "任务名称不能为空", trigger: "blur"}],
@@ -352,7 +352,7 @@ function getList() {
 
 /** 任务组名字典翻译 */
 function jobGroupFormat(row, column) {
-  return proxy.selectDictLabel(sys_job_group.value, row.jobGroup);
+  return proxy.selectDictLabel(sys_job_group.value, row.group);
 }
 
 /** 取消按钮 */
@@ -390,8 +390,8 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.jobId);
-  single.value = selection.length != 1;
+  ids.value = selection.map(item => item.id);
+  single.value = selection.length !== 1;
   multiple.value = !selection.length;
 }
 
@@ -414,24 +414,23 @@ function handleCommand(command, row) {
 
 // 任务状态修改
 function handleStatusChange(row) {
-  let text = !row.enable ? "启用" : "停用";
-  proxy.$modal.confirm('确认要"' + text + '""' + row.jobName + '"任务吗?').then(function () {
+  let text = row.enable ? "启用" : "停用";
+  proxy.$modal.confirm('确认要"' + text + '""' + row.name + '"任务吗?').then(function () {
     return changeJobStatus(row.id, row.enable);
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
-    row.status = row.status === "0" ? "1" : "0";
+    row.status = !row.status;
   });
 }
 
 /* 立即执行一次 */
 function handleRun(row) {
-  proxy.$modal.confirm('确认要立即执行一次"' + row.jobName + '"任务吗?').then(function () {
+  proxy.$modal.confirm('确认要立即执行一次"' + row.name + '"任务吗?').then(function () {
     return runJob(row.id, row.group);
   }).then(() => {
     proxy.$modal.msgSuccess("执行成功");
-  }).catch(() => {
-  });
+  })
 }
 
 /** 任务详细信息 */
@@ -469,7 +468,7 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const jobId = row.jobId || ids.value;
+  const jobId = row.id || ids.value;
   getJob(jobId).then(response => {
     form.value = response.data;
     open.value = true;
@@ -481,7 +480,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["jobRef"].validate(valid => {
     if (valid) {
-      if (form.value.id != undefined) {
+      if (form.value.id !== undefined) {
         updateJob(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -506,8 +505,7 @@ function handleDelete(row) {
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {
-  });
+  })
 }
 
 /** 导出按钮操作 */

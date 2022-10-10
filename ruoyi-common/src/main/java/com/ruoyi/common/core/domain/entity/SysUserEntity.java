@@ -7,6 +7,7 @@ import javax.validation.constraints.*;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ruoyi.common.core.domain.IdDateEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,7 +87,7 @@ public class SysUserEntity extends IdDateEntity {
     /**
      * 密码
      */
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField("password")
     private String password;
 

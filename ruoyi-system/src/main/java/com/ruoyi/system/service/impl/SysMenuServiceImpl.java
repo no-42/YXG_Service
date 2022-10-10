@@ -424,7 +424,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     private List<SysMenuEntity> getChildList(List<SysMenuEntity> list, SysMenuEntity t) {
         List<SysMenuEntity> tlist = new ArrayList<>();
         for (SysMenuEntity n : list) {
-            if (n.getParentId() != null && n.getParentId().equals(t.getParentId())) {
+            if (n.getParentId() != null && n.getParentId().equals(t.getId())) {
                 tlist.add(n);
             }
         }

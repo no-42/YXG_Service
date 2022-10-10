@@ -72,9 +72,9 @@ public class SysJob extends IdDateEntity {
     /**
      * 是否并发执行（0允许 1禁止）
      */
-    @Excel(name = "并发执行", readConverterExp = "0=允许,1=禁止")
+    @Excel(name = "并发执行", readConverterExp = "true=允许,false=禁止")
     @TableField("concurrent")
-    private String concurrent;
+    private Boolean concurrent;
 
     /**
      * 任务状态（0正常 1暂停）

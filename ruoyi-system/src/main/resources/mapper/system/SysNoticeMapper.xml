@@ -33,7 +33,7 @@
 
     <select id="selectNoticeById" parameterType="String" resultMap="SysNoticeResult">
         <include refid="selectNoticeVo"/>
-        where id = #{noticeId}
+        where id = #{noticeId}::uuid
     </select>
 
     <select id="selectNoticeList" parameterType="com.ruoyi.system.domain.SysNoticeEntity" resultMap="SysNoticeResult">
@@ -56,7 +56,7 @@
         <if test="title != null and title != '' ">title,</if>
         <if test="type != null and type != '' ">type,</if>
         <if test="content != null and content != '' ">content,</if>
-        <if test="enable != null and enable != '' ">enable,</if>
+        <if test="enable != null">enable,</if>
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
@@ -64,7 +64,7 @@
         <if test="title != null and title != ''">#{title},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="content != null and content != ''">#{content},</if>
-        <if test="enable != null and enable != ''">#{enable},</if>
+        <if test="enable != null">#{enable},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         now()
@@ -77,17 +77,17 @@
             <if test="title != null and title != ''">title = #{title},</if>
             <if test="type != null and type != ''">"type" = #{type},</if>
             <if test="content != null">content = #{content},</if>
-            <if test="enable != null and enable != ''">enable = #{enable},</if>
+            <if test="enable != null">enable = #{enable},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where notice_id = #{noticeId}
+        where id = #{id}::uuid
     </update>
 
     <delete id="deleteNoticeById" parameterType="String">
         delete
         from "system".sys_notice
-        where id = #{noticeId}
+        where id = #{noticeId}::uuid
     </delete>
 
     <delete id="deleteNoticeByIds" parameterType="String">

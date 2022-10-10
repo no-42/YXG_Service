@@ -12,26 +12,26 @@
     <select id="checkMenuExistRole" resultType="Integer">
         select count(1)
         from "system".sys_role_menu
-        where menu_id = #{menuId}
+        where menu_id = #{menuId}::uuid
     </select>
 
     <delete id="deleteRoleMenuByRoleId" parameterType="String">
         delete
         from "system".sys_role_menu
-        where role_id = #{roleId}
+        where role_id = #{roleId}::uuid
     </delete>
 
     <delete id="deleteRoleMenu" parameterType="String">
         delete from "system".sys_role_menu where role_id in
         <foreach collection="array" item="roleId" open="(" separator="," close=")">
-            #{roleId}
+            #{roleId}::uuid
         </foreach>
     </delete>
 
     <insert id="batchRoleMenu">
         insert into "system".sys_role_menu(role_id, menu_id) values
         <foreach item="item" index="index" collection="list" separator=",">
-            (#{item.roleId},#{item.menuId})
+            (#{item.roleId}::uuid,#{item.menuId}::uuid)
         </foreach>
     </insert>
 

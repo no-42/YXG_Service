@@ -105,7 +105,7 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where dict_code = #{dictCode}
+        where id = #{id}::uuid
     </update>
 
     <update id="updateDictDataType" parameterType="String">

@@ -130,4 +130,6 @@ public class SysOperLogEntity extends IdEntity {
     @TableField("oper_time")
     private Date operTime;
 
+    private Integer[] businessTypes;
+
 }

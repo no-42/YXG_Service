@@ -80,19 +80,19 @@
             <!--                and date_format(oper_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
             <!--            </if>-->
         </where>
-        order by oper_id desc
+        order by id desc
     </select>
 
     <delete id="deleteOperLogByIds" parameterType="String">
         delete from "system".sys_oper_log where id in
         <foreach collection="array" item="operId" open="(" separator="," close=")">
-            #{operId}
+            #{operId}::uuid
         </foreach>
     </delete>
 
     <select id="selectOperLogById" parameterType="String" resultMap="SysOperLogResult">
         <include refid="selectOperLogVo"/>
-        where id = #{operId}
+        where id = #{operId}::uuid
     </select>
 
     <update id="cleanOperLog">

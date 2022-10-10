@@ -68,8 +68,8 @@ public class SysDeptController extends BaseController {
     /**
      * 获取部门下拉树列表
      */
-    @GetMapping("/treeselect")
-    public AjaxResult treeselect(SysDeptEntity dept) {
+    @GetMapping("/treeSelect")
+    public AjaxResult treeSelect(SysDeptEntity dept) {
         List<SysDeptEntity> depts = deptService.selectDeptList(dept);
         return AjaxResult.success(deptService.buildDeptTreeSelect(depts));
     }
@@ -77,8 +77,8 @@ public class SysDeptController extends BaseController {
     /**
      * 加载对应角色部门列表树
      */
-    @GetMapping(value = "/roleDeptTreeselect/{roleId}")
-    public AjaxResult roleDeptTreeselect(@PathVariable("roleId") String roleId) {
+    @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
+    public AjaxResult roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
         List<SysDeptEntity> depts = deptService.selectDeptList(new SysDeptEntity());
         AjaxResult ajax = AjaxResult.success();
         ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));

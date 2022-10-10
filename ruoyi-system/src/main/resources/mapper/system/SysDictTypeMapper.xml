@@ -48,7 +48,7 @@
 
     <select id="selectDictTypeById" parameterType="String" resultMap="SysDictTypeResult">
         <include refid="selectDictTypeVo"/>
-        where id = #{dictId}
+        where id = #{dictId}::uuid
     </select>
 
     <select id="selectDictTypeByType" parameterType="String" resultMap="SysDictTypeResult">
@@ -84,7 +84,7 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where dict_id = #{dictId}
+        where id = #{id}::uuid
     </update>
 
     <insert id="insertDictType" parameterType="com.ruoyi.common.core.domain.entity.SysDictTypeEntity">

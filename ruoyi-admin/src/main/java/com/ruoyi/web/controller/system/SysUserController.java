@@ -96,7 +96,7 @@ public class SysUserController extends BaseController {
         AjaxResult ajax = AjaxResult.success();
         List<SysRoleEntity> roles = roleService.selectRoleAll();
         SysUserEntity user = userService.selectUserById(userId);
-        ajax.put("roles", user.isAdmin() ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        ajax.put("roles", user != null && user.isAdmin() ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         ajax.put("posts", postService.selectPostAll());
         if (StringUtils.isNotNull(userId)) {
             SysUserEntity sysUserEntity = userService.selectUserById(userId);

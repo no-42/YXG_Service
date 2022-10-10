@@ -105,14 +105,14 @@
         from "system".sys_user u
         left join "system".sys_dept d on u.dept_id = d.id
         where u.del_flag = '0'
-        <if test="id != null and id != 0">
-            AND u.id = #{d}
+        <if test="id != null and id != ''">
+            AND u.id = #{d}::uuid
         </if>
         <if test="userName != null and userName != ''">
             AND u.user_name like concat('%', #{userName}, '%')
         </if>
         <if test="enable != null">
-            AND u.status = #{status}
+            AND u.enable = #{enable}
         </if>
         <if test="phone != null and phone != ''">
             AND u.phone like concat('%', #{phone}, '%')
@@ -124,11 +124,11 @@
         <!--            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
         <!--        </if>-->
         <if test="deptId != null and deptId != ''">
-            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.id FROM "system".sys_dept t WHERE find_in_set(#{deptId},
-            ancestors) ))
+            AND (u.dept_id = #{deptId}::uuid OR u.dept_id IN ( SELECT t.id FROM "system".sys_dept t WHERE #{deptId}::uuid  = ANY(string_to_array(ancestors,',')::uuid[]))
+            )
         </if>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <!-- ${params.dataScope} -->
     </select>
 
     <select id="selectAllocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
@@ -136,9 +136,9 @@
         select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phone, u.enable, u.create_time
         from "system".sys_user u
         left join "system".sys_dept d on u.dept_id = d.id
-        left join "system".sys_user_role ur on u.user_id = ur.user_id
+        left join "system".sys_user_role ur on u.id = ur.user_id
         left join "system".sys_role r on r.id = ur.role_id
-        where u.del_flag = false and r.role_id = #{roleId}
+        where u.del_flag = false and r.id = #{roleId}::uuid
         <if test="userName != null and userName != ''">
             AND u.user_name like concat('%', #{userName}, '%')
         </if>
@@ -146,19 +146,19 @@
             AND u.phone like concat('%', #{phone}, '%')
         </if>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <!-- ${params.dataScope} -->
     </select>
 
     <select id="selectUnallocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
             resultMap="SysUserResult">
         select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phone, u.enable, u.create_time
         from "system".sys_user u
-        left join "system".sys_dept d on u.dept_id = d.dept_id
-        left join "system".sys_user_role ur on u.user_id = ur.user_id
+        left join "system".sys_dept d on u.dept_id = d.id
+        left join "system".sys_user_role ur on u.id = ur.user_id
         left join "system".sys_role r on r.id = ur.role_id
-        where u.del_flag = false and (r.id != #{roleId} or r.id IS NULL)
+        where u.del_flag = false and (r.id != #{roleId}::uuid or r.id IS NULL)
         and u.id not in (select u.id from "system".sys_user u inner join "system".sys_user_role ur on u.id = ur.user_id and
-        ur.role_id = #{roleId})
+        ur.role_id = #{roleId}::uuid)
         <if test="userName != null and userName != ''">
             AND u.user_name like concat('%', #{userName}, '%')
         </if>
@@ -166,7 +166,7 @@
             AND u.phone like concat('%', #{phone}, '%')
         </if>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <!-- ${params.dataScope} -->
     </select>
 
     <select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
@@ -187,24 +187,24 @@
     </select>
 
     <select id="checkPhoneUnique" parameterType="String" resultMap="SysUserResult">
-        select user_id, phone
+        select id, phone
         from "system".sys_user
         where phone = #{phone}
           and del_flag = false limit 1
     </select>
 
     <select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
-        select user_id, email
+        select id, email
         from "system".sys_user
         where email = #{email}
           and del_flag = false limit 1
     </select>
 
     <insert id="insertUser" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity" useGeneratedKeys="true"
-            keyProperty="userId">
+            keyProperty="id">
         insert into "system".sys_user(
         <if test="id != null and id != ''">id,</if>
-        <if test="deptId != null and deptId != 0">dept_id,</if>
+        <if test="deptId != null and deptId != ''">dept_id,</if>
         <if test="userName != null and userName != ''">user_name,</if>
         <if test="nickName != null and nickName != ''">nick_name,</if>
         <if test="email != null and email != ''">email,</if>
@@ -218,7 +218,7 @@
         create_time
         )values(
         <if test="id != null and id != ''">#{id}::uuid,</if>
-        <if test="deptId != null and deptId != ''">#{deptId},</if>
+        <if test="deptId != null and deptId != ''">#{deptId}::uuid,</if>
         <if test="userName != null and userName != ''">#{userName},</if>
         <if test="nickName != null and nickName != ''">#{nickName},</if>
         <if test="email != null and email != ''">#{email},</if>
@@ -236,7 +236,7 @@
     <update id="updateUser" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity">
         update "system".sys_user
         <set>
-            <if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
+            <if test="deptId != null and deptId != ''">dept_id = #{deptId}::uuid,</if>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
             <if test="email != null ">email = #{email},</if>

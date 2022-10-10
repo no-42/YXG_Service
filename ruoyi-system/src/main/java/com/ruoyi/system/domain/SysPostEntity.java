@@ -1,6 +1,7 @@
 package com.ruoyi.system.domain;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -45,9 +46,9 @@ public class SysPostEntity extends IdDateEntity {
      * 岗位排序
      */
     @Excel(name = "岗位排序")
-    @NotBlank(message = "显示顺序不能为空")
+    @NotNull(message = "显示顺序不能为空")
     @TableField("sort")
-    private String sort;
+    private Integer sort;
 
     /**
      * 状态（0正常 1停用）

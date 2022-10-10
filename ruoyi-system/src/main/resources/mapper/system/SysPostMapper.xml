@@ -50,23 +50,23 @@
 
     <select id="selectPostById" parameterType="String" resultMap="SysPostResult">
         <include refid="selectPostVo"/>
-        where id = #{postId}
+        where id = #{postId}::uuid
     </select>
 
     <select id="selectPostListByUserId" parameterType="String" resultType="String">
         select p.id
         from "system".sys_post p
-                 left join sys_user_post up on up.post_id = p.id
-                 left join sys_user u on u.id = up.user_id
-        where u.id = #{userId}
+                 left join "system".sys_user_post up on up.post_id = p.id
+                 left join "system".sys_user u on u.id = up.user_id
+        where u.id = #{userId}::uuid
     </select>
 
     <select id="selectPostsByUserName" parameterType="String" resultMap="SysPostResult">
         select p.id, p.name, p.code
         from "system".sys_post p
-                 left join sys_user_post up on up.post_id = p.id
-                 left join sys_user u on u.id = up.user_id
-        where u.name = #{userName}
+                 left join "system".sys_user_post up on up.post_id = p.id
+                 left join "system".sys_user u on u.id = up.user_id
+        where u.user_name = #{userName}
     </select>
 
     <select id="checkPostNameUnique" parameterType="String" resultMap="SysPostResult">
@@ -84,13 +84,13 @@
         <set>
             <if test="code != null and code != ''">code = #{code},</if>
             <if test="name != null and name != ''">"name" = #{name},</if>
-            <if test="sort != null and sort != ''">sort = #{sort},</if>
-            <if test="enable != null and enable != ''">enable = #{enable},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="enable != null">enable = #{enable},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where post_id = #{postId}
+        where id = #{id}::uuid
     </update>
 
     <insert id="insertPost" parameterType="com.ruoyi.system.domain.SysPostEntity" useGeneratedKeys="true"
@@ -99,8 +99,8 @@
         <if test="id != null and id != ''">id,</if>
         <if test="code != null and code != ''">code,</if>
         <if test="name != null and name != ''">name,</if>
-        <if test="sort != null and sort != ''">sort,</if>
-        <if test="enable != null and enable != ''">enable,</if>
+        <if test="sort != null">sort,</if>
+        <if test="enable != null">enable,</if>
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
@@ -108,8 +108,8 @@
         <if test="id != null and id != ''">#{id}::uuid,</if>
         <if test="code != null and code != ''">#{code},</if>
         <if test="name != null and name != ''">#{name},</if>
-        <if test="sort != null and sort != ''">#{sort},</if>
-        <if test="enable != null and enable != ''">#{enable},</if>
+        <if test="sort != null">#{sort},</if>
+        <if test="enable != null">#{enable},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         now()
@@ -119,13 +119,13 @@
     <delete id="deletePostById" parameterType="String">
         delete
         from "system".sys_post
-        where id = #{postId}
+        where id = #{postId}::uuid
     </delete>
 
     <delete id="deletePostByIds" parameterType="String">
         delete from "system".sys_post where id in
         <foreach collection="array" item="postId" open="(" separator="," close=")">
-            #{postId}
+            #{postId}::uuid
         </foreach>
     </delete>
 

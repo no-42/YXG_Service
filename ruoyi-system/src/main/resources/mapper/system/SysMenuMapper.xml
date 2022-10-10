@@ -40,7 +40,7 @@
                type,
                visible,
                enable,
-               ifnull(perms, '') as perms,
+               COALESCE(perms, '') as perms,
                icon,
                create_time
         from "system".sys_menu
@@ -51,7 +51,7 @@
         <include refid="selectMenuVo"/>
         <where>
             <if test="name != null and name != ''">
-                AND name like concat('%', #{name}, '%')
+                AND "name" like concat('%', #{name}, '%')
             </if>
             <if test="visible != null and visible != ''">
                 AND visible = #{visible}
@@ -88,12 +88,12 @@
     <select id="selectMenuListByUserId" parameterType="com.ruoyi.common.core.domain.entity.SysMenuEntity"
             resultMap="SysMenuResult">
         select distinct m.id, m.parent_id, m.name, m.path, m.component, m."query", m.visible, m.enable,
-        ifnull(m.perms,'') as perms, m.is_frame, m.is_cache, m.type, m.icon, m.order_num, m.create_time
+        COALESCE(m.perms,'') as perms, m.is_frame, m.is_cache, m.type, m.icon, m.order_num, m.create_time
         from "system".sys_menu m
         left join "system".sys_role_menu rm on m.id = rm.menu_id
         left join "system".sys_user_role ur on rm.role_id = ur.role_id
         left join "system".sys_role ro on ur.role_id = ro.id
-        where ur.user_id = #{userId}
+        where ur.user_id = #{userId}::uuid
         <if test="menu.name != null and menu.name != ''">
             AND m.name like concat('%', #{name}, '%')
         </if>
@@ -115,7 +115,7 @@
                         m."query",
                         m.visible,
                         m.enable,
-                        ifnull(m.perms, '') as perms,
+                        COALESCE(m.perms, '') as perms,
                         m.is_frame,
                         m.is_cache,
                         m.type,
@@ -127,7 +127,7 @@
                  left join "system".sys_user_role ur on rm.role_id = ur.role_id
                  left join "system".sys_role ro on ur.role_id = ro.id
                  left join "system".sys_user u on ur.user_id = u.id
-        where u.id = #{userId}
+        where u.id = #{userId}::uuid
           and m.type in ('M', 'C')
           and m.enable = true
           AND ro.enable = true
@@ -138,10 +138,10 @@
         select m.id
         from "system".sys_menu m
         left join "system".sys_role_menu rm on m.id = rm.menu_id
-        where rm.role_id = #{roleId}
+        where rm.role_id = #{roleId}::uuid
         <if test="menuCheckStrictly">
-            and m.id not in (select m.parent_id from sys_menu m inner join sys_role_menu rm on m.id =
-            rm.menu_id and rm.role_id = #{roleId})
+            and m.id not in (select m.parent_id from "system".sys_menu m inner join "system".sys_role_menu rm on m.id =
+            rm.menu_id and rm.role_id = #{roleId}::uuid and m.parent_id is not null)
         </if>
         order by m.parent_id, m.order_num
     </select>
@@ -161,30 +161,30 @@
                  left join "system".sys_role r on r.role_id = ur.role_id
         where m.enable = true
           and r.enable = true
-          and ur.user_id = #{userId}
+          and ur.user_id = #{userId}::uuid
     </select>
 
     <select id="selectMenuById" parameterType="String" resultMap="SysMenuResult">
         <include refid="selectMenuVo"/>
-        where id = #{menuId}
+        where id = #{menuId}::uuid
     </select>
 
     <select id="hasChildByMenuId" resultType="Integer">
         select count(1)
         from "system".sys_menu
-        where parent_id = #{menuId}
+        where parent_id = #{menuId}::uuid
     </select>
 
     <select id="checkMenuNameUnique" resultMap="SysMenuResult">
         <include refid="selectMenuVo"/>
-        where "name"=#{menuName} and parent_id = #{parentId} limit 1
+        where "name"=#{menuName} and parent_id = #{parentId}::uuid limit 1
     </select>
 
     <update id="updateMenu" parameterType="com.ruoyi.common.core.domain.entity.SysMenuEntity">
         update "system".sys_menu
         <set>
             <if test="name != null and name != ''">name = #{name},</if>
-            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="parentId != null">parent_id = #{parentId}::uuid,</if>
             <if test="orderNum != null">order_num = #{orderNum},</if>
             <if test="path != null and path != ''">"path" = #{path},</if>
             <if test="component != null">component = #{component},</if>
@@ -200,12 +200,12 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where menu_id = #{menuId}
+        where id = #{id}::uuid
     </update>
 
     <insert id="insertMenu" parameterType="com.ruoyi.common.core.domain.entity.SysMenuEntity">
         insert into "system".sys_menu(
-        <if test="id != null and id != 0">id,</if>
+        <if test="id != null and id != ''">id,</if>
         <if test="parentId != null and parentId != 0">parent_id,</if>
         <if test="name != null and name != ''">name,</if>
         <if test="orderNum != null">order_num,</if>
@@ -223,7 +223,7 @@
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
-        <if test="id != null and id != 0">#{id}::uuid,</if>
+        <if test="id != null and id != ''">#{id}::uuid,</if>
         <if test="parentId != null and parentId != 0">#{parentId},</if>
         <if test="menuName != null and menuName != ''">#{menuName},</if>
         <if test="orderNum != null">#{orderNum},</if>
@@ -246,7 +246,7 @@
     <delete id="deleteMenuById" parameterType="Long">
         delete
         from "system".sys_menu
-        where id = #{menuId}
+        where id = #{menuId}::uuid
     </delete>
 
 </mapper> 

@@ -172,7 +172,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public String checkPhoneUnique(SysUserEntity user) {
         SysUserEntity info = userMapper.checkPhoneUnique(user.getPhone());
-        if (StringUtils.isNotNull(info) && info.getId().equals(user.getId())) {
+        if (StringUtils.isNotNull(info) && !info.getId().equals(user.getId())) {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
@@ -186,7 +186,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public String checkEmailUnique(SysUserEntity user) {
         SysUserEntity info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getId().equals(user.getId())) {
+        if (StringUtils.isNotNull(info) && !info.getId().equals(user.getId())) {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;

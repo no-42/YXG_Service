@@ -46,7 +46,7 @@
             AND id = #{id}::uuid
         </if>
         <if test="parentId != null and parentId != ''">
-            AND d.parent_id = #{parentId}
+            AND d.parent_id = #{parentId}::uuid
         </if>
         <if test="name != null and name != ''">
             AND d."name" like concat('%', #{name}, '%')
@@ -55,7 +55,7 @@
             AND d.enable = #{enable}
         </if>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <!-- ${params.dataScope} -->
         order by d.parent_id, d.order_num
     </select>
 
@@ -63,10 +63,10 @@
         select d.id
         from "system".sys_dept d
         left join "system".sys_role_dept rd on d.id = rd.dept_id
-        where rd.role_id = #{roleId}
+        where rd.role_id = #{roleId}::uuid
         <if test="deptCheckStrictly">
-            and d.id not in (select d.parent_id from sys_dept d inner join sys_role_dept rd on d.id =
-            rd.dept_id and rd.role_id = #{roleId})
+            and d.id not in (select d.parent_id from "system".sys_dept d inner join "system".sys_role_dept rd on d.id =
+            rd.dept_id and rd.role_id = #{roleId}::uuid and d.parent_id is not null)
         </if>
         order by d.parent_id, d.order_num
     </select>
@@ -94,6 +94,7 @@
         select *
         from "system".sys_dept
         where find_in_set(#{deptId}, ancestors)
+        <!-- TODO 这里 -->
     </select>
 
     <select id="selectNormalChildrenDeptById" parameterType="String" resultType="int">
@@ -106,7 +107,7 @@
 
     <select id="checkDeptNameUnique" resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
-        where "name"=#{name} and parent_id = #{parentId} and del_flag = '0' limit 1
+        where "name"=#{name} and parent_id = #{parentId}::uuid and del_flag = '0' limit 1
     </select>
 
     <insert id="insertDept" parameterType="com.ruoyi.common.core.domain.entity.SysDeptEntity" useGeneratedKeys="true"
@@ -123,7 +124,7 @@
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
-        <if test="parentId != null and parentId != ''">#{parentId},</if>
+        <if test="parentId != null and parentId != ''">#{parentId}::uuid,</if>
         <if test="name != null and name != ''">#{name},</if>
         <if test="ancestors != null and ancestors != ''">#{ancestors},</if>
         <if test="orderNum != null">#{orderNum},</if>
@@ -139,7 +140,7 @@
     <update id="updateDept" parameterType="com.ruoyi.common.core.domain.entity.SysDeptEntity">
         update "system".sys_dept
         <set>
-            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId}::uuid,</if>
             <if test="name != null and name != ''">dept_name = #{deptName},</if>
             <if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
             <if test="orderNum != null">order_num = #{orderNum},</if>
@@ -150,33 +151,33 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where dept_id = #{deptId}
+        where id = #{id}:uuid
     </update>
 
     <update id="updateDeptChildren" parameterType="java.util.List">
         update "system".sys_dept set ancestors =
         <foreach collection="depts" item="item" index="index"
-                 separator=" " open="case dept_id" close="end">
+                 separator=" " open="case id" close="end">
             when #{id}::uuid then #{item.ancestors}
         </foreach>
-        where dept_id in
+        where id in
         <foreach collection="depts" item="item" index="index"
                  separator="," open="(" close=")">
-            #{item.id}
+            #{item.id}::uuid
         </foreach>
     </update>
 
     <update id="updateDeptStatusNormal" parameterType="String">
         update "system".sys_dept set enable = true where id in
         <foreach collection="array" item="deptId" open="(" separator="," close=")">
-            #{deptId}
+            #{deptId}::uuid
         </foreach>
     </update>
 
     <delete id="deleteDeptById" parameterType="String">
         update "system".sys_dept
         set del_flag = true
-        where dept_id = #{deptId}
+        where id = #{deptId}::uuid
     </delete>
 
 </mapper> 
