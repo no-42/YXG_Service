@@ -46,7 +46,7 @@
             "urlCheck" : false,
             "es6" : false,
             "minified" : true,
-            "postcss" : true
+            "postcss" : false
         },
         "optimization" : {
             "subPackages" : true
