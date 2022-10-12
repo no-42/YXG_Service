@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "ruoyi-ui-user-miniapp",
   "description": "ruoyi",
-  "appid": "touristappid",
+  "appid": "wx91ea22c965061b8d",
   "setting": {
     "urlCheck": true,
     "es6": false,
