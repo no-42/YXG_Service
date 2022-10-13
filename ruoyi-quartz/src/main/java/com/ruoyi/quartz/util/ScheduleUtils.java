@@ -16,7 +16,7 @@ import com.ruoyi.common.exception.job.TaskException;
 import com.ruoyi.common.exception.job.TaskException.Code;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.domain.entity.SysJobEntity;
 
 /**
  * 定时任务工具类
@@ -27,11 +27,11 @@ public class ScheduleUtils {
     /**
      * 得到quartz任务类
      *
-     * @param sysJob 执行计划
+     * @param sysJobEntity 执行计划
      * @return 具体执行任务类
      */
-    private static Class<? extends Job> getQuartzJobClass(SysJob sysJob) {
-        boolean isConcurrent = "0".equals(sysJob.getConcurrent());
+    private static Class<? extends Job> getQuartzJobClass(SysJobEntity sysJobEntity) {
+        boolean isConcurrent = "0".equals(sysJobEntity.getConcurrent());
         return isConcurrent ? QuartzJobExecution.class : QuartzDisallowConcurrentExecution.class;
     }
 
@@ -52,7 +52,7 @@ public class ScheduleUtils {
     /**
      * 创建定时任务
      */
-    public static void createScheduleJob(Scheduler scheduler, SysJob job) throws SchedulerException, TaskException {
+    public static void createScheduleJob(Scheduler scheduler, SysJobEntity job) throws SchedulerException, TaskException {
         Class<? extends Job> jobClass = getQuartzJobClass(job);
         // 构建job信息
         String jobId = job.getId();
@@ -91,7 +91,7 @@ public class ScheduleUtils {
     /**
      * 设置定时任务策略
      */
-    public static CronScheduleBuilder handleCronScheduleMisfirePolicy(SysJob job, CronScheduleBuilder cb)
+    public static CronScheduleBuilder handleCronScheduleMisfirePolicy(SysJobEntity job, CronScheduleBuilder cb)
             throws TaskException {
         switch (job.getMisfirePolicy()) {
             case ScheduleConstants.MISFIRE_DEFAULT:

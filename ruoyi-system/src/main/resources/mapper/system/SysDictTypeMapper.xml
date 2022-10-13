@@ -20,25 +20,25 @@
         from "system".sys_dict_type
     </sql>
 
-    <select id="selectDictTypeList" parameterType="com.ruoyi.common.core.domain.entity.SysDictTypeEntity"
+    <select id="selectDictTypeList" parameterType="com.ruoyi.system.domain.query.SysDictTypeQuery"
             resultMap="SysDictTypeResult">
         <include refid="selectDictTypeVo"/>
         <where>
             <if test="name != null and name != ''">
                 AND "name" like concat('%', #{name}, '%')
             </if>
-            <if test="enable != null and enable != ''">
+            <if test="enable != null">
                 AND enable = #{enable}
             </if>
             <if test="type != null and type != ''">
                 AND "type" like concat('%', #{type}, '%')
             </if>
-            <!--            <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-            <!--            </if>-->
-            <!--            <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-            <!--            </if>-->
+            <if test="createTimeBegin != null and createTimeBegin != ''">
+                and create_time &gt;= #{createTimeBegin}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                and create_time &lt;= #{createTimeEnd}
+            </if>
         </where>
     </select>
 

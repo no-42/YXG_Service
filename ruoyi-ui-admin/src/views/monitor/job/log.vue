@@ -102,7 +102,7 @@
 
     <el-table v-loading="loading" :data="jobLogList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-<!--      <el-table-column label="日志编号" width="80" align="center" prop="id"/>-->
+      <!--      <el-table-column label="日志编号" width="80" align="center" prop="id"/>-->
       <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true"/>
       <el-table-column label="任务组名" align="center" prop="jobGroup" :show-overflow-tooltip="true">
         <template #default="scope">
@@ -215,7 +215,7 @@ const {queryParams, form, rules} = toRefs(data);
 /** 查询调度日志列表 */
 function getList() {
   loading.value = true;
-  listJobLog(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listJobLog(proxy.addDateRange(queryParams.value, dateRange.value, "createTime")).then(response => {
     jobLogList.value = response.rows;
     total.value = response.total;
     loading.value = false;

@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.system.domain.SysConfigEntity;
+import com.ruoyi.system.domain.entity.SysConfigEntity;
+import com.ruoyi.system.domain.query.SysConfigQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -25,10 +26,10 @@ public interface SysConfigMapper extends BaseMapper<SysConfigEntity> {
     /**
      * 查询参数配置列表
      *
-     * @param config 参数配置信息
+     * @param query 查询条件
      * @return 参数配置集合
      */
-    List<SysConfigEntity> selectConfigList(SysConfigEntity config);
+    List<SysConfigEntity> selectConfigList(SysConfigQuery query);
 
     /**
      * 根据键名查询参数配置信息

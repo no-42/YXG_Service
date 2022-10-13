@@ -115,9 +115,6 @@ public class GenTableServiceImpl implements IGenTableService {
     @Override
     @Transactional
     public void updateGenTable(GenTable genTable) {
-//        TODO 这里
-//        String options = JSONUtils.toJSON(genTable.getParams());
-//        genTable.setOptions(options);
         int row = genTableMapper.updateGenTable(genTable);
         if (row > 0) {
             for (GenTableColumn cenTableColumn : genTable.getColumns()) {
@@ -162,7 +159,7 @@ public class GenTableServiceImpl implements IGenTableService {
                 }
             }
         } catch (Exception e) {
-            throw new ServiceException("导入失败：" + e.getMessage());
+            throw new RuntimeException("导入失败", e);
         }
     }
 
@@ -271,18 +268,6 @@ public class GenTableServiceImpl implements IGenTableService {
             if (tableColumnMap.containsKey(column.getColumnName())) {
                 GenTableColumn prevColumn = tableColumnMap.get(column.getColumnName());
                 column.setId(prevColumn.getId());
-                if (column.isList()) {
-                    // 如果是列表，继续保留查询方式/字典类型选项
-                    column.setDictType(prevColumn.getDictType());
-                    column.setQueryType(prevColumn.getQueryType());
-                }
-                if (StringUtils.isNotEmpty(prevColumn.getIsRequired()) && !column.isPk()
-                        && (column.isInsert() || column.isEdit())
-                        && ((column.isUsableColumn()) || (!column.isSuperColumn()))) {
-                    // 如果是(新增/修改&非主键/非忽略及父属性)，继续保留必填/显示类型选项
-                    column.setIsRequired(prevColumn.getIsRequired());
-                    column.setHtmlType(prevColumn.getHtmlType());
-                }
                 genTableColumnMapper.updateGenTableColumn(column);
             } else {
                 genTableColumnMapper.insertGenTableColumn(column);
@@ -380,7 +365,7 @@ public class GenTableServiceImpl implements IGenTableService {
      */
     public void setPkColumn(GenTable table) {
         for (GenTableColumn column : table.getColumns()) {
-            if (column.isPk()) {
+            if (column.getIsPk()) {
                 table.setPkColumn(column);
                 break;
             }
@@ -390,7 +375,7 @@ public class GenTableServiceImpl implements IGenTableService {
         }
         if (GenConstants.TPL_SUB.equals(table.getTplCategory())) {
             for (GenTableColumn column : table.getSubTable().getColumns()) {
-                if (column.isPk()) {
+                if (column.getIsPk()) {
                     table.getSubTable().setPkColumn(column);
                     break;
                 }

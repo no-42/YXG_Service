@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.system.domain.SysLogininforEntity;
+import com.ruoyi.system.domain.entity.SysLoginInfoEntity;
+import com.ruoyi.system.domain.query.SysLoginInfoQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,21 +13,21 @@ import org.apache.ibatis.annotations.Mapper;
  * @author ruoyi
  */
 @Mapper
-public interface SysLogininforMapper extends BaseMapper<SysLogininforEntity> {
+public interface SysLoginInfoMapper extends BaseMapper<SysLoginInfoEntity> {
     /**
      * 新增系统登录日志
      *
-     * @param logininfor 访问日志对象
+     * @param info 访问日志对象
      */
-    void insertLogininfor(SysLogininforEntity logininfor);
+    void insertLoginInfo(SysLoginInfoEntity info);
 
     /**
      * 查询系统登录日志集合
      *
-     * @param logininfor 访问日志对象
+     * @param query 查询信息
      * @return 登录记录集合
      */
-    List<SysLogininforEntity> selectLogininforList(SysLogininforEntity logininfor);
+    List<SysLoginInfoEntity> selectLoginInfoList(SysLoginInfoQuery query);
 
     /**
      * 批量删除系统登录日志
@@ -34,12 +35,12 @@ public interface SysLogininforMapper extends BaseMapper<SysLogininforEntity> {
      * @param infoIds 需要删除的登录日志ID
      * @return 结果
      */
-    int deleteLogininforByIds(String[] infoIds);
+    int deleteLoginInfoByIds(String[] infoIds);
 
     /**
      * 清空系统登录日志
      *
      * @return 结果
      */
-    int cleanLogininfor();
+    int cleanLoginInfo();
 }

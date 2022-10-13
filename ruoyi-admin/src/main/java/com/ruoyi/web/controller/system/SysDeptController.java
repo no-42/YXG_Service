@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.system.domain.query.SysDeptQuery;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class SysDeptController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list")
-    public AjaxResult list(SysDeptEntity dept) {
+    public AjaxResult list(SysDeptQuery dept) {
         List<SysDeptEntity> depts = deptService.selectDeptList(dept);
         return AjaxResult.success(depts);
     }
@@ -50,7 +51,7 @@ public class SysDeptController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list/exclude/{deptId}")
     public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) String deptId) {
-        List<SysDeptEntity> depts = deptService.selectDeptList(new SysDeptEntity());
+        List<SysDeptEntity> depts = deptService.selectDeptList(new SysDeptQuery());
         depts.removeIf(d -> d.getId().equals(deptId) || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), deptId + ""));
         return AjaxResult.success(depts);
     }
@@ -69,7 +70,7 @@ public class SysDeptController extends BaseController {
      * 获取部门下拉树列表
      */
     @GetMapping("/treeSelect")
-    public AjaxResult treeSelect(SysDeptEntity dept) {
+    public AjaxResult treeSelect(SysDeptQuery dept) {
         List<SysDeptEntity> depts = deptService.selectDeptList(dept);
         return AjaxResult.success(deptService.buildDeptTreeSelect(depts));
     }
@@ -79,7 +80,7 @@ public class SysDeptController extends BaseController {
      */
     @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
     public AjaxResult roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
-        List<SysDeptEntity> depts = deptService.selectDeptList(new SysDeptEntity());
+        List<SysDeptEntity> depts = deptService.selectDeptList(new SysDeptQuery());
         AjaxResult ajax = AjaxResult.success();
         ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
         ajax.put("depts", deptService.buildDeptTreeSelect(depts));

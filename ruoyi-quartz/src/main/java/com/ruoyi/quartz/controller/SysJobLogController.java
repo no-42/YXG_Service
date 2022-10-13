@@ -3,6 +3,7 @@ package com.ruoyi.quartz.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.quartz.domain.query.SysJobLogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.quartz.domain.SysJobLog;
+import com.ruoyi.quartz.domain.entity.SysJobLogEntity;
 import com.ruoyi.quartz.service.ISysJobLogService;
 
 /**
@@ -36,9 +37,9 @@ public class SysJobLogController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysJobLog sysJobLog) {
+    public TableDataInfo list(SysJobLogQuery sysJobLogEntity) {
         startPage();
-        List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
+        List<SysJobLogEntity> list = jobLogService.selectJobLogList(sysJobLogEntity);
         return getDataTable(list);
     }
 
@@ -48,9 +49,9 @@ public class SysJobLogController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:export')")
     @Log(title = "任务调度日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysJobLog sysJobLog) {
-        List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
-        ExcelUtil<SysJobLog> util = new ExcelUtil<SysJobLog>(SysJobLog.class);
+    public void export(HttpServletResponse response, SysJobLogQuery sysJobLogEntity) {
+        List<SysJobLogEntity> list = jobLogService.selectJobLogList(sysJobLogEntity);
+        ExcelUtil<SysJobLogEntity> util = new ExcelUtil<SysJobLogEntity>(SysJobLogEntity.class);
         util.exportExcel(response, list, "调度日志");
     }
 

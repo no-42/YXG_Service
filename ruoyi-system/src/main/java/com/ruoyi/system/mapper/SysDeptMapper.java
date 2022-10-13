@@ -3,6 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.system.domain.query.SysDeptQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysDeptEntity;
@@ -17,10 +19,11 @@ public interface SysDeptMapper extends BaseMapper<SysDeptEntity> {
     /**
      * 查询部门管理数据
      *
-     * @param dept 部门信息
+     * @param query 查询信息
      * @return 部门信息集合
      */
-    List<SysDeptEntity> selectDeptList(SysDeptEntity dept);
+    @DataScope(deptAlias = "d")
+    List<SysDeptEntity> selectDeptList(SysDeptQuery query);
 
     /**
      * 根据角色ID查询部门树信息

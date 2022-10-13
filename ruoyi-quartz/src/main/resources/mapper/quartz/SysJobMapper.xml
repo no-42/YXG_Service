@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.quartz.mapper.SysJobMapper">
 
-    <resultMap type="com.ruoyi.quartz.domain.SysJob" id="SysJobResult">
+    <resultMap type="com.ruoyi.quartz.domain.entity.SysJobEntity" id="SysJobResult">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="group" column="group"/>
@@ -35,7 +35,7 @@
         from "system".sys_job
     </sql>
 
-    <select id="selectJobList" parameterType="com.ruoyi.quartz.domain.SysJob" resultMap="SysJobResult">
+    <select id="selectJobList" parameterType="com.ruoyi.quartz.domain.query.SysJobQuery" resultMap="SysJobResult">
         <include refid="selectJobVo"/>
         <where>
             <if test="name != null and name != ''">
@@ -75,7 +75,7 @@
         </foreach>
     </delete>
 
-    <update id="updateJob" parameterType="com.ruoyi.quartz.domain.SysJob">
+    <update id="updateJob" parameterType="com.ruoyi.quartz.domain.entity.SysJobEntity">
         update "system".sys_job
         <set>
             <if test="name != null and name != ''">"name" = #{name},</if>
@@ -92,7 +92,8 @@
         where id = #{id}::uuid
     </update>
 
-    <insert id="insertJob" parameterType="com.ruoyi.quartz.domain.SysJob" useGeneratedKeys="true" keyProperty="jobId">
+    <insert id="insertJob" parameterType="com.ruoyi.quartz.domain.entity.SysJobEntity" useGeneratedKeys="true"
+            keyProperty="jobId">
         insert into "system".sys_job(
         <if test="id != null and id != ''">id,</if>
         <if test="name != null and name != ''">"name",</if>

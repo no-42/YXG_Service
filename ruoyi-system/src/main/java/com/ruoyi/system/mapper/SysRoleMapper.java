@@ -3,7 +3,9 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.core.domain.entity.SysRoleEntity;
+import com.ruoyi.system.domain.query.SysRoleQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,10 +18,11 @@ public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
     /**
      * 根据条件分页查询角色数据
      *
-     * @param role 角色信息
+     * @param query 角色信息
      * @return 角色数据集合信息
      */
-    List<SysRoleEntity> selectRoleList(SysRoleEntity role);
+    @DataScope(deptAlias = "d")
+    List<SysRoleEntity> selectRoleList(SysRoleQuery query);
 
     /**
      * 根据用户ID查询角色

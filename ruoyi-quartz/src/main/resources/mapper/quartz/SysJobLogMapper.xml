@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.quartz.mapper.SysJobLogMapper">
 
-    <resultMap type="com.ruoyi.quartz.domain.SysJobLog" id="SysJobLogResult">
+    <resultMap type="com.ruoyi.quartz.domain.entity.SysJobLogEntity" id="SysJobLogResult">
         <id property="id" column="id"/>
         <result property="jobName" column="job_name"/>
         <result property="jobGroup" column="job_group"/>
@@ -27,7 +27,8 @@
         from "system".sys_job_log
     </sql>
 
-    <select id="selectJobLogList" parameterType="com.ruoyi.quartz.domain.SysJobLog" resultMap="SysJobLogResult">
+    <select id="selectJobLogList" parameterType="com.ruoyi.quartz.domain.query.SysJobLogQuery"
+            resultMap="SysJobLogResult">
         <include refid="selectJobLogVo"/>
         <where>
             <if test="jobName != null and jobName != ''">
@@ -42,12 +43,12 @@
             <if test="invokeTarget != null and invokeTarget != ''">
                 AND invoke_target like concat('%', #{invokeTarget}, '%')
             </if>
-            <!--            <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-            <!--            </if>-->
-            <!--            <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-            <!--            </if>-->
+            <if test="createTimeBegin != null and createTimeBegin != ''">
+                and create_time &gt;= #{createTimeBegin}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                and create_time &lt;= #{createTimeEnd}
+            </if>
         </where>
     </select>
 
@@ -63,7 +64,7 @@
     <delete id="deleteJobLogById" parameterType="String">
         delete
         from "system".sys_job_log
-        where id = #{id}::uuid
+        where id = #{id}
     </delete>
 
     <delete id="deleteJobLogByIds" parameterType="String">
@@ -77,7 +78,7 @@
         truncate table "system".sys_job_log
     </update>
 
-    <insert id="insertJobLog" parameterType="com.ruoyi.quartz.domain.SysJobLog">
+    <insert id="insertJobLog" parameterType="com.ruoyi.quartz.domain.entity.SysJobLogEntity">
         insert into "system".sys_job_log(
         <if test="id != null and id != ''">id,</if>
         <if test="jobName != null and jobName != ''">job_name,</if>

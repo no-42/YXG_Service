@@ -3,6 +3,8 @@ package com.ruoyi.framework.aspectj;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ruoyi.common.core.domain.BaseQuery;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -23,6 +25,7 @@ import com.ruoyi.common.utils.SecurityUtils;
  */
 @Aspect
 @Component
+@Slf4j
 public class DataScopeAspect {
     /**
      * 全部数据权限
@@ -95,13 +98,13 @@ public class DataScopeAspect {
                 break;
             } else if (DATA_SCOPE_CUSTOM.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.id IN ( SELECT dept_id FROM sys_role_dept WHERE role_id = {} ) ", deptAlias,
+                        " OR {}.id IN ( SELECT dept_id FROM \"system\".sys_role_dept WHERE role_id = {} ) ", deptAlias,
                         role.getId()));
             } else if (DATA_SCOPE_DEPT.equals(dataScope)) {
                 sqlString.append(StringUtils.format(" OR {}.id = {} ", deptAlias, user.getDeptId()));
             } else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.id IN ( SELECT id FROM sys_dept WHERE id = {} or find_in_set( {} , ancestors ) )",
+                        " OR {}.id IN ( SELECT id FROM  \"system\".sys_dept WHERE id = {} or find_in_set( {} , ancestors ) )",
                         deptAlias, user.getDeptId(), user.getDeptId()));
             } else if (DATA_SCOPE_SELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
@@ -116,9 +119,11 @@ public class DataScopeAspect {
 
         if (StringUtils.isNotBlank(sqlString.toString())) {
             Object params = joinPoint.getArgs()[0];
-            if (StringUtils.isNotNull(params) && params instanceof BaseEntity) {
-                BaseEntity baseEntity = (BaseEntity) params;
-//                baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
+            if (StringUtils.isNotNull(params) && params instanceof BaseQuery) {
+                BaseQuery query = (BaseQuery) params;
+                query.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
+            } else {
+                log.error("当前mapper错误，没有BaseQuery参数，但是却使用了DataScope注解");
             }
         }
     }
@@ -128,9 +133,9 @@ public class DataScopeAspect {
      */
     private void clearDataScope(final JoinPoint joinPoint) {
         Object params = joinPoint.getArgs()[0];
-        if (StringUtils.isNotNull(params) && params instanceof BaseEntity) {
-            BaseEntity baseEntity = (BaseEntity) params;
-//            baseEntity.getParams().put(DATA_SCOPE, "");
+        if (StringUtils.isNotNull(params) && params instanceof BaseQuery) {
+            BaseQuery query = (BaseQuery) params;
+            query.getParams().put(DATA_SCOPE, "");
         }
     }
 }

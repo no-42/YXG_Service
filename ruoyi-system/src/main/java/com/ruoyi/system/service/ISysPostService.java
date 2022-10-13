@@ -2,7 +2,8 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 
-import com.ruoyi.system.domain.SysPostEntity;
+import com.ruoyi.system.domain.entity.SysPostEntity;
+import com.ruoyi.system.domain.query.SysPostQuery;
 
 /**
  * 岗位信息 服务层
@@ -13,10 +14,10 @@ public interface ISysPostService {
     /**
      * 查询岗位信息集合
      *
-     * @param post 岗位信息
+     * @param query 查询信息
      * @return 岗位列表
      */
-    List<SysPostEntity> selectPostList(SysPostEntity post);
+    List<SysPostEntity> selectPostList(SysPostQuery query);
 
     /**
      * 查询所有岗位

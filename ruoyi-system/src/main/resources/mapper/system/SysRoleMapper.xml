@@ -39,11 +39,12 @@
                  left join "system".sys_dept d on u.dept_id = d.id
     </sql>
 
-    <select id="selectRoleList" parameterType="com.ruoyi.common.core.domain.entity.SysRoleEntity" resultMap="SysRoleResult">
+    <select id="selectRoleList" parameterType="com.ruoyi.system.domain.query.SysRoleQuery"
+            resultMap="SysRoleResult">
         <include refid="selectRoleVo"/>
         where r.del_flag = '0'
         <if test="id != null and id != ''">
-            AND r.id = #{id}::uuid
+            AND r.id = #{id}
         </if>
         <if test="name != null and name != ''">
             AND r.name like concat('%', #{name}, '%')
@@ -54,14 +55,14 @@
         <if test="key != null and key != ''">
             AND r.key like concat('%', #{key}, '%')
         </if>
-<!--        <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-<!--            and date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-<!--        </if>-->
-<!--        <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-<!--            and date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-<!--        </if>-->
+        <if test="createTimeBegin != null and createTimeBegin != ''">
+            and r.create_time &gt;= #{createTimeBegin}
+        </if>
+        <if test="createTimeEnd != null and createTimeEnd != ''">
+            and r.create_time &lt;= #{createTimeEnd}
+        </if>
         <!-- 数据范围过滤 -->
-        <!-- ${params.dataScope} -->
+        ${params.dataScope}
         order by r.sort
     </select>
 
@@ -102,7 +103,8 @@
         where r.key=#{roleKey} and r.del_flag = '0' limit 1
     </select>
 
-    <insert id="insertRole" parameterType="com.ruoyi.common.core.domain.entity.SysRoleEntity" useGeneratedKeys="true" keyProperty="roleId">
+    <insert id="insertRole" parameterType="com.ruoyi.common.core.domain.entity.SysRoleEntity" useGeneratedKeys="true"
+            keyProperty="roleId">
         insert into "system".sys_role(
         <if test="id != null and id != ''">id,</if>
         <if test="name != null and name != ''">name,</if>

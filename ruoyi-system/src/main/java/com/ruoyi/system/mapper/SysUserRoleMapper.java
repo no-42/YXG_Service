@@ -5,7 +5,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.ruoyi.system.domain.SysUserRoleEntity;
+import com.ruoyi.system.domain.entity.SysUserRoleEntity;
 
 /**
  * 用户与角色关联表 数据层

@@ -2,7 +2,8 @@ package com.ruoyi.quartz.mapper;
 
 import java.util.List;
 
-import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.domain.entity.SysJobEntity;
+import com.ruoyi.quartz.domain.query.SysJobQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,17 +16,17 @@ public interface SysJobMapper {
     /**
      * 查询调度任务日志集合
      *
-     * @param job 调度信息
+     * @param query 查询信息
      * @return 操作日志集合
      */
-    List<SysJob> selectJobList(SysJob job);
+    List<SysJobEntity> selectJobList(SysJobQuery query);
 
     /**
      * 查询所有调度任务
      *
      * @return 调度任务列表
      */
-    List<SysJob> selectJobAll();
+    List<SysJobEntity> selectJobAll();
 
     /**
      * 通过调度ID查询调度任务信息
@@ -33,7 +34,7 @@ public interface SysJobMapper {
      * @param jobId 调度ID
      * @return 角色对象信息
      */
-    SysJob selectJobById(String jobId);
+    SysJobEntity selectJobById(String jobId);
 
     /**
      * 通过调度ID删除调度任务信息
@@ -57,7 +58,7 @@ public interface SysJobMapper {
      * @param job 调度任务信息
      * @return 结果
      */
-    int updateJob(SysJob job);
+    int updateJob(SysJobEntity job);
 
     /**
      * 新增调度任务信息
@@ -65,5 +66,5 @@ public interface SysJobMapper {
      * @param job 调度任务信息
      * @return 结果
      */
-    int insertJob(SysJob job);
+    int insertJob(SysJobEntity job);
 }

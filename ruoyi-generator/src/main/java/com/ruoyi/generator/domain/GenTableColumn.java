@@ -65,43 +65,43 @@ public class GenTableColumn extends IdDateEntity {
      * 是否主键（1是）
      */
     @TableField("is_pk")
-    private String isPk;
+    private Boolean isPk;
 
     /**
      * 是否自增（1是）
      */
     @TableField("is_increment")
-    private String isIncrement;
+    private Boolean isIncrement;
 
     /**
      * 是否必填（1是）
      */
     @TableField("is_required")
-    private String isRequired;
+    private Boolean isRequired;
 
     /**
      * 是否为插入字段（1是）
      */
     @TableField("is_insert")
-    private String isInsert;
+    private Boolean isInsert;
 
     /**
      * 是否编辑字段（1是）
      */
     @TableField("is_edit")
-    private String isEdit;
+    private Boolean isEdit;
 
     /**
      * 是否列表字段（1是）
      */
     @TableField("is_list")
-    private String isList;
+    private Boolean isList;
 
     /**
      * 是否查询字段（1是）
      */
     @TableField("is_query")
-    private String isQuery;
+    private Boolean isQuery;
 
     /**
      * 查询方式（EQ等于、NE不等于、GT大于、LT小于、LIKE模糊、BETWEEN范围）
@@ -126,67 +126,7 @@ public class GenTableColumn extends IdDateEntity {
      */
     @TableField("sort")
     private Integer sort;
-
-    public boolean isPk() {
-        return isPk(this.isPk);
-    }
-
-    public boolean isPk(String isPk) {
-        return isPk != null && StringUtils.equals("1", isPk);
-    }
-
-    public boolean isIncrement() {
-        return isIncrement(this.isIncrement);
-    }
-
-    public boolean isIncrement(String isIncrement) {
-        return isIncrement != null && StringUtils.equals("1", isIncrement);
-    }
-
-    public boolean isRequired() {
-        return isRequired(this.isRequired);
-    }
-
-    public boolean isRequired(String isRequired) {
-        return isRequired != null && StringUtils.equals("1", isRequired);
-    }
-
-
-    public boolean isInsert() {
-        return isInsert(this.isInsert);
-    }
-
-    public boolean isInsert(String isInsert) {
-        return isInsert != null && StringUtils.equals("1", isInsert);
-    }
-
-
-    public boolean isEdit() {
-        return isInsert(this.isEdit);
-    }
-
-    public boolean isEdit(String isEdit) {
-        return isEdit != null && StringUtils.equals("1", isEdit);
-    }
-
-
-    public boolean isList() {
-        return isList(this.isList);
-    }
-
-    public boolean isList(String isList) {
-        return isList != null && StringUtils.equals("1", isList);
-    }
-
-    public boolean isQuery() {
-        return isQuery(this.isQuery);
-    }
-
-    public boolean isQuery(String isQuery) {
-        return isQuery != null && StringUtils.equals("1", isQuery);
-    }
-
-
+    
     public boolean isSuperColumn() {
         return isSuperColumn(this.javaField);
     }

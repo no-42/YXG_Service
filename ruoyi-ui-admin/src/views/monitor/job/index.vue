@@ -420,7 +420,7 @@ function handleStatusChange(row) {
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
-    row.status = !row.status;
+    row.enable = !row.enable;
   });
 }
 

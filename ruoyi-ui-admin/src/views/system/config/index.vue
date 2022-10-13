@@ -103,7 +103,7 @@
 
     <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-<!--      <el-table-column label="参数主键" align="center" prop="id"/>-->
+      <!--      <el-table-column label="参数主键" align="center" prop="id"/>-->
       <el-table-column label="参数名称" align="center" prop="name" :show-overflow-tooltip="true"/>
       <el-table-column label="参数键名" align="center" prop="key" :show-overflow-tooltip="true"/>
       <el-table-column label="参数键值" align="center" prop="value"/>
@@ -221,7 +221,7 @@ const {queryParams, form, rules} = toRefs(data);
 /** 查询参数列表 */
 function getList() {
   loading.value = true;
-  listConfig(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listConfig(proxy.addDateRange(queryParams.value, dateRange.value, "createTime")).then(response => {
     configList.value = response.rows;
     total.value = response.total;
     loading.value = false;

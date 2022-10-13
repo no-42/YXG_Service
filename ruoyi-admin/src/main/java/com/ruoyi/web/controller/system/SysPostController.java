@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysPostQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.SysPostEntity;
+import com.ruoyi.system.domain.entity.SysPostEntity;
 import com.ruoyi.system.service.ISysPostService;
 
 /**
@@ -40,7 +41,7 @@ public class SysPostController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:post:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysPostEntity post) {
+    public TableDataInfo list(SysPostQuery post) {
         startPage();
         List<SysPostEntity> list = postService.selectPostList(post);
         return getDataTable(list);
@@ -49,7 +50,7 @@ public class SysPostController extends BaseController {
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:post:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysPostEntity post) {
+    public void export(HttpServletResponse response, SysPostQuery post) {
         List<SysPostEntity> list = postService.selectPostList(post);
         ExcelUtil<SysPostEntity> util = new ExcelUtil<SysPostEntity>(SysPostEntity.class);
         util.exportExcel(response, list, "岗位数据");

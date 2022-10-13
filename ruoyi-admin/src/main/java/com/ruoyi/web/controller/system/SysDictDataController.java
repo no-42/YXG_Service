@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysDictDataQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -42,7 +43,7 @@ public class SysDictDataController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictDataEntity dictData) {
+    public TableDataInfo list(SysDictDataQuery dictData) {
         startPage();
         List<SysDictDataEntity> list = dictDataService.selectDictDataList(dictData);
         return getDataTable(list);
@@ -51,7 +52,7 @@ public class SysDictDataController extends BaseController {
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDictDataEntity dictData) {
+    public void export(HttpServletResponse response, SysDictDataQuery dictData) {
         List<SysDictDataEntity> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictDataEntity> util = new ExcelUtil<>(SysDictDataEntity.class);
         util.exportExcel(response, list, "字典数据");

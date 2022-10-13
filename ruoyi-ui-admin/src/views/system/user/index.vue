@@ -353,8 +353,8 @@
 </template>
 
 <script setup name="User">
-import { getCurrentInstance,ref} from 'vue';
-import { useRouter } from 'vue-router'
+import {getCurrentInstance, ref} from 'vue';
+import {useRouter} from 'vue-router'
 import {getToken} from "@/utils/auth";
 import {treeSelect} from "@/api/system/dept";
 import {changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser} from "@/api/system/user";
@@ -454,7 +454,7 @@ function getTreeselect() {
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  listUser(proxy.addDateRange(queryParams.value, dateRange.value, "createTime")).then(res => {
     loading.value = false;
     userList.value = res.rows;
     total.value = res.total;

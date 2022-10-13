@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.domain.entity;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName(value = "sys_logininfor", schema = "system")
-public class SysLogininforEntity extends IdEntity {
+public class SysLoginInfoEntity extends IdEntity {
     
     /**
      * 用户账号

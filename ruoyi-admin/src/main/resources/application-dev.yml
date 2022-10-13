@@ -3,7 +3,7 @@ spring:
   datasource:
     # 主库数据源
     master:
-      jdbcUrl: jdbc:postgresql://43.140.198.24:5432/shop
+      jdbcUrl: jdbc:postgresql://43.140.198.24:5432/shop?stringtype=unspecified
       username: postgres
       password: 5ZwHkMb3yXZ7DAxIvqWmyI1K
     # 从库数据源

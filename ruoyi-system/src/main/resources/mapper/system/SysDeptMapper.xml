@@ -38,24 +38,24 @@
         from "system".sys_dept d
     </sql>
 
-    <select id="selectDeptList" parameterType="com.ruoyi.common.core.domain.entity.SysDeptEntity"
+    <select id="selectDeptList" parameterType="com.ruoyi.system.domain.query.SysDeptQuery"
             resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
         where d.del_flag = '0'
         <if test="id != null and id != ''">
-            AND id = #{id}::uuid
+            AND id = #{id}
         </if>
         <if test="parentId != null and parentId != ''">
-            AND d.parent_id = #{parentId}::uuid
+            AND d.parent_id = #{parentId}
         </if>
         <if test="name != null and name != ''">
             AND d."name" like concat('%', #{name}, '%')
         </if>
-        <if test="enable != null and enable != ''">
+        <if test="enable != null">
             AND d.enable = #{enable}
         </if>
         <!-- 数据范围过滤 -->
-        <!-- ${params.dataScope} -->
+        ${params.dataScope}
         order by d.parent_id, d.order_num
     </select>
 

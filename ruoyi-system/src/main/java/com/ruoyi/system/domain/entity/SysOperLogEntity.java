@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.domain.entity;
 
 import java.util.Date;
 
@@ -129,7 +129,5 @@ public class SysOperLogEntity extends IdEntity {
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     @TableField("oper_time")
     private Date operTime;
-
-    private Integer[] businessTypes;
 
 }

@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.system.domain.SysNoticeEntity;
+import com.ruoyi.system.domain.entity.SysNoticeEntity;
+import com.ruoyi.system.domain.query.SysNoticeQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -24,10 +25,10 @@ public interface SysNoticeMapper extends BaseMapper<SysNoticeEntity> {
     /**
      * 查询公告列表
      *
-     * @param notice 公告信息
+     * @param query query
      * @return 公告集合
      */
-    List<SysNoticeEntity> selectNoticeList(SysNoticeEntity notice);
+    List<SysNoticeEntity> selectNoticeList(SysNoticeQuery query);
 
     /**
      * 新增公告

@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.system.domain.query.SysDictDataQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysDictDataEntity;
@@ -17,10 +18,10 @@ public interface SysDictDataMapper extends BaseMapper<SysDictDataEntity> {
     /**
      * 根据条件分页查询字典数据
      *
-     * @param dictData 字典数据信息
+     * @param query 查询条件
      * @return 字典数据集合信息
      */
-    List<SysDictDataEntity> selectDictDataList(SysDictDataEntity dictData);
+    List<SysDictDataEntity> selectDictDataList(SysDictDataQuery query);
 
     /**
      * 根据字典类型查询字典数据

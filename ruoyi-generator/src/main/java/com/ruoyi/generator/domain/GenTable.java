@@ -34,6 +34,13 @@ public class GenTable extends IdDateEntity {
     private String tableName;
 
     /**
+     * 表模式
+     */
+    @NotBlank(message = "表模式不能为空")
+    @TableField("schema_name")
+    private String schemaName;
+
+    /**
      * 表描述
      */
     @NotBlank(message = "表描述不能为空")

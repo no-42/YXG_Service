@@ -52,33 +52,42 @@
                create_time,
                update_by,
                update_time
-        from gen_table_column
+        from "system".gen_table_column
     </sql>
 
-    <select id="selectGenTableColumnListByTableId" parameterType="Long" resultMap="GenTableColumnResult">
+    <select id="selectGenTableColumnListByTableId" parameterType="String" resultMap="GenTableColumnResult">
         <include refid="selectGenTableColumnVo"/>
-        where id = #{tableId}
+        where table_id = #{tableId}
         order by sort
     </select>
 
     <select id="selectDbTableColumnsByName" parameterType="String" resultMap="GenTableColumnResult">
-        select column_name,
-               (case when (is_nullable = 'no' <![CDATA[ && ]]> column_key != 'PRI') then '1' else null end) as is_required,
-               (case when column_key = 'PRI' then '1' else '0' end)                               as is_pk,
-               ordinal_position                                                                   as sort,
-               column_comment,
-               (case when extra = 'auto_increment' then '1' else '0' end)                         as is_increment,
-               column_type
-        from information_schema.columns
-        where table_schema = (select database())
-          and table_name = (#{tableName})
-        order by ordinal_position
+        SELECT pAttr.attname                                                                                       as column_name,
+               pAttr.attnotnull                                                                                    as is_required,
+               (pAttr.attname = 'id')                                                                              as is_pk,
+               pAttr.attnum                                                                                        as sort,
+               pDesc.description                                                                                   as column_comment,
+               false                                                                                               as is_increment,
+               concat_ws('', pType.typname, SUBSTRING(format_type(pAttr.atttypid, pAttr.atttypmod) FROM
+                                                      '\(.*\)'))                                                   as column_type
+        FROM pg_class as pClass,
+             pg_attribute as pAttr,
+             pg_type as pType,
+             pg_description as pDesc
+        WHERE pClass.relname = #{tableName}
+          AND pAttr.attnum > 0
+          AND pAttr.attrelid = pClass.oid
+          AND pAttr.atttypid = pType.oid
+          AND pDesc.objoid = pAttr.attrelid
+          AND pDesc.objsubid = pAttr.attnum
+        order by pAttr.attnum asc
     </select>
 
     <insert id="insertGenTableColumn" parameterType="com.ruoyi.generator.domain.GenTableColumn" useGeneratedKeys="true"
-            keyProperty="columnId">
-        insert into gen_table_column (
-        <if test="id != null and id != ''">sid,</if>
+            keyProperty="id">
+        insert into "system".gen_table_column (
+        <if test="id != null and id != ''">id,</if>
+        <if test="tableId != null and tableId != ''">table_id,</if>                                        
         <if test="columnName != null and columnName != ''">column_name,</if>
         <if test="columnComment != null and columnComment != ''">column_comment,</if>
         <if test="columnType != null and columnType != ''">column_type,</if>
@@ -98,7 +107,8 @@
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
-        <if test="id != null and id != ''">#{id}::uuid,</if>
+        <if test="id != null and id != ''">#{id},</if>
+        <if test="tableId != null and tableId != ''">#{tableId},</if>
         <if test="columnName != null and columnName != ''">#{columnName},</if>
         <if test="columnComment != null and columnComment != ''">#{columnComment},</if>
         <if test="columnType != null and columnType != ''">#{columnType},</if>
@@ -121,7 +131,7 @@
     </insert>
 
     <update id="updateGenTableColumn" parameterType="com.ruoyi.generator.domain.GenTableColumn">
-        update gen_table_column
+        update "system".gen_table_column
         <set>
             column_comment = #{columnComment},
             java_type = #{javaType},
@@ -138,18 +148,18 @@
             update_by = #{updateBy},
             update_time = now()
         </set>
-        where id = #{columnId}
+        where id = #{id}
     </update>
 
     <delete id="deleteGenTableColumnByIds" parameterType="Long">
-        delete from gen_table_column where id in
+        delete from "system".gen_table_column where id in
         <foreach collection="array" item="tableId" open="(" separator="," close=")">
             #{tableId}
         </foreach>
     </delete>
 
     <delete id="deleteGenTableColumns">
-        delete from gen_table_column where id in
+        delete from "system".gen_table_column where id in
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item.columnId}
         </foreach>

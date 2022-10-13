@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysOperLogMapper">
 
-    <resultMap type="com.ruoyi.system.domain.SysOperLogEntity" id="SysOperLogResult">
+    <resultMap type="com.ruoyi.system.domain.entity.SysOperLogEntity" id="SysOperLogResult">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="businessType" column="business_type"/>
@@ -43,15 +43,16 @@
         from "system".sys_oper_log
     </sql>
 
-    <insert id="insertOperlog" parameterType="com.ruoyi.system.domain.SysOperLogEntity">
-        insert into "system".sys_oper_log(title, business_type, method, request_method, operator_type, oper_name, dept_name,
-                                 oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg,
-                                 oper_time)
+    <insert id="insertOperlog" parameterType="com.ruoyi.system.domain.entity.SysOperLogEntity">
+        insert into "system".sys_oper_log(title, business_type, method, request_method, operator_type, oper_name,
+                                          dept_name,
+                                          oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg,
+                                          oper_time)
         values (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operName}, #{deptName},
                 #{operUrl}, #{operIp}, #{operLocation}, #{operParam}, #{jsonResult}, #{status}, #{errorMsg}, now())
     </insert>
 
-    <select id="selectOperLogList" parameterType="com.ruoyi.system.domain.SysOperLogEntity"
+    <select id="selectOperLogList" parameterType="com.ruoyi.system.domain.query.SysOperLogQuery"
             resultMap="SysOperLogResult">
         <include refid="selectOperLogVo"/>
         <where>
@@ -73,12 +74,12 @@
             <if test="operName != null and operName != ''">
                 AND oper_name like concat('%', #{operName}, '%')
             </if>
-            <!--            <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-            <!--                and date_format(oper_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-            <!--            </if>-->
-            <!--            <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-            <!--                and date_format(oper_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-            <!--            </if>-->
+            <if test="operTimeBegin != null and operTimeBegin != ''">
+                and oper_time &gt;= #{operTimeBegin}
+            </if>
+            <if test="operTimeEnd != null and operTimeEnd != ''">
+                and oper_time &lt;= #{operTimeEnd}
+            </if>
         </where>
         order by id desc
     </select>

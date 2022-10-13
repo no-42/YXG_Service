@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.common.core.domain.entity.SysDictTypeEntity;
+import com.ruoyi.system.domain.query.SysDictTypeQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,10 +17,10 @@ public interface SysDictTypeMapper extends BaseMapper<SysDictTypeEntity> {
     /**
      * 根据条件分页查询字典类型
      *
-     * @param dictType 字典类型信息
+     * @param query 字典类型信息
      * @return 字典类型集合信息
      */
-    List<SysDictTypeEntity> selectDictTypeList(SysDictTypeEntity dictType);
+    List<SysDictTypeEntity> selectDictTypeList(SysDictTypeQuery query);
 
     /**
      * 根据所有字典类型

@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysConfigQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.SysConfigEntity;
+import com.ruoyi.system.domain.entity.SysConfigEntity;
 import com.ruoyi.system.service.ISysConfigService;
 
 /**
@@ -40,7 +41,7 @@ public class SysConfigController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:config:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysConfigEntity config) {
+    public TableDataInfo list(SysConfigQuery config) {
         startPage();
         List<SysConfigEntity> list = configService.selectConfigList(config);
         return getDataTable(list);
@@ -49,7 +50,7 @@ public class SysConfigController extends BaseController {
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:config:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysConfigEntity config) {
+    public void export(HttpServletResponse response, SysConfigQuery config) {
         List<SysConfigEntity> list = configService.selectConfigList(config);
         ExcelUtil<SysConfigEntity> util = new ExcelUtil<SysConfigEntity>(SysConfigEntity.class);
         util.exportExcel(response, list, "参数数据");

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysNoticeMapper">
 
-    <resultMap type="com.ruoyi.system.domain.SysNoticeEntity" id="SysNoticeResult">
+    <resultMap type="com.ruoyi.system.domain.entity.SysNoticeEntity" id="SysNoticeResult">
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="type" column="type"/>
@@ -33,10 +33,11 @@
 
     <select id="selectNoticeById" parameterType="String" resultMap="SysNoticeResult">
         <include refid="selectNoticeVo"/>
-        where id = #{noticeId}::uuid
+        where id = #{noticeId}
     </select>
 
-    <select id="selectNoticeList" parameterType="com.ruoyi.system.domain.SysNoticeEntity" resultMap="SysNoticeResult">
+    <select id="selectNoticeList" parameterType="com.ruoyi.system.domain.query.SysNoticeQuery"
+            resultMap="SysNoticeResult">
         <include refid="selectNoticeVo"/>
         <where>
             <if test="title != null and title != ''">
@@ -51,7 +52,7 @@
         </where>
     </select>
 
-    <insert id="insertNotice" parameterType="com.ruoyi.system.domain.SysNoticeEntity">
+    <insert id="insertNotice" parameterType="com.ruoyi.system.domain.entity.SysNoticeEntity">
         insert into "system".sys_notice (
         <if test="title != null and title != '' ">title,</if>
         <if test="type != null and type != '' ">type,</if>
@@ -71,7 +72,7 @@
         )
     </insert>
 
-    <update id="updateNotice" parameterType="com.ruoyi.system.domain.SysNoticeEntity">
+    <update id="updateNotice" parameterType="com.ruoyi.system.domain.entity.SysNoticeEntity">
         update "system".sys_notice
         <set>
             <if test="title != null and title != ''">title = #{title},</if>

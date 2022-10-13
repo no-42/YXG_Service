@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysConfigMapper">
 
-    <resultMap type="com.ruoyi.system.domain.SysConfigEntity" id="SysConfigResult">
+    <resultMap type="com.ruoyi.system.domain.entity.SysConfigEntity" id="SysConfigResult">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="key" column="key"/>
@@ -34,7 +34,7 @@
     <sql id="sqlwhereSearch">
         <where>
             <if test="id != null and id != ''">
-                and id = #{id}::uuid
+                and id = #{id}
             </if>
             <if test="key !=null and key != ''">
                 and "key" = #{key}
@@ -42,12 +42,14 @@
         </where>
     </sql>
 
-    <select id="selectConfig" parameterType="com.ruoyi.system.domain.SysConfigEntity" resultMap="SysConfigResult">
+    <select id="selectConfig" parameterType="com.ruoyi.system.domain.entity.SysConfigEntity"
+            resultMap="SysConfigResult">
         <include refid="selectConfigVo"/>
         <include refid="sqlwhereSearch"/>
     </select>
 
-    <select id="selectConfigList" parameterType="com.ruoyi.system.domain.SysConfigEntity" resultMap="SysConfigResult">
+    <select id="selectConfigList" parameterType="com.ruoyi.system.domain.query.SysConfigQuery"
+            resultMap="SysConfigResult">
         <include refid="selectConfigVo"/>
         <where>
             <if test="name != null and name != ''">
@@ -59,12 +61,12 @@
             <if test="key != null and key != ''">
                 AND "key" like concat('%', #{key}, '%')
             </if>
-            <!--            <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-            <!--            </if>-->
-            <!--            <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-            <!--                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-            <!--            </if>-->
+            <if test="createTimeBegin != null and createTimeBegin != ''">
+                and create_time &gt;= createTimeBegin
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                and create_time &lt;= createTimeEnd
+            </if>
         </where>
     </select>
 
@@ -73,7 +75,7 @@
         where "key" = #{key} limit 1
     </select>
 
-    <insert id="insertConfig" parameterType="com.ruoyi.system.domain.SysConfigEntity">
+    <insert id="insertConfig" parameterType="com.ruoyi.system.domain.entity.SysConfigEntity">
         insert into "system".sys_config (
         <if test="name != null and name != '' ">"name",</if>
         <if test="key != null and key != '' ">"key",</if>
@@ -93,7 +95,7 @@
         )
     </insert>
 
-    <update id="updateConfig" parameterType="com.ruoyi.system.domain.SysConfigEntity">
+    <update id="updateConfig" parameterType="com.ruoyi.system.domain.entity.SysConfigEntity">
         update "system".sys_config
         <set>
             <if test="name != null and name != ''">"name" = #{name},</if>

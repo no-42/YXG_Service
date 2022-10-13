@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.monitor;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysOperLogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.SysOperLogEntity;
+import com.ruoyi.system.domain.entity.SysOperLogEntity;
 import com.ruoyi.system.service.ISysOperLogService;
 
 /**
@@ -33,7 +34,7 @@ public class SysOperlogController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('monitor:operlog:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysOperLogEntity operLog) {
+    public TableDataInfo list(SysOperLogQuery operLog) {
         startPage();
         List<SysOperLogEntity> list = operLogService.selectOperLogList(operLog);
         return getDataTable(list);
@@ -42,7 +43,7 @@ public class SysOperlogController extends BaseController {
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('monitor:operlog:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysOperLogEntity operLog) {
+    public void export(HttpServletResponse response, SysOperLogQuery operLog) {
         List<SysOperLogEntity> list = operLogService.selectOperLogList(operLog);
         ExcelUtil<SysOperLogEntity> util = new ExcelUtil<SysOperLogEntity>(SysOperLogEntity.class);
         util.exportExcel(response, list, "操作日志");

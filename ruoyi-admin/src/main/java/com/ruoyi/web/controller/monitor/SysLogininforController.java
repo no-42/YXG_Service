@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.monitor;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysLoginInfoQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +19,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.service.SysPasswordService;
-import com.ruoyi.system.domain.SysLogininforEntity;
-import com.ruoyi.system.service.ISysLogininforService;
+import com.ruoyi.system.domain.entity.SysLoginInfoEntity;
+import com.ruoyi.system.service.ISysLoginInfoService;
 
 /**
  * 系统访问记录
@@ -27,47 +28,47 @@ import com.ruoyi.system.service.ISysLogininforService;
  * @author ruoyi
  */
 @RestController
-@RequestMapping("/monitor/logininfor")
+@RequestMapping("/monitor/logininfo")
 public class SysLogininforController extends BaseController {
     @Autowired
-    private ISysLogininforService logininforService;
+    private ISysLoginInfoService loginInfoService;
 
     @Autowired
     private SysPasswordService passwordService;
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
+    @PreAuthorize("@ss.hasPermi('monitor:logininfo:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysLogininforEntity logininfor) {
+    public TableDataInfo list(SysLoginInfoQuery info) {
         startPage();
-        List<SysLogininforEntity> list = logininforService.selectLogininforList(logininfor);
+        List<SysLoginInfoEntity> list = loginInfoService.selectLoginInfoList(info);
         return getDataTable(list);
     }
 
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
+    @PreAuthorize("@ss.hasPermi('monitor:logininfo:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysLogininforEntity logininfor) {
-        List<SysLogininforEntity> list = logininforService.selectLogininforList(logininfor);
-        ExcelUtil<SysLogininforEntity> util = new ExcelUtil<SysLogininforEntity>(SysLogininforEntity.class);
+    public void export(HttpServletResponse response, SysLoginInfoQuery logininfor) {
+        List<SysLoginInfoEntity> list = loginInfoService.selectLoginInfoList(logininfor);
+        ExcelUtil<SysLoginInfoEntity> util = new ExcelUtil<SysLoginInfoEntity>(SysLoginInfoEntity.class);
         util.exportExcel(response, list, "登录日志");
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @PreAuthorize("@ss.hasPermi('monitor:logininfo:remove')")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable String[] infoIds) {
-        return toAjax(logininforService.deleteLogininforByIds(infoIds));
+        return toAjax(loginInfoService.deleteLoginInfoByIds(infoIds));
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @PreAuthorize("@ss.hasPermi('monitor:logininfo:remove')")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
     public AjaxResult clean() {
-        logininforService.cleanLogininfor();
+        loginInfoService.cleanLoginInfo();
         return success();
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")
+    @PreAuthorize("@ss.hasPermi('monitor:logininfo:unlock')")
     @Log(title = "账户解锁", businessType = BusinessType.OTHER)
     @GetMapping("/unlock/{userName}")
     public AjaxResult unlock(@PathVariable("userName") String userName) {

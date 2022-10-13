@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.ruoyi.common.core.domain.entity.SysRoleEntity;
-import com.ruoyi.system.domain.SysUserRoleEntity;
+import com.ruoyi.system.domain.entity.SysUserRoleEntity;
+import com.ruoyi.system.domain.query.SysRoleQuery;
 
 /**
  * 角色业务层
@@ -15,10 +16,10 @@ public interface ISysRoleService {
     /**
      * 根据条件分页查询角色数据
      *
-     * @param role 角色信息
+     * @param query 查询条件
      * @return 角色数据集合信息
      */
-    List<SysRoleEntity> selectRoleList(SysRoleEntity role);
+    List<SysRoleEntity> selectRoleList(SysRoleQuery query);
 
     /**
      * 根据用户ID查询角色列表

@@ -1,4 +1,4 @@
-package com.ruoyi.quartz.domain;
+package com.ruoyi.quartz.domain.entity;
 
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
@@ -25,7 +25,7 @@ import com.ruoyi.quartz.util.CronUtils;
 @Setter
 @ToString
 @TableName(value = "sys_job", schema = "system")
-public class SysJob extends IdDateEntity {
+public class SysJobEntity extends IdDateEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -84,6 +84,9 @@ public class SysJob extends IdDateEntity {
     private Boolean enable;
 
 
+    /**
+     * TODO 移到DTO
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getNextValidTime() {
         if (StringUtils.isNotEmpty(cronExpression)) {

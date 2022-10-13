@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.system.domain.SysOperLogEntity;
+import com.ruoyi.system.domain.entity.SysOperLogEntity;
+import com.ruoyi.system.domain.query.SysOperLogQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -23,10 +24,10 @@ public interface SysOperLogMapper extends BaseMapper<SysOperLogEntity> {
     /**
      * 查询系统操作日志集合
      *
-     * @param operLog 操作日志对象
+     * @param query 查询数据
      * @return 操作日志集合
      */
-    List<SysOperLogEntity> selectOperLogList(SysOperLogEntity operLog);
+    List<SysOperLogEntity> selectOperLogList(SysOperLogQuery query);
 
     /**
      * 批量删除系统操作日志

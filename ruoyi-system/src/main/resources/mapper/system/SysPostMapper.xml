@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysPostMapper">
 
-    <resultMap type="com.ruoyi.system.domain.SysPostEntity" id="SysPostResult">
+    <resultMap type="com.ruoyi.system.domain.entity.SysPostEntity" id="SysPostResult">
         <id property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="name" column="name"/>
@@ -29,13 +29,13 @@
         from "system".sys_post
     </sql>
 
-    <select id="selectPostList" parameterType="com.ruoyi.system.domain.SysPostEntity" resultMap="SysPostResult">
+    <select id="selectPostList" parameterType="com.ruoyi.system.domain.entity.SysPostEntity" resultMap="SysPostResult">
         <include refid="selectPostVo"/>
         <where>
             <if test="code != null and code != ''">
                 AND code like concat('%', #{code}, '%')
             </if>
-            <if test="enable != null and enable != ''">
+            <if test="enable != null">
                 AND enable = #{enable}
             </if>
             <if test="name != null and name != ''">
@@ -50,7 +50,7 @@
 
     <select id="selectPostById" parameterType="String" resultMap="SysPostResult">
         <include refid="selectPostVo"/>
-        where id = #{postId}::uuid
+        where id = #{postId}
     </select>
 
     <select id="selectPostListByUserId" parameterType="String" resultType="String">
@@ -79,7 +79,7 @@
         where code=#{code} limit 1
     </select>
 
-    <update id="updatePost" parameterType="com.ruoyi.system.domain.SysPostEntity">
+    <update id="updatePost" parameterType="com.ruoyi.system.domain.entity.SysPostEntity">
         update "system".sys_post
         <set>
             <if test="code != null and code != ''">code = #{code},</if>
@@ -93,7 +93,7 @@
         where id = #{id}::uuid
     </update>
 
-    <insert id="insertPost" parameterType="com.ruoyi.system.domain.SysPostEntity" useGeneratedKeys="true"
+    <insert id="insertPost" parameterType="com.ruoyi.system.domain.entity.SysPostEntity" useGeneratedKeys="true"
             keyProperty="postId">
         insert into "system".sys_post(
         <if test="id != null and id != ''">id,</if>

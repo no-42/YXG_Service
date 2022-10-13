@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.system.domain.SysPostEntity;
+import com.ruoyi.system.domain.entity.SysPostEntity;
+import com.ruoyi.system.domain.query.SysPostQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,10 +17,10 @@ public interface SysPostMapper extends BaseMapper<SysPostEntity> {
     /**
      * 查询岗位数据集合
      *
-     * @param post 岗位信息
+     * @param query 查询数据
      * @return 岗位数据集合
      */
-    List<SysPostEntity> selectPostList(SysPostEntity post);
+    List<SysPostEntity> selectPostList(SysPostQuery query);
 
     /**
      * 查询所有岗位

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 
+import com.ruoyi.system.domain.query.SysUserQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.bean.BeanValidators;
 import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.system.domain.SysPostEntity;
-import com.ruoyi.system.domain.SysUserPostEntity;
-import com.ruoyi.system.domain.SysUserRoleEntity;
+import com.ruoyi.system.domain.entity.SysPostEntity;
+import com.ruoyi.system.domain.entity.SysUserPostEntity;
+import com.ruoyi.system.domain.entity.SysUserRoleEntity;
 import com.ruoyi.system.mapper.SysPostMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -61,70 +62,31 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     protected Validator validator;
 
-    /**
-     * 根据条件分页查询用户列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
     @Override
-    @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUserEntity> selectUserList(SysUserEntity user) {
-        return userMapper.selectUserList(user);
+    public List<SysUserEntity> selectUserList(SysUserQuery query) {
+        return userMapper.selectUserList(query);
     }
 
-    /**
-     * 根据条件分页查询已分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
     @Override
-    @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUserEntity> selectAllocatedList(SysUserEntity user) {
-        return userMapper.selectAllocatedList(user);
+    public List<SysUserEntity> selectAllocatedList(SysUserQuery query) {
+        return userMapper.selectAllocatedList(query);
     }
 
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     *
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
     @Override
-    @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUserEntity> selectUnallocatedList(SysUserEntity user) {
         return userMapper.selectUnallocatedList(user);
     }
 
-    /**
-     * 通过用户名查询用户
-     *
-     * @param userName 用户名
-     * @return 用户对象信息
-     */
     @Override
     public SysUserEntity selectUserByUserName(String userName) {
         return userMapper.selectUserByUserName(userName);
     }
 
-    /**
-     * 通过用户ID查询用户
-     *
-     * @param userId 用户ID
-     * @return 用户对象信息
-     */
     @Override
     public SysUserEntity selectUserById(String userId) {
         return userMapper.selectUserById(userId);
     }
 
-    /**
-     * 查询用户所属角色组
-     *
-     * @param userName 用户名
-     * @return 结果
-     */
     @Override
     public String selectUserRoleGroup(String userName) {
         List<SysRoleEntity> list = roleMapper.selectRolesByUserName(userName);
@@ -134,12 +96,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return list.stream().map(SysRoleEntity::getName).collect(Collectors.joining(","));
     }
 
-    /**
-     * 查询用户所属岗位组
-     *
-     * @param userName 用户名
-     * @return 结果
-     */
     @Override
     public String selectUserPostGroup(String userName) {
         List<SysPostEntity> list = postMapper.selectPostsByUserName(userName);
@@ -149,12 +105,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return list.stream().map(SysPostEntity::getName).collect(Collectors.joining(","));
     }
 
-    /**
-     * 校验用户名称是否唯一
-     *
-     * @param userName 用户名称
-     * @return 结果
-     */
     @Override
     public String checkUserNameUnique(String userName) {
         int count = userMapper.checkUserNameUnique(userName);
@@ -164,11 +114,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return UserConstants.UNIQUE;
     }
 
-    /**
-     * 校验手机号码是否唯一
-     *
-     * @param user 用户信息
-     */
     @Override
     public String checkPhoneUnique(SysUserEntity user) {
         SysUserEntity info = userMapper.checkPhoneUnique(user.getPhone());
@@ -178,11 +123,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return UserConstants.UNIQUE;
     }
 
-    /**
-     * 校验email是否唯一
-     *
-     * @param user 用户信息
-     */
     @Override
     public String checkEmailUnique(SysUserEntity user) {
         SysUserEntity info = userMapper.checkEmailUnique(user.getEmail());
@@ -192,11 +132,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return UserConstants.UNIQUE;
     }
 
-    /**
-     * 校验用户是否允许操作
-     *
-     * @param user 用户信息
-     */
     @Override
     public void checkUserAllowed(SysUserEntity user) {
         if (StringUtils.isNotNull(user.getId()) && user.isAdmin()) {
@@ -204,15 +139,10 @@ public class SysUserServiceImpl implements ISysUserService {
         }
     }
 
-    /**
-     * 校验用户是否有数据权限
-     *
-     * @param userId 用户id
-     */
     @Override
     public void checkUserDataScope(String userId) {
         if (!SecurityUtils.isAdmin()) {
-            SysUserEntity user = new SysUserEntity();
+            SysUserQuery user = new SysUserQuery();
             user.setId(userId);
             List<SysUserEntity> users = SpringUtils.getAopProxy(this).selectUserList(user);
             if (StringUtils.isEmpty(users)) {
@@ -221,12 +151,6 @@ public class SysUserServiceImpl implements ISysUserService {
         }
     }
 
-    /**
-     * 新增保存用户信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     @Transactional
     public int insertUser(SysUserEntity user) {
@@ -239,23 +163,11 @@ public class SysUserServiceImpl implements ISysUserService {
         return rows;
     }
 
-    /**
-     * 注册用户信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     public boolean registerUser(SysUserEntity user) {
         return userMapper.insertUser(user) > 0;
     }
 
-    /**
-     * 修改保存用户信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     @Transactional
     public int updateUser(SysUserEntity user) {
@@ -271,12 +183,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.updateUser(user);
     }
 
-    /**
-     * 用户授权角色
-     *
-     * @param userId  用户ID
-     * @param roleIds 角色组
-     */
     @Override
     @Transactional
     public void insertUserAuth(String userId, String[] roleIds) {
@@ -284,77 +190,35 @@ public class SysUserServiceImpl implements ISysUserService {
         insertUserRole(userId, roleIds);
     }
 
-    /**
-     * 修改用户状态
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     public int updateUserStatus(SysUserEntity user) {
         return userMapper.updateUser(user);
     }
 
-    /**
-     * 修改用户基本信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     public int updateUserProfile(SysUserEntity user) {
         return userMapper.updateUser(user);
     }
 
-    /**
-     * 修改用户头像
-     *
-     * @param userName 用户名
-     * @param avatar   头像地址
-     * @return 结果
-     */
     @Override
     public boolean updateUserAvatar(String userName, String avatar) {
         return userMapper.updateUserAvatar(userName, avatar) > 0;
     }
 
-    /**
-     * 重置用户密码
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
     @Override
     public int resetPwd(SysUserEntity user) {
         return userMapper.updateUser(user);
     }
 
-    /**
-     * 重置用户密码
-     *
-     * @param userName 用户名
-     * @param password 密码
-     * @return 结果
-     */
     @Override
     public int resetUserPwd(String userName, String password) {
         return userMapper.resetUserPwd(userName, password);
     }
 
-    /**
-     * 新增用户角色信息
-     *
-     * @param user 用户对象
-     */
     public void insertUserRole(SysUserEntity user) {
         this.insertUserRole(user.getId(), user.getRoleIds());
     }
 
-    /**
-     * 新增用户岗位信息
-     *
-     * @param user 用户对象
-     */
     public void insertUserPost(SysUserEntity user) {
         String[] posts = user.getPostIds();
         if (StringUtils.isNotEmpty(posts)) {
@@ -370,12 +234,6 @@ public class SysUserServiceImpl implements ISysUserService {
         }
     }
 
-    /**
-     * 新增用户角色信息
-     *
-     * @param userId  用户ID
-     * @param roleIds 角色组
-     */
     public void insertUserRole(String userId, String[] roleIds) {
         if (StringUtils.isNotEmpty(roleIds)) {
             // 新增用户与角色管理
@@ -390,12 +248,6 @@ public class SysUserServiceImpl implements ISysUserService {
         }
     }
 
-    /**
-     * 通过用户ID删除用户
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
     @Override
     @Transactional
     public int deleteUserById(String userId) {
@@ -406,12 +258,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.deleteUserById(userId);
     }
 
-    /**
-     * 批量删除用户信息
-     *
-     * @param userIds 需要删除的用户ID
-     * @return 结果
-     */
     @Override
     @Transactional
     public int deleteUserByIds(String[] userIds) {
@@ -428,14 +274,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.deleteUserByIds(userIds);
     }
 
-    /**
-     * 导入用户数据
-     *
-     * @param userList        用户数据列表
-     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName        操作用户
-     * @return 结果
-     */
     @Override
     public String importUser(List<SysUserEntity> userList, Boolean isUpdateSupport, String operName) {
         if (StringUtils.isNull(userList) || userList.size() == 0) {

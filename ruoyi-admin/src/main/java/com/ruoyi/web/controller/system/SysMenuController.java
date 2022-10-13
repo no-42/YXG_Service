@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.system.domain.query.SysMenuQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,7 @@ public class SysMenuController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:menu:list')")
     @GetMapping("/list")
-    public AjaxResult list(SysMenuEntity menu) {
+    public AjaxResult list(SysMenuQuery menu) {
         List<SysMenuEntity> menus = menuService.selectMenuList(menu, getUserId());
         return AjaxResult.success(menus);
     }
@@ -56,7 +57,7 @@ public class SysMenuController extends BaseController {
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeSelect")
-    public AjaxResult treeSelect(SysMenuEntity menu) {
+    public AjaxResult treeSelect(SysMenuQuery menu) {
         List<SysMenuEntity> menus = menuService.selectMenuList(menu, getUserId());
         return AjaxResult.success(menuService.buildMenuTreeSelect(menus));
     }

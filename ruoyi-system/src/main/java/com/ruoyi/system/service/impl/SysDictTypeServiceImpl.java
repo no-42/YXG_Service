@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import com.ruoyi.system.domain.query.SysDictDataQuery;
+import com.ruoyi.system.domain.query.SysDictTypeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,33 +42,17 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         loadingDictCache();
     }
 
-    /**
-     * 根据条件分页查询字典类型
-     *
-     * @param dictType 字典类型信息
-     * @return 字典类型集合信息
-     */
     @Override
-    public List<SysDictTypeEntity> selectDictTypeList(SysDictTypeEntity dictType) {
-        return dictTypeMapper.selectDictTypeList(dictType);
+    public List<SysDictTypeEntity> selectDictTypeList(SysDictTypeQuery query) {
+        return dictTypeMapper.selectDictTypeList(query);
     }
 
-    /**
-     * 根据所有字典类型
-     *
-     * @return 字典类型集合信息
-     */
+
     @Override
     public List<SysDictTypeEntity> selectDictTypeAll() {
         return dictTypeMapper.selectDictTypeAll();
     }
 
-    /**
-     * 根据字典类型查询字典数据
-     *
-     * @param dictType 字典类型
-     * @return 字典数据集合信息
-     */
     @Override
     public List<SysDictDataEntity> selectDictDataByType(String dictType) {
         List<SysDictDataEntity> dictDatas = DictUtils.getDictCache(dictType);
@@ -81,33 +67,16 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         return null;
     }
 
-    /**
-     * 根据字典类型ID查询信息
-     *
-     * @param dictId 字典类型ID
-     * @return 字典类型
-     */
     @Override
     public SysDictTypeEntity selectDictTypeById(String dictId) {
         return dictTypeMapper.selectDictTypeById(dictId);
     }
 
-    /**
-     * 根据字典类型查询信息
-     *
-     * @param dictType 字典类型
-     * @return 字典类型
-     */
     @Override
     public SysDictTypeEntity selectDictTypeByType(String dictType) {
         return dictTypeMapper.selectDictTypeByType(dictType);
     }
 
-    /**
-     * 批量删除字典类型信息
-     *
-     * @param dictIds 需要删除的字典ID
-     */
     @Override
     public void deleteDictTypeByIds(String[] dictIds) {
         for (String dictId : dictIds) {
@@ -120,12 +89,9 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         }
     }
 
-    /**
-     * 加载字典缓存数据
-     */
     @Override
     public void loadingDictCache() {
-        SysDictDataEntity dictData = new SysDictDataEntity();
+        SysDictDataQuery dictData = new SysDictDataQuery();
         dictData.setEnable(true);
         Map<String, List<SysDictDataEntity>> dictDataMap = dictDataMapper.selectDictDataList(dictData).stream().collect(Collectors.groupingBy(SysDictDataEntity::getType));
         for (Map.Entry<String, List<SysDictDataEntity>> entry : dictDataMap.entrySet()) {
@@ -133,29 +99,18 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         }
     }
 
-    /**
-     * 清空字典缓存数据
-     */
     @Override
     public void clearDictCache() {
         DictUtils.clearDictCache();
     }
 
-    /**
-     * 重置字典缓存数据
-     */
     @Override
     public void resetDictCache() {
         clearDictCache();
         loadingDictCache();
     }
 
-    /**
-     * 新增保存字典类型信息
-     *
-     * @param dict 字典类型信息
-     * @return 结果
-     */
+
     @Override
     public int insertDictType(SysDictTypeEntity dict) {
         int row = dictTypeMapper.insertDictType(dict);
@@ -165,12 +120,6 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         return row;
     }
 
-    /**
-     * 修改保存字典类型信息
-     *
-     * @param dict 字典类型信息
-     * @return 结果
-     */
     @Override
     @Transactional
     public int updateDictType(SysDictTypeEntity dict) {
@@ -183,13 +132,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         }
         return row;
     }
-
-    /**
-     * 校验字典类型称是否唯一
-     *
-     * @param dict 字典类型
-     * @return 结果
-     */
+    
     @Override
     public String checkDictTypeUnique(SysDictTypeEntity dict) {
         String dictId = StringUtils.isNotEmpty(dict.getId()) ? dict.getId() : null;

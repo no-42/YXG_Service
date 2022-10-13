@@ -3,6 +3,7 @@ package com.ruoyi.quartz.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.quartz.domain.query.SysJobQuery;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.job.TaskException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.domain.entity.SysJobEntity;
 import com.ruoyi.quartz.service.ISysJobService;
 import com.ruoyi.quartz.util.CronUtils;
 import com.ruoyi.quartz.util.ScheduleUtils;
@@ -44,9 +45,9 @@ public class SysJobController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('monitor:job:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysJob sysJob) {
+    public TableDataInfo list(SysJobQuery sysJobEntity) {
         startPage();
-        List<SysJob> list = jobService.selectJobList(sysJob);
+        List<SysJobEntity> list = jobService.selectJobList(sysJobEntity);
         return getDataTable(list);
     }
 
@@ -56,9 +57,9 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:export')")
     @Log(title = "定时任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysJob sysJob) {
-        List<SysJob> list = jobService.selectJobList(sysJob);
-        ExcelUtil<SysJob> util = new ExcelUtil<>(SysJob.class);
+    public void export(HttpServletResponse response, SysJobQuery sysJobEntity) {
+        List<SysJobEntity> list = jobService.selectJobList(sysJobEntity);
+        ExcelUtil<SysJobEntity> util = new ExcelUtil<>(SysJobEntity.class);
         util.exportExcel(response, list, "定时任务");
     }
 
@@ -77,7 +78,7 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:add')")
     @Log(title = "定时任务", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysJob job) throws SchedulerException, TaskException {
+    public AjaxResult add(@RequestBody SysJobEntity job) throws SchedulerException, TaskException {
         if (!CronUtils.isValid(job.getCronExpression())) {
             return error("新增任务'" + job.getName() + "'失败，Cron表达式不正确");
         } else if (StringUtils.containsIgnoreCase(job.getInvokeTarget(), Constants.LOOKUP_RMI)) {
@@ -101,7 +102,7 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:edit')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysJob job) throws SchedulerException, TaskException {
+    public AjaxResult edit(@RequestBody SysJobEntity job) throws SchedulerException, TaskException {
         if (!CronUtils.isValid(job.getCronExpression())) {
             return error("修改任务'" + job.getName() + "'失败，Cron表达式不正确");
         } else if (StringUtils.containsIgnoreCase(job.getInvokeTarget(), Constants.LOOKUP_RMI)) {
@@ -125,8 +126,8 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:changeStatus')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
-    public AjaxResult changeStatus(@RequestBody SysJob job) throws SchedulerException {
-        SysJob newJob = jobService.selectJobById(job.getId());
+    public AjaxResult changeStatus(@RequestBody SysJobEntity job) throws SchedulerException {
+        SysJobEntity newJob = jobService.selectJobById(job.getId());
         newJob.setEnable(job.getEnable());
         return toAjax(jobService.changeStatus(newJob));
     }
@@ -137,7 +138,7 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:changeStatus')")
     @Log(title = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping("/run")
-    public AjaxResult run(@RequestBody SysJob job) throws SchedulerException {
+    public AjaxResult run(@RequestBody SysJobEntity job) throws SchedulerException {
         boolean result = jobService.run(job);
         return result ? success() : error("任务不存在或已过期！");
     }

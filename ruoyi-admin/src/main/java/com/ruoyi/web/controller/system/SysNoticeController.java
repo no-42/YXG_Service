@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.system.domain.query.SysNoticeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +19,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.SysNoticeEntity;
+import com.ruoyi.system.domain.entity.SysNoticeEntity;
 import com.ruoyi.system.service.ISysNoticeService;
 
 /**
@@ -37,7 +38,7 @@ public class SysNoticeController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysNoticeEntity notice) {
+    public TableDataInfo list(SysNoticeQuery notice) {
         startPage();
         List<SysNoticeEntity> list = noticeService.selectNoticeList(notice);
         return getDataTable(list);

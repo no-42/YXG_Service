@@ -3,6 +3,8 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.system.domain.query.SysUserQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysUserEntity;
@@ -17,18 +19,20 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
     /**
      * 根据条件分页查询用户列表
      *
-     * @param sysUserEntity 用户信息
+     * @param query 查询条件
      * @return 用户信息集合信息
      */
-    List<SysUserEntity> selectUserList(SysUserEntity sysUserEntity);
+    @DataScope(deptAlias = "d", userAlias = "u")
+    List<SysUserEntity> selectUserList(SysUserQuery query);
 
     /**
      * 根据条件分页查询已配用户角色列表
      *
-     * @param user 用户信息
+     * @param query 查询条件
      * @return 用户信息集合信息
      */
-    List<SysUserEntity> selectAllocatedList(SysUserEntity user);
+    @DataScope(deptAlias = "d", userAlias = "u")
+    List<SysUserEntity> selectAllocatedList(SysUserQuery query);
 
     /**
      * 根据条件分页查询未分配用户角色列表
@@ -36,6 +40,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @param user 用户信息
      * @return 用户信息集合信息
      */
+    @DataScope(deptAlias = "d", userAlias = "u")
     List<SysUserEntity> selectUnallocatedList(SysUserEntity user);
 
     /**

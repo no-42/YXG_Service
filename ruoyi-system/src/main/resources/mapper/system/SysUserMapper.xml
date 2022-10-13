@@ -73,7 +73,7 @@
                d.enable     as dept_enable,
                r.id         as role_id,
                r.name       as role_name,
-               r.key       as role_key,
+               r.key        as role_key,
                r.sort       as role_sort,
                r.data_scope as role_data_scope,
                r.enable     as role_enable
@@ -83,7 +83,7 @@
                  left join "system".sys_role r on r.id = ur.role_id
     </sql>
 
-    <select id="selectUserList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
+    <select id="selectUserList" parameterType="com.ruoyi.system.domain.query.SysUserQuery"
             resultMap="SysUserResult">
         select u.id,
         u.dept_id,
@@ -117,21 +117,22 @@
         <if test="phone != null and phone != ''">
             AND u.phone like concat('%', #{phone}, '%')
         </if>
-        <!--        <if test="params.beginTime != null and params.beginTime != ''">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-        <!--            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')-->
-        <!--        </if>-->
-        <!--        <if test="params.endTime != null and params.endTime != ''">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-        <!--            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')-->
-        <!--        </if>-->
         <if test="deptId != null and deptId != ''">
-            AND (u.dept_id = #{deptId}::uuid OR u.dept_id IN ( SELECT t.id FROM "system".sys_dept t WHERE #{deptId}::uuid  = ANY(string_to_array(ancestors,',')::uuid[]))
+            AND (u.dept_id = #{deptId}::uuid OR u.dept_id IN ( SELECT t.id FROM "system".sys_dept t WHERE
+            #{deptId} = ANY(string_to_array(ancestors,',')))
             )
         </if>
+        <if test="createTimeBegin != null and createTimeBegin != ''">
+            AND u.create_time &gt;= #{createTimeBegin}
+        </if>
+        <if test="createTimeEnd != null and createTimeEnd != ''">
+            AND u.create_time &lt;= #{createTimeEnd}
+        </if>
         <!-- 数据范围过滤 -->
-        <!-- ${params.dataScope} -->
+        ${params.dataScope}
     </select>
 
-    <select id="selectAllocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
+    <select id="selectAllocatedList" parameterType="com.ruoyi.system.domain.query.SysUserQuery"
             resultMap="SysUserResult">
         select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phone, u.enable, u.create_time
         from "system".sys_user u
@@ -146,7 +147,7 @@
             AND u.phone like concat('%', #{phone}, '%')
         </if>
         <!-- 数据范围过滤 -->
-        <!-- ${params.dataScope} -->
+        ${params.dataScope}
     </select>
 
     <select id="selectUnallocatedList" parameterType="com.ruoyi.common.core.domain.entity.SysUserEntity"
@@ -157,7 +158,8 @@
         left join "system".sys_user_role ur on u.id = ur.user_id
         left join "system".sys_role r on r.id = ur.role_id
         where u.del_flag = false and (r.id != #{roleId}::uuid or r.id IS NULL)
-        and u.id not in (select u.id from "system".sys_user u inner join "system".sys_user_role ur on u.id = ur.user_id and
+        and u.id not in (select u.id from "system".sys_user u inner join "system".sys_user_role ur on u.id = ur.user_id
+        and
         ur.role_id = #{roleId}::uuid)
         <if test="userName != null and userName != ''">
             AND u.user_name like concat('%', #{userName}, '%')
@@ -176,7 +178,7 @@
 
     <select id="selectUserById" parameterType="String" resultMap="SysUserResult">
         <include refid="selectUserVo"/>
-        where u.id = #{userId}::uuid
+        where u.id = #{userId}
     </select>
 
     <select id="checkUserNameUnique" parameterType="String" resultType="int">

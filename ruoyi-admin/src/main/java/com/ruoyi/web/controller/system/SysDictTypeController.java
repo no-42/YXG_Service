@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysDictTypeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +38,7 @@ public class SysDictTypeController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictTypeEntity dictType) {
+    public TableDataInfo list(SysDictTypeQuery dictType) {
         startPage();
         List<SysDictTypeEntity> list = dictTypeService.selectDictTypeList(dictType);
         return getDataTable(list);
@@ -46,7 +47,7 @@ public class SysDictTypeController extends BaseController {
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysDictTypeEntity dictType) {
+    public void export(HttpServletResponse response, SysDictTypeQuery dictType) {
         List<SysDictTypeEntity> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtil<SysDictTypeEntity> util = new ExcelUtil<>(SysDictTypeEntity.class);
         util.exportExcel(response, list, "字典类型");

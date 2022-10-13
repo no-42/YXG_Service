@@ -2,7 +2,8 @@ package com.ruoyi.quartz.mapper;
 
 import java.util.List;
 
-import com.ruoyi.quartz.domain.SysJobLog;
+import com.ruoyi.quartz.domain.entity.SysJobLogEntity;
+import com.ruoyi.quartz.domain.query.SysJobLogQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,17 +16,17 @@ public interface SysJobLogMapper {
     /**
      * 获取quartz调度器日志的计划任务
      *
-     * @param jobLog 调度日志信息
+     * @param query 查询信息
      * @return 调度任务日志集合
      */
-    List<SysJobLog> selectJobLogList(SysJobLog jobLog);
+    List<SysJobLogEntity> selectJobLogList(SysJobLogQuery query);
 
     /**
      * 查询所有调度任务日志
      *
      * @return 调度任务日志列表
      */
-    List<SysJobLog> selectJobLogAll();
+    List<SysJobLogEntity> selectJobLogAll();
 
     /**
      * 通过调度任务日志ID查询调度信息
@@ -33,7 +34,7 @@ public interface SysJobLogMapper {
      * @param jobLogId 调度任务日志ID
      * @return 调度任务日志对象信息
      */
-    SysJobLog selectJobLogById(String jobLogId);
+    SysJobLogEntity selectJobLogById(String jobLogId);
 
     /**
      * 新增任务日志
@@ -41,7 +42,7 @@ public interface SysJobLogMapper {
      * @param jobLog 调度日志信息
      * @return 结果
      */
-    int insertJobLog(SysJobLog jobLog);
+    int insertJobLog(SysJobLogEntity jobLog);
 
     /**
      * 批量删除调度日志信息

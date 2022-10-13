@@ -27,6 +27,7 @@
           <el-table-column label="Java类型" min-width="11%">
             <template #default="scope">
               <el-select v-model="scope.row.javaType">
+                <el-option label="UUID" value="UUID"/>
                 <el-option label="Long" value="Long"/>
                 <el-option label="String" value="String"/>
                 <el-option label="Integer" value="Integer"/>
@@ -45,22 +46,22 @@
 
           <el-table-column label="插入" min-width="5%">
             <template #default="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isInsert"></el-checkbox>
+              <el-checkbox v-model="scope.row.isInsert"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="编辑" min-width="5%">
             <template #default="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isEdit"></el-checkbox>
+              <el-checkbox v-model="scope.row.isEdit"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="列表" min-width="5%">
             <template #default="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isList"></el-checkbox>
+              <el-checkbox v-model="scope.row.isList"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询" min-width="5%">
             <template #default="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isQuery"></el-checkbox>
+              <el-checkbox v-model="scope.row.isQuery"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
@@ -127,6 +128,8 @@
 </template>
 
 <script setup name="GenEdit">
+import {getCurrentInstance, ref} from 'vue';
+import {useRoute} from 'vue-router'
 import {getGenTable, updateGenTable} from "@/api/tool/gen";
 import {optionselect as getDictOptionselect} from "@/api/system/dict/type";
 import basicInfoForm from "./basicInfoForm";
@@ -151,12 +154,6 @@ function submitForm() {
     if (validateResult) {
       const genTable = Object.assign({}, info.value);
       genTable.columns = columns.value;
-      genTable.params = {
-        treeCode: info.value.treeCode,
-        treeName: info.value.treeName,
-        treeParentCode: info.value.treeParentCode,
-        parentMenuId: info.value.parentMenuId
-      };
       updateGenTable(genTable).then(res => {
         proxy.$modal.msgSuccess(res.msg);
         if (res.code === 200) {

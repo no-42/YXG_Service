@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysUserQuery;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,7 +55,7 @@ public class SysUserController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysUserEntity user) {
+    public TableDataInfo list(SysUserQuery user) {
         startPage();
         List<SysUserEntity> list = userService.selectUserList(user);
         return getDataTable(list);
@@ -63,7 +64,7 @@ public class SysUserController extends BaseController {
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:user:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysUserEntity user) {
+    public void export(HttpServletResponse response, SysUserQuery user) {
         List<SysUserEntity> list = userService.selectUserList(user);
         ExcelUtil<SysUserEntity> util = new ExcelUtil<>(SysUserEntity.class);
         util.exportExcel(response, list, "用户数据");

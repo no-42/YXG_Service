@@ -3,6 +3,8 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.query.SysRoleQuery;
+import com.ruoyi.system.domain.query.SysUserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +29,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.service.SysPermissionService;
 import com.ruoyi.framework.web.service.TokenService;
-import com.ruoyi.system.domain.SysUserRoleEntity;
+import com.ruoyi.system.domain.entity.SysUserRoleEntity;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 
@@ -53,7 +55,7 @@ public class SysRoleController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysRoleEntity role) {
+    public TableDataInfo list(SysRoleQuery role) {
         startPage();
         List<SysRoleEntity> list = roleService.selectRoleList(role);
         return getDataTable(list);
@@ -62,7 +64,7 @@ public class SysRoleController extends BaseController {
     @Log(title = "角色管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:role:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysRoleEntity role) {
+    public void export(HttpServletResponse response, SysRoleQuery role) {
         List<SysRoleEntity> list = roleService.selectRoleList(role);
         ExcelUtil<SysRoleEntity> util = new ExcelUtil<SysRoleEntity>(SysRoleEntity.class);
         util.exportExcel(response, list, "角色数据");
@@ -173,7 +175,7 @@ public class SysRoleController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/authUser/allocatedList")
-    public TableDataInfo allocatedList(SysUserEntity user) {
+    public TableDataInfo allocatedList(SysUserQuery user) {
         startPage();
         List<SysUserEntity> list = userService.selectAllocatedList(user);
         return getDataTable(list);

@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -8,25 +8,24 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 用户和角色关联 sys_user_role
+ * 角色和菜单关联 sys_role_menu
  *
  * @author ruoyi
  */
 @Getter
 @Setter
 @ToString
-@TableName(value = "sys_user_role", schema = "system")
-public class SysUserRoleEntity extends BaseEntity {
-    /**
-     * 用户ID
-     */
-    @TableField("user_id")
-    private String userId;
-
+@TableName(value = "sys_role_menu", schema = "system")
+public class SysRoleMenuEntity extends BaseEntity {
     /**
      * 角色ID
      */
     @TableField("role_id")
     private String roleId;
 
+    /**
+     * 菜单ID
+     */
+    @TableField("menu_id")
+    private String menuId;
 }

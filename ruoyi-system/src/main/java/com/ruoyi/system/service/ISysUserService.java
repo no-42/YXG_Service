@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.entity.SysUserEntity;
+import com.ruoyi.system.domain.query.SysUserQuery;
 
 /**
  * 用户 业务层
@@ -13,18 +14,18 @@ public interface ISysUserService {
     /**
      * 根据条件分页查询用户列表
      *
-     * @param user 用户信息
+     * @param query 查询条件
      * @return 用户信息集合信息
      */
-    List<SysUserEntity> selectUserList(SysUserEntity user);
+    List<SysUserEntity> selectUserList(SysUserQuery query);
 
     /**
      * 根据条件分页查询已分配用户角色列表
      *
-     * @param user 用户信息
+     * @param query 查询条件
      * @return 用户信息集合信息
      */
-    List<SysUserEntity> selectAllocatedList(SysUserEntity user);
+    List<SysUserEntity> selectAllocatedList(SysUserQuery query);
 
     /**
      * 根据条件分页查询未分配用户角色列表

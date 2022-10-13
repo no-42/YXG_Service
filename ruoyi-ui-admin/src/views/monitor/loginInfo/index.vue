@@ -58,7 +58,7 @@
             icon="Delete"
             :disabled="multiple"
             @click="handleDelete"
-            v-hasPermi="['monitor:logininfor:remove']"
+            v-hasPermi="['monitor:logininfo:remove']"
         >删除
         </el-button>
       </el-col>
@@ -68,7 +68,7 @@
             plain
             icon="Delete"
             @click="handleClean"
-            v-hasPermi="['monitor:logininfor:remove']"
+            v-hasPermi="['monitor:logininfo:remove']"
         >清空
         </el-button>
       </el-col>
@@ -79,7 +79,7 @@
             icon="Unlock"
             :disabled="single"
             @click="handleUnlock"
-            v-hasPermi="['monitor:logininfor:unlock']"
+            v-hasPermi="['monitor:logininfo:unlock']"
         >解锁
         </el-button>
       </el-col>
@@ -89,17 +89,17 @@
             plain
             icon="Download"
             @click="handleExport"
-            v-hasPermi="['monitor:logininfor:export']"
+            v-hasPermi="['monitor:logininfo:export']"
         >导出
         </el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table ref="logininforRef" v-loading="loading" :data="logininforList" @selection-change="handleSelectionChange"
+    <el-table ref="loginInfoRef" v-loading="loading" :data="loginInfoList" @selection-change="handleSelectionChange"
               :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55" align="center"/>
-<!--      <el-table-column label="访问编号" align="center" prop="id"/>-->
+      <!--      <el-table-column label="访问编号" align="center" prop="id"/>-->
       <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" sortable="custom"
                        :sort-orders="['descending', 'ascending']"/>
       <el-table-column label="地址" align="center" prop="ipaddr" :show-overflow-tooltip="true"/>
@@ -132,12 +132,12 @@
 
 <script setup name="Logininfor">
 import {ref, getCurrentInstance} from "vue"
-import {list, delLogininfor, cleanLogininfor, unlockLogininfor} from "@/api/monitor/logininfor";
+import {list, delLoginInfo, cleanLoginInfo, unlockLoginInfo} from "@/api/monitor/loginInfo";
 
 const {proxy} = getCurrentInstance();
 const {sys_common_status} = proxy.useDict("sys_common_status");
 
-const logininforList = ref([]);
+const loginInfoList = ref([]);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
@@ -162,8 +162,8 @@ const queryParams = ref({
 /** 查询登录日志列表 */
 function getList() {
   loading.value = true;
-  list(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
-    logininforList.value = response.rows;
+  list(proxy.addDateRange(queryParams.value, dateRange.value, "loginTime")).then(response => {
+    loginInfoList.value = response.rows;
     total.value = response.total;
     loading.value = false;
   });
@@ -179,7 +179,7 @@ function handleQuery() {
 function resetQuery() {
   dateRange.value = [];
   proxy.resetForm("queryRef");
-  proxy.$refs["logininforRef"].sort(defaultSort.value.prop, defaultSort.value.order);
+  proxy.$refs["loginInfoRef"].sort(defaultSort.value.prop, defaultSort.value.order);
   handleQuery();
 }
 
@@ -202,7 +202,7 @@ function handleSortChange(column, prop, order) {
 function handleDelete(row) {
   const infoIds = row.id || ids.value;
   proxy.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?').then(function () {
-    return delLogininfor(infoIds);
+    return delLoginInfo(infoIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
@@ -213,7 +213,7 @@ function handleDelete(row) {
 /** 清空按钮操作 */
 function handleClean() {
   proxy.$modal.confirm("是否确认清空所有登录日志数据项?").then(function () {
-    return cleanLogininfor();
+    return cleanLoginInfo();
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("清空成功");
@@ -225,7 +225,7 @@ function handleClean() {
 function handleUnlock() {
   const username = selectName.value;
   proxy.$modal.confirm('是否确认解锁用户"' + username + '"数据项?').then(function () {
-    return unlockLogininfor(username);
+    return unlockLoginInfo(username);
   }).then(() => {
     proxy.$modal.msgSuccess("用户" + username + "解锁成功");
   }).catch(() => {
@@ -234,7 +234,7 @@ function handleUnlock() {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download("monitor/logininfor/export", {
+  proxy.download("monitor/logininfo/export", {
     ...queryParams.value,
   }, `config_${new Date().getTime()}.xlsx`);
 }

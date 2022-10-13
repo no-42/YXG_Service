@@ -36,7 +36,7 @@
         from "system".sys_dict_data
     </sql>
 
-    <select id="selectDictDataList" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity"
+    <select id="selectDictDataList" parameterType="com.ruoyi.system.domain.query.SysDictDataQuery"
             resultMap="SysDictDataResult">
         <include refid="selectDictDataVo"/>
         <where>

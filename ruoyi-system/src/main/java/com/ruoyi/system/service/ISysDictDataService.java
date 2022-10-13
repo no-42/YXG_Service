@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.entity.SysDictDataEntity;
+import com.ruoyi.system.domain.query.SysDictDataQuery;
 
 /**
  * 字典 业务层
@@ -13,10 +14,10 @@ public interface ISysDictDataService {
     /**
      * 根据条件分页查询字典数据
      *
-     * @param dictData 字典数据信息
+     * @param query 查询信息
      * @return 字典数据集合信息
      */
-    List<SysDictDataEntity> selectDictDataList(SysDictDataEntity dictData);
+    List<SysDictDataEntity> selectDictDataList(SysDictDataQuery query);
 
     /**
      * 根据字典类型和字典键值查询字典数据信息

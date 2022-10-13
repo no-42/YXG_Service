@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.domain.entity.SysJobEntity;
 
 /**
  * 任务执行工具
@@ -18,10 +18,10 @@ public class JobInvokeUtil {
     /**
      * 执行方法
      *
-     * @param sysJob 系统任务
+     * @param sysJobEntity 系统任务
      */
-    public static void invokeMethod(SysJob sysJob) throws Exception {
-        String invokeTarget = sysJob.getInvokeTarget();
+    public static void invokeMethod(SysJobEntity sysJobEntity) throws Exception {
+        String invokeTarget = sysJobEntity.getInvokeTarget();
         String beanName = getBeanName(invokeTarget);
         String methodName = getMethodName(invokeTarget);
         List<Object[]> methodParams = getMethodParams(invokeTarget);

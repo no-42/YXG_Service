@@ -46,17 +46,17 @@
         from "system".sys_menu
     </sql>
 
-    <select id="selectMenuList" parameterType="com.ruoyi.common.core.domain.entity.SysMenuEntity"
+    <select id="selectMenuList" parameterType="com.ruoyi.system.domain.query.SysMenuQuery"
             resultMap="SysMenuResult">
         <include refid="selectMenuVo"/>
         <where>
             <if test="name != null and name != ''">
                 AND "name" like concat('%', #{name}, '%')
             </if>
-            <if test="visible != null and visible != ''">
+            <if test="visible != null">
                 AND visible = #{visible}
             </if>
-            <if test="enable != null and enable != ''">
+            <if test="enable != null">
                 AND enable = #{enable}
             </if>
         </where>
@@ -97,10 +97,10 @@
         <if test="menu.name != null and menu.name != ''">
             AND m.name like concat('%', #{name}, '%')
         </if>
-        <if test="menu.visible != null and menu.visible != ''">
+        <if test="menu.visible != null">
             AND m.visible = #{menu.visible}
         </if>
-        <if test="menu.enable != null and menu.enable != ''">
+        <if test="menu.enable != null">
             AND m.enable = #{menu.enable}
         </if>
         order by m.parent_id, m.order_num
@@ -243,10 +243,10 @@
         )
     </insert>
 
-    <delete id="deleteMenuById" parameterType="Long">
+    <delete id="deleteMenuById" parameterType="String">
         delete
         from "system".sys_menu
-        where id = #{menuId}::uuid
+        where id = #{menuId}
     </delete>
 
 </mapper> 

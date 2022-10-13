@@ -1,4 +1,4 @@
-package com.ruoyi.quartz.domain;
+package com.ruoyi.quartz.domain.entity;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SysJobLog extends IdEntity {
+public class SysJobLogEntity extends IdEntity {
     private static final long serialVersionUID = 1L;
 
     /**

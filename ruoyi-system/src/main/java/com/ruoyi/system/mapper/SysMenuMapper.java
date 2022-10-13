@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.system.domain.query.SysMenuQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.common.core.domain.entity.SysMenuEntity;
@@ -17,10 +18,10 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
     /**
      * 查询系统菜单列表
      *
-     * @param menu 菜单信息
+     * @param query 查询信息
      * @return 菜单列表
      */
-    List<SysMenuEntity> selectMenuList(SysMenuEntity menu);
+    List<SysMenuEntity> selectMenuList(SysMenuQuery query);
 
     /**
      * 根据用户所有权限
@@ -35,7 +36,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      * @param menu 菜单信息
      * @return 菜单列表
      */
-    List<SysMenuEntity> selectMenuListByUserId(@Param("menu") SysMenuEntity menu, @Param("userId") String userId);
+    List<SysMenuEntity> selectMenuListByUserId(@Param("menu") SysMenuQuery menu, @Param("userId") String userId);
 
     /**
      * 根据用户ID查询权限

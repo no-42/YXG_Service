@@ -6,20 +6,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ruoyi.system.domain.query.SysRoleQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysRoleEntity;
-import com.ruoyi.common.core.domain.entity.SysUserEntity;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
-import com.ruoyi.system.domain.SysRoleDeptEntity;
-import com.ruoyi.system.domain.SysRoleMenuEntity;
-import com.ruoyi.system.domain.SysUserRoleEntity;
+import com.ruoyi.system.domain.entity.SysRoleDeptEntity;
+import com.ruoyi.system.domain.entity.SysRoleMenuEntity;
+import com.ruoyi.system.domain.entity.SysUserRoleEntity;
 import com.ruoyi.system.mapper.SysRoleDeptMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
@@ -45,24 +44,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Autowired
     private SysRoleDeptMapper roleDeptMapper;
 
-    /**
-     * 根据条件分页查询角色数据
-     *
-     * @param role 角色信息
-     * @return 角色数据集合信息
-     */
     @Override
-    @DataScope(deptAlias = "d")
-    public List<SysRoleEntity> selectRoleList(SysRoleEntity role) {
-        return roleMapper.selectRoleList(role);
+    public List<SysRoleEntity> selectRoleList(SysRoleQuery query) {
+        return roleMapper.selectRoleList(query);
     }
-
-    /**
-     * 根据用户ID查询角色
-     *
-     * @param userId 用户ID
-     * @return 角色列表
-     */
+    
     @Override
     public List<SysRoleEntity> selectRolesByUserId(String userId) {
         List<SysRoleEntity> userRoles = roleMapper.selectRolePermissionByUserId(userId);
@@ -77,13 +63,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return roles;
     }
-
-    /**
-     * 根据用户ID查询权限
-     *
-     * @param userId 用户ID
-     * @return 权限列表
-     */
+    
     @Override
     public Set<String> selectRolePermissionByUserId(String userId) {
         List<SysRoleEntity> perms = roleMapper.selectRolePermissionByUserId(userId);
@@ -95,45 +75,22 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return permsSet;
     }
-
-    /**
-     * 查询所有角色
-     *
-     * @return 角色列表
-     */
+    
     @Override
     public List<SysRoleEntity> selectRoleAll() {
-        return SpringUtils.getAopProxy(this).selectRoleList(new SysRoleEntity());
+        return SpringUtils.getAopProxy(this).selectRoleList(new SysRoleQuery());
     }
-
-    /**
-     * 根据用户ID获取角色选择框列表
-     *
-     * @param userId 用户ID
-     * @return 选中角色ID列表
-     */
+    
     @Override
     public List<String> selectRoleListByUserId(String userId) {
         return roleMapper.selectRoleListByUserId(userId);
     }
-
-    /**
-     * 通过角色ID查询角色
-     *
-     * @param roleId 角色ID
-     * @return 角色对象信息
-     */
+    
     @Override
     public SysRoleEntity selectRoleById(String roleId) {
         return roleMapper.selectRoleById(roleId);
     }
-
-    /**
-     * 校验角色名称是否唯一
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     public String checkRoleNameUnique(SysRoleEntity role) {
         SysRoleEntity info = roleMapper.checkRoleNameUnique(role.getName());
@@ -142,13 +99,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return UserConstants.UNIQUE;
     }
-
-    /**
-     * 校验角色权限是否唯一
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     public String checkRoleKeyUnique(SysRoleEntity role) {
         SysRoleEntity info = roleMapper.checkRoleKeyUnique(role.getKey());
@@ -157,28 +108,18 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return UserConstants.UNIQUE;
     }
-
-    /**
-     * 校验角色是否允许操作
-     *
-     * @param role 角色信息
-     */
+    
     @Override
     public void checkRoleAllowed(SysRoleEntity role) {
         if (StringUtils.isNotNull(role.getId()) && role.isAdmin()) {
             throw new ServiceException("不允许操作超级管理员角色");
         }
     }
-
-    /**
-     * 校验角色是否有数据权限
-     *
-     * @param roleId 角色id
-     */
+    
     @Override
     public void checkRoleDataScope(String roleId) {
         if (!SecurityUtils.isAdmin()) {
-            SysRoleEntity role = new SysRoleEntity();
+            SysRoleQuery role = new SysRoleQuery();
             role.setId(roleId);
             List<SysRoleEntity> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
             if (StringUtils.isEmpty(roles)) {
@@ -186,24 +127,12 @@ public class SysRoleServiceImpl implements ISysRoleService {
             }
         }
     }
-
-    /**
-     * 通过角色ID查询角色使用数量
-     *
-     * @param roleId 角色ID
-     * @return 结果
-     */
+    
     @Override
     public int countUserRoleByRoleId(String roleId) {
         return userRoleMapper.countUserRoleByRoleId(roleId);
     }
-
-    /**
-     * 新增保存角色信息
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     @Transactional
     public int insertRole(SysRoleEntity role) {
@@ -211,13 +140,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleMapper.insertRole(role);
         return insertRoleMenu(role);
     }
-
-    /**
-     * 修改保存角色信息
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     @Transactional
     public int updateRole(SysRoleEntity role) {
@@ -227,24 +150,12 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleMenuMapper.deleteRoleMenuByRoleId(role.getId());
         return insertRoleMenu(role);
     }
-
-    /**
-     * 修改角色状态
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     public int updateRoleStatus(SysRoleEntity role) {
         return roleMapper.updateRole(role);
     }
-
-    /**
-     * 修改数据权限信息
-     *
-     * @param role 角色信息
-     * @return 结果
-     */
+    
     @Override
     @Transactional
     public int authDataScope(SysRoleEntity role) {
@@ -255,12 +166,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         // 新增角色和部门信息（数据权限）
         return insertRoleDept(role);
     }
-
-    /**
-     * 新增角色菜单信息
-     *
-     * @param role 角色对象
-     */
+    
     public int insertRoleMenu(SysRoleEntity role) {
         int rows = 1;
         // 新增用户与角色管理
@@ -276,12 +182,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return rows;
     }
-
-    /**
-     * 新增角色部门信息(数据权限)
-     *
-     * @param role 角色对象
-     */
+    
     public int insertRoleDept(SysRoleEntity role) {
         int rows = 1;
         // 新增角色与部门（数据权限）管理
@@ -297,13 +198,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         return rows;
     }
-
-    /**
-     * 通过角色ID删除角色
-     *
-     * @param roleId 角色ID
-     * @return 结果
-     */
+    
     @Override
     @Transactional
     public int deleteRoleById(String roleId) {
@@ -313,13 +208,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleDeptMapper.deleteRoleDeptByRoleId(roleId);
         return roleMapper.deleteRoleById(roleId);
     }
-
-    /**
-     * 批量删除角色信息
-     *
-     * @param roleIds 需要删除的角色ID
-     * @return 结果
-     */
+    
     @Override
     @Transactional
     public int deleteRoleByIds(String[] roleIds) {
@@ -339,37 +228,17 @@ public class SysRoleServiceImpl implements ISysRoleService {
         roleDeptMapper.deleteRoleDept(roleIds);
         return roleMapper.deleteRoleByIds(roleIds);
     }
-
-    /**
-     * 取消授权用户角色
-     *
-     * @param userRole 用户和角色关联信息
-     * @return 结果
-     */
+    
     @Override
     public int deleteAuthUser(SysUserRoleEntity userRole) {
         return userRoleMapper.deleteUserRoleInfo(userRole);
     }
-
-    /**
-     * 批量取消授权用户角色
-     *
-     * @param roleId  角色ID
-     * @param userIds 需要取消授权的用户数据ID
-     * @return 结果
-     */
+    
     @Override
     public int deleteAuthUsers(String roleId, String[] userIds) {
         return userRoleMapper.deleteUserRoleInfos(roleId, userIds);
     }
-
-    /**
-     * 批量选择授权用户角色
-     *
-     * @param roleId  角色ID
-     * @param userIds 需要授权的用户数据ID
-     * @return 结果
-     */
+    
     @Override
     public int insertAuthUsers(String roleId, String[] userIds) {
         // 新增用户与角色管理
