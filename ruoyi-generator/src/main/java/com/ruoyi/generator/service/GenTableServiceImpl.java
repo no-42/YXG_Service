@@ -26,7 +26,6 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.GenConstants;
 import com.ruoyi.common.core.text.CharsetKit;
 import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.generator.domain.GenTable;
 import com.ruoyi.generator.domain.GenTableColumn;
@@ -143,7 +142,7 @@ public class GenTableServiceImpl implements IGenTableService {
     @Override
     @Transactional
     public void importGenTable(List<GenTable> tableList) {
-        String operName = SecurityUtils.getUsername();
+        String operName = "null";
         try {
             for (GenTable table : tableList) {
                 String tableName = table.getTableName();

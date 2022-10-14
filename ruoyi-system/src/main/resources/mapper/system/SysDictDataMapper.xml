@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysDictDataMapper">
 
-    <resultMap type="com.ruoyi.common.core.domain.entity.SysDictDataEntity" id="SysDictDataResult">
+    <resultMap type="com.ruoyi.common.core.entity.SysDictDataEntity" id="SysDictDataResult">
         <id property="id" column="id"/>
         <result property="sort" column="sort"/>
         <result property="label" column="label"/>
@@ -53,7 +53,7 @@
         order by "sort" asc
     </select>
 
-    <select id="selectDictDataByType" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity"
+    <select id="selectDictDataByType" parameterType="com.ruoyi.common.core.entity.SysDictDataEntity"
             resultMap="SysDictDataResult">
         <include refid="selectDictDataVo"/>
         where enable = true and "type" = #{type} order by sort asc
@@ -90,7 +90,7 @@
         </foreach>
     </delete>
 
-    <update id="updateDictData" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity">
+    <update id="updateDictData" parameterType="com.ruoyi.common.core.entity.SysDictDataEntity">
         update "system".sys_dict_data
         <set>
             <if test="sort != null">sort = #{sort},</if>
@@ -114,7 +114,7 @@
         where type = #{oldDictType}
     </update>
 
-    <insert id="insertDictData" parameterType="com.ruoyi.common.core.domain.entity.SysDictDataEntity">
+    <insert id="insertDictData" parameterType="com.ruoyi.common.core.entity.SysDictDataEntity">
         insert into "system".sys_dict_data(
         <if test="sort != null">sort,</if>
         <if test="label != null and label != ''">label,</if>

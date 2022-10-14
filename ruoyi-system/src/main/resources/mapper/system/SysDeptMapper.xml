@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysDeptMapper">
 
-    <resultMap type="com.ruoyi.common.core.domain.entity.SysDeptEntity" id="SysDeptResult">
+    <resultMap type="com.ruoyi.common.core.entity.SysDeptEntity" id="SysDeptResult">
         <id property="id" column="id"/>
         <result property="parentId" column="parent_id"/>
         <result property="ancestors" column="ancestors"/>
@@ -110,7 +110,7 @@
         where "name"=#{name} and parent_id = #{parentId}::uuid and del_flag = '0' limit 1
     </select>
 
-    <insert id="insertDept" parameterType="com.ruoyi.common.core.domain.entity.SysDeptEntity" useGeneratedKeys="true"
+    <insert id="insertDept" parameterType="com.ruoyi.common.core.entity.SysDeptEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into "system".sys_dept(
         <if test="parentId != null and parentId != ''">parent_id,</if>
@@ -137,7 +137,7 @@
         )
     </insert>
 
-    <update id="updateDept" parameterType="com.ruoyi.common.core.domain.entity.SysDeptEntity">
+    <update id="updateDept" parameterType="com.ruoyi.common.core.entity.SysDeptEntity">
         update "system".sys_dept
         <set>
             <if test="parentId != null and parentId != ''">parent_id = #{parentId}::uuid,</if>

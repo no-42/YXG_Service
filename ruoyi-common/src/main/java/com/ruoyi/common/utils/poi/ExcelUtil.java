@@ -78,7 +78,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.UtilException;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.DictUtils;
+//import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileTypeUtils;
 import com.ruoyi.common.utils.file.FileUtils;
@@ -980,7 +980,8 @@ public class ExcelUtil<T> {
      * @return 字典标签
      */
     public static String convertDictByExp(String dictValue, String dictType, String separator) {
-        return DictUtils.getDictLabel(dictType, dictValue, separator);
+//        return DictUtils.getDictLabel(dictType, dictValue, separator);
+        return null;
     }
 
     /**
@@ -992,7 +993,8 @@ public class ExcelUtil<T> {
      * @return 字典值
      */
     public static String reverseDictByExp(String dictLabel, String dictType, String separator) {
-        return DictUtils.getDictValue(dictType, dictLabel, separator);
+//        return DictUtils.getDictValue(dictType, dictLabel, separator);
+        return null;
     }
 
     /**

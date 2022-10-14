@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.common.utils.JSONUtils;
+import com.ruoyi.system.domain.model.LoginUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -18,10 +20,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.enums.BusinessStatus;
 import com.ruoyi.common.enums.HttpMethod;
-import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.utils.SecurityUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
@@ -69,7 +70,10 @@ public class LogAspect {
     protected void handleLog(final JoinPoint joinPoint, Log controllerLog, final Exception e, Object jsonResult) {
         try {
             // 获取当前的用户
-            LoginUser loginUser = SecurityUtils.getLoginUser();
+            LoginUser<?> loginUser = SecurityUtils.getLoginUser();
+            if (loginUser == null || !(loginUser.getUser() instanceof SysUserEntity)){
+                return;
+            }
 
             // *========数据库日志=========*//
             SysOperLogEntity operLog = new SysOperLogEntity();
@@ -78,9 +82,9 @@ public class LogAspect {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
-            if (loginUser != null) {
-                operLog.setOperName(loginUser.getUsername());
-            }
+//            if (loginUser != null) {
+//                operLog.setOperName(loginUser.getUsername());
+//            }
 
             if (e != null) {
                 operLog.setStatus(BusinessStatus.FAIL.ordinal());

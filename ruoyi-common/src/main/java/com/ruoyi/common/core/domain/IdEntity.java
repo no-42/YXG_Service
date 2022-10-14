@@ -1,6 +1,7 @@
 package com.ruoyi.common.core.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class IdEntity extends BaseEntity {
 
-    @TableField("id")
+    @TableId("id")
     private String id;
 }

@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.BaseQuery;
+import com.ruoyi.system.domain.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.annotation.DataScope;
-import com.ruoyi.common.core.domain.BaseEntity;
-import com.ruoyi.common.core.domain.entity.SysRoleEntity;
-import com.ruoyi.common.core.domain.entity.SysUserEntity;
-import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.core.entity.SysRoleEntity;
+import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.utils.SecurityUtils;
 
 /**
  * 数据过滤处理
@@ -67,11 +66,13 @@ public class DataScopeAspect {
         // 获取当前的用户
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if (StringUtils.isNotNull(loginUser)) {
-            SysUserEntity currentUser = loginUser.getUser();
-            // 如果是超级管理员，则不过滤数据
-            if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin()) {
-                dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
-                        controllerDataScope.userAlias());
+            if (loginUser.getUser() instanceof SysUserEntity) {
+                SysUserEntity currentUser = (SysUserEntity) loginUser.getUser();
+                // 如果是超级管理员，则不过滤数据
+                if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin()) {
+                    dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
+                            controllerDataScope.userAlias());
+                }
             }
         }
     }
@@ -98,20 +99,20 @@ public class DataScopeAspect {
                 break;
             } else if (DATA_SCOPE_CUSTOM.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.id IN ( SELECT dept_id FROM \"system\".sys_role_dept WHERE role_id = {} ) ", deptAlias,
+                        " OR {}.id IN ( SELECT dept_id FROM \"system\".sys_role_dept WHERE role_id = {} ) " , deptAlias,
                         role.getId()));
             } else if (DATA_SCOPE_DEPT.equals(dataScope)) {
-                sqlString.append(StringUtils.format(" OR {}.id = {} ", deptAlias, user.getDeptId()));
+                sqlString.append(StringUtils.format(" OR {}.id = {} " , deptAlias, user.getDeptId()));
             } else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope)) {
                 sqlString.append(StringUtils.format(
-                        " OR {}.id IN ( SELECT id FROM  \"system\".sys_dept WHERE id = {} or find_in_set( {} , ancestors ) )",
+                        " OR {}.id IN ( SELECT id FROM  \"system\".sys_dept WHERE id = {} or find_in_set( {} , ancestors ) )" ,
                         deptAlias, user.getDeptId(), user.getDeptId()));
             } else if (DATA_SCOPE_SELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
-                    sqlString.append(StringUtils.format(" OR {}.id = {} ", userAlias, user.getId()));
+                    sqlString.append(StringUtils.format(" OR {}.id = {} " , userAlias, user.getId()));
                 } else {
                     // 数据权限为仅本人且没有userAlias别名不查询任何数据
-                    sqlString.append(StringUtils.format(" OR {}.id = 0 ", deptAlias));
+                    sqlString.append(StringUtils.format(" OR {}.id = 0 " , deptAlias));
                 }
             }
             conditions.add(dataScope);

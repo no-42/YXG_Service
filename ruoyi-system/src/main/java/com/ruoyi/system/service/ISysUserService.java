@@ -2,7 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 
-import com.ruoyi.common.core.domain.entity.SysUserEntity;
+import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.system.domain.query.SysUserQuery;
 
 /**

@@ -10,14 +10,15 @@ import java.util.stream.Collectors;
 
 import com.ruoyi.system.domain.query.SysMenuQuery;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.utils.TreeSelectBuild;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.TreeSelect;
-import com.ruoyi.common.core.domain.entity.SysMenuEntity;
-import com.ruoyi.common.core.domain.entity.SysRoleEntity;
-import com.ruoyi.common.core.domain.entity.SysUserEntity;
+import com.ruoyi.system.domain.entity.SysMenuEntity;
+import com.ruoyi.common.core.entity.SysRoleEntity;
+import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.vo.MetaVo;
 import com.ruoyi.system.domain.vo.RouterVo;
@@ -46,12 +47,12 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
-    
+
     @Override
     public List<SysMenuEntity> selectMenuList(String userId) {
         return selectMenuList(new SysMenuQuery(), userId);
     }
-    
+
     @Override
     public List<SysMenuEntity> selectMenuList(SysMenuQuery query, String userId) {
         List<SysMenuEntity> menuList;
@@ -64,7 +65,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return menuList;
     }
-    
+
     @Override
     public Set<String> selectMenuPermsByUserId(String userId) {
         List<String> perms = menuMapper.selectMenuPermsByUserId(userId);
@@ -76,7 +77,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return permsSet;
     }
-    
+
     @Override
     public List<SysMenuEntity> selectMenuTreeByUserId(String userId) {
         List<SysMenuEntity> menus;
@@ -88,13 +89,13 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return getChildPerms(menus, null);
     }
-    
+
     @Override
     public List<String> selectMenuListByRoleId(String roleId) {
         SysRoleEntity role = roleMapper.selectRoleById(roleId);
         return menuMapper.selectMenuListByRoleId(roleId, role.getMenuCheckStrictly());
     }
-    
+
     @Override
     public List<RouterVo> buildMenus(List<SysMenuEntity> menus) {
         List<RouterVo> routers = new LinkedList<>();
@@ -139,7 +140,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return routers;
     }
-    
+
     @Override
     public List<SysMenuEntity> buildMenuTree(List<SysMenuEntity> menus) {
         List<SysMenuEntity> returnList = new ArrayList<>();
@@ -159,45 +160,45 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return returnList;
     }
-    
+
     @Override
     public List<TreeSelect> buildMenuTreeSelect(List<SysMenuEntity> menus) {
         List<SysMenuEntity> menuTrees = buildMenuTree(menus);
-        return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+        return menuTrees.stream().map(TreeSelectBuild::sysMenuBuild).collect(Collectors.toList());
     }
-    
+
     @Override
     public SysMenuEntity selectMenuById(String menuId) {
         return menuMapper.selectMenuById(menuId);
     }
-    
+
     @Override
     public boolean hasChildByMenuId(String menuId) {
         int result = menuMapper.hasChildByMenuId(menuId);
         return result > 0;
     }
-    
+
     @Override
     public boolean checkMenuExistRole(String menuId) {
         int result = roleMenuMapper.checkMenuExistRole(menuId);
         return result > 0;
     }
-    
+
     @Override
     public int insertMenu(SysMenuEntity menu) {
         return menuMapper.insertMenu(menu);
     }
-    
+
     @Override
     public int updateMenu(SysMenuEntity menu) {
         return menuMapper.updateMenu(menu);
     }
-    
+
     @Override
     public int deleteMenuById(String menuId) {
         return menuMapper.deleteMenuById(menuId);
     }
-    
+
     @Override
     public String checkMenuNameUnique(SysMenuEntity menu) {
         SysMenuEntity info = menuMapper.checkMenuNameUnique(menu.getName(), menu.getParentId());
@@ -353,6 +354,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     public String innerLinkReplaceEach(String path) {
         return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS},
-                new String[]{"", ""});
+                new String[]{"" , ""});
     }
 }

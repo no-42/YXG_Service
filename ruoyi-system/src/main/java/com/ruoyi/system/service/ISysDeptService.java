@@ -3,7 +3,7 @@ package com.ruoyi.system.service;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.TreeSelect;
-import com.ruoyi.common.core.domain.entity.SysDeptEntity;
+import com.ruoyi.common.core.entity.SysDeptEntity;
 import com.ruoyi.system.domain.query.SysDeptQuery;
 
 /**

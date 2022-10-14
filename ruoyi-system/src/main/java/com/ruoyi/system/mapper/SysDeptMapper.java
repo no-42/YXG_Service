@@ -7,7 +7,7 @@ import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.system.domain.query.SysDeptQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.ruoyi.common.core.domain.entity.SysDeptEntity;
+import com.ruoyi.common.core.entity.SysDeptEntity;
 
 /**
  * 部门管理 数据层

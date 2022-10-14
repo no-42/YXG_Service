@@ -3,7 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.common.core.domain.entity.SysDictTypeEntity;
+import com.ruoyi.common.core.entity.SysDictTypeEntity;
 import com.ruoyi.system.domain.query.SysDictTypeQuery;
 import org.apache.ibatis.annotations.Mapper;
 

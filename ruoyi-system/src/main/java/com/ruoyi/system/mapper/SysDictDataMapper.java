@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.query.SysDictDataQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.ruoyi.common.core.domain.entity.SysDictDataEntity;
+import com.ruoyi.common.core.entity.SysDictDataEntity;
 
 /**
  * 字典表 数据层

@@ -8,14 +8,14 @@ import javax.annotation.PostConstruct;
 
 import com.ruoyi.system.domain.query.SysDictDataQuery;
 import com.ruoyi.system.domain.query.SysDictTypeQuery;
+import com.ruoyi.system.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.constant.UserConstants;
-import com.ruoyi.common.core.domain.entity.SysDictDataEntity;
-import com.ruoyi.common.core.domain.entity.SysDictTypeEntity;
+import com.ruoyi.common.core.entity.SysDictDataEntity;
+import com.ruoyi.common.core.entity.SysDictTypeEntity;
 import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysDictTypeMapper;

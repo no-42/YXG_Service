@@ -1,7 +1,8 @@
 package com.ruoyi.system.service.impl;
 
+import com.ruoyi.common.core.entity.SysUserEntity;
+import com.ruoyi.system.domain.model.LoginUser;
 import org.springframework.stereotype.Service;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysUserOnline;
 import com.ruoyi.system.service.ISysUserOnlineService;
@@ -21,7 +22,7 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService {
      * @return 在线用户信息
      */
     @Override
-    public SysUserOnline selectOnlineByIpaddr(String ipaddr, LoginUser user) {
+    public SysUserOnline selectOnlineByIpaddr(String ipaddr, LoginUser<SysUserEntity> user) {
         if (StringUtils.equals(ipaddr, user.getIpaddr())) {
             return loginUserToUserOnline(user);
         }
@@ -36,7 +37,7 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService {
      * @return 在线用户信息
      */
     @Override
-    public SysUserOnline selectOnlineByUserName(String userName, LoginUser user) {
+    public SysUserOnline selectOnlineByUserName(String userName, LoginUser<SysUserEntity> user) {
         if (StringUtils.equals(userName, user.getUsername())) {
             return loginUserToUserOnline(user);
         }
@@ -52,7 +53,7 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService {
      * @return 在线用户信息
      */
     @Override
-    public SysUserOnline selectOnlineByInfo(String ipaddr, String userName, LoginUser user) {
+    public SysUserOnline selectOnlineByInfo(String ipaddr, String userName, LoginUser<SysUserEntity> user) {
         if (StringUtils.equals(ipaddr, user.getIpaddr()) && StringUtils.equals(userName, user.getUsername())) {
             return loginUserToUserOnline(user);
         }
@@ -66,7 +67,7 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService {
      * @return 在线用户
      */
     @Override
-    public SysUserOnline loginUserToUserOnline(LoginUser user) {
+    public SysUserOnline loginUserToUserOnline(LoginUser<SysUserEntity> user) {
         if (StringUtils.isNull(user) || StringUtils.isNull(user.getUser())) {
             return null;
         }

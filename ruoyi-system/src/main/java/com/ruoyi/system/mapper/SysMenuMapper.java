@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.query.SysMenuQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.ruoyi.common.core.domain.entity.SysMenuEntity;
+import com.ruoyi.system.domain.entity.SysMenuEntity;
 
 /**
  * 菜单表 数据层

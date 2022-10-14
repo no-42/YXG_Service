@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.common.annotation.DataScope;
-import com.ruoyi.common.core.domain.entity.SysRoleEntity;
+import com.ruoyi.common.core.entity.SysRoleEntity;
 import com.ruoyi.system.domain.query.SysRoleQuery;
 import org.apache.ibatis.annotations.Mapper;
 

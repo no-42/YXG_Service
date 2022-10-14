@@ -103,11 +103,11 @@
               <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
                 <el-option
                     v-for="dict in dictOptions"
-                    :key="dict.dictType"
-                    :label="dict.dictName"
-                    :value="dict.dictType">
-                  <span style="float: left">{{ dict.dictName }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictType }}</span>
+                    :key="dict.type"
+                    :label="dict.name"
+                    :value="dict.type">
+                  <span style="float: left">{{ dict.name }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.type }}</span>
                 </el-option>
               </el-select>
             </template>

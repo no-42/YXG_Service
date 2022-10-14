@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ruoyi.common.core.domain.TreeSelect;
-import com.ruoyi.common.core.domain.entity.SysMenuEntity;
+import com.ruoyi.system.domain.entity.SysMenuEntity;
 import com.ruoyi.system.domain.query.SysMenuQuery;
 import com.ruoyi.system.domain.vo.RouterVo;
 
