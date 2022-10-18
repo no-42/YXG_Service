@@ -13,7 +13,7 @@ import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.entity.SysConfigEntity;
+import com.ruoyi.common.core.entity.SysConfigEntity;
 import com.ruoyi.system.mapper.SysConfigMapper;
 import com.ruoyi.system.service.ISysConfigService;
 

@@ -196,6 +196,8 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>ruoyi-starter</module>
+        <module>ruoyi-api</module>
+        <module>business-member</module>
     </modules>
     <packaging>pom</packaging>
 

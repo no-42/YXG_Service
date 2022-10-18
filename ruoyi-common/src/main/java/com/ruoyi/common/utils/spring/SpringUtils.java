@@ -17,6 +17,17 @@ import com.ruoyi.common.utils.StringUtils;
  */
 @Component
 public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware {
+
+    /**
+     * 测试环境标志
+     */
+    public static final String PROFILE_DEV = "dev";
+
+    /**
+     * 生产环境标志
+     */
+    public static final String PROFILE_PROP = "prop";
+    
     /**
      * Spring应用上下文环境
      */
@@ -136,5 +147,12 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      */
     public static String getRequiredProperty(String key) {
         return applicationContext.getEnvironment().getRequiredProperty(key);
+    }
+
+    /**
+     * 判断当前的环境配置是否是测试环境
+     */
+    public static boolean isDev() {
+        return PROFILE_DEV.equals(getActiveProfile());
     }
 }

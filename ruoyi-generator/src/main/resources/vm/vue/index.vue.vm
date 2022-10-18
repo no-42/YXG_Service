@@ -120,19 +120,19 @@
 #end
 #if($column.pk)
       <el-table-column label="${comment}" align="center" prop="${javaField}" />
-#elseif($column.list && $column.htmlType == "datetime")
+#elseif($column.isList && $column.htmlType == "datetime")
       <el-table-column label="${comment}" align="center" prop="${javaField}" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.${javaField}, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-#elseif($column.list && $column.htmlType == "imageUpload")
+#elseif($column.isList && $column.htmlType == "imageUpload")
       <el-table-column label="${comment}" align="center" prop="${javaField}" width="100">
         <template #default="scope">
           <image-preview :src="scope.row.${javaField}" :width="50" :height="50"/>
         </template>
       </el-table-column>
-#elseif($column.list && "" != $column.dictType)
+#elseif($column.isList && "" != $column.dictType && $column.dictType )
       <el-table-column label="${comment}" align="center" prop="${javaField}">
         <template #default="scope">
 #if($column.htmlType == "checkbox")
@@ -142,7 +142,7 @@
 #end
         </template>
       </el-table-column>
-#elseif($column.list && "" != $javaField)
+#elseif($column.isList && "" != $javaField)
       <el-table-column label="${comment}" align="center" prop="${javaField}" />
 #end
 #end
@@ -177,7 +177,7 @@
       <el-form ref="${businessName}Ref" :model="form" :rules="rules" label-width="80px">
 #foreach($column in $columns)
 #set($field=$column.javaField)
-#if($column.insert && !$column.pk)
+#if($column.isInsert && !$column.pk)
 #if(($column.usableColumn) || (!$column.superColumn))
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
@@ -293,13 +293,13 @@
 #set($comment=$column.columnComment)
 #end
 #if($column.pk || $javaField == ${subTableFkclassName})
-#elseif($column.list && $column.htmlType == "input")
+#elseif($column.isList && $column.htmlType == "input")
           <el-table-column label="$comment" prop="${javaField}" width="150">
             <template #default="scope">
               <el-input v-model="scope.row.$javaField" placeholder="请输入$comment" />
             </template>
           </el-table-column>
-#elseif($column.list && $column.htmlType == "datetime")
+#elseif($column.isList && $column.htmlType == "datetime")
           <el-table-column label="$comment" prop="${javaField}" width="240">
             <template #default="scope">
               <el-date-picker clearable
@@ -310,7 +310,7 @@
               </el-date-picker>
             </template>
           </el-table-column>
-#elseif($column.list && ($column.htmlType == "select" || $column.htmlType == "radio") && "" != $column.dictType)
+#elseif($column.isList && ($column.htmlType == "select" || $column.htmlType == "radio") && "" != $column.dictType)
           <el-table-column label="$comment" prop="${javaField}" width="150">
             <template #default="scope">
               <el-select v-model="scope.row.$javaField" placeholder="请选择$comment">
@@ -323,7 +323,7 @@
               </el-select>
             </template>
           </el-table-column>
-#elseif($column.list && ($column.htmlType == "select" || $column.htmlType == "radio") && "" == $column.dictType)
+#elseif($column.isList && ($column.htmlType == "select" || $column.htmlType == "radio") && "" == $column.dictType)
           <el-table-column label="$comment" prop="${javaField}" width="150">
             <template #default="scope">
               <el-select v-model="scope.row.$javaField" placeholder="请选择$comment">
@@ -347,6 +347,7 @@
 </template>
 
 <script setup name="${BusinessName}">
+import {getCurrentInstance, ref, toRefs} from 'vue';
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
 
 const { proxy } = getCurrentInstance();
@@ -383,14 +384,14 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     #foreach ($column in $columns)
-#if($column.query)
+#if($column.isQuery)
     $column.javaField: null#if($foreach.count != $columns.size()),#end
 #end
 #end
   },
   rules: {
     #foreach ($column in $columns)
-#if($column.required)
+#if($column.isRequired)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
@@ -558,7 +559,7 @@ function row${subClassName}Index({ row, rowIndex }) {
 function handleAdd${subClassName}() {
   let obj = {};
 #foreach($column in $subTable.columns)
-#if($column.pk || $column.javaField == ${subTableFkclassName})
+#if($column.isPk || $column.javaField == ${subTableFkclassName})
 #elseif($column.list && "" != $javaField)
   obj.$column.javaField = "";
 #end

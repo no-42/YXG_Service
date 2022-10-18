@@ -2,7 +2,7 @@ package com.ruoyi.system.service;
 
 import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.system.domain.SysUserOnline;
-import com.ruoyi.system.domain.model.LoginUser;
+import com.ruoyi.common.core.domain.LoginUser;
 
 /**
  * 在线用户 服务层

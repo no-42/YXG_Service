@@ -339,7 +339,7 @@ function getList() {
 function getTreeSelect() {
   menuOptions.value = [];
   listMenu().then(response => {
-    const menu = {id: 0, name: "主类目", children: []};
+    const menu = {id: null, name: "主类目", children: []};
     menu.children = proxy.handleTree(response.data, "id");
     menuOptions.value.push(menu);
   });
@@ -355,13 +355,13 @@ function cancel() {
 function reset() {
   form.value = {
     id: undefined,
-    parentId: 0,
+    parentId: undefined,
     name: undefined,
     icon: undefined,
     type: "M",
     orderNum: undefined,
-    isFrame: "1",
-    isCache: "0",
+    isFrame: undefined,
+    isCache: undefined,
     visible: undefined,
     enable: undefined
   };

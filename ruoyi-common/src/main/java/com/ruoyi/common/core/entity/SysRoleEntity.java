@@ -86,18 +86,21 @@ public class SysRoleEntity extends IdDateEntity {
      * 用户是否存在此角色标识 默认不存在
      * TODO 放到dto中
      */
+    @TableField(exist = false)
     private boolean flag = false;
 
     /**
      * 菜单组
      * TODO 放到dto中
      */
+    @TableField(exist = false)
     private String[] menuIds;
 
     /**
      * 部门组（数据权限）
      * TODO 放到dto中
      */
+    @TableField(exist = false)
     private String[] deptIds;
 
 

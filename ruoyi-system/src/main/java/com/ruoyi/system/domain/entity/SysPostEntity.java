@@ -61,6 +61,7 @@ public class SysPostEntity extends IdDateEntity {
      * 用户是否存在此岗位标识 默认不存在
      * TODO 这个待确定
      */
+    @TableField(exist = false)
     private boolean flag = false;
 
 }

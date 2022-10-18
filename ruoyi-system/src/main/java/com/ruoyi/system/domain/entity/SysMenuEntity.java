@@ -114,13 +114,15 @@ public class SysMenuEntity extends IdDateEntity {
     /**
      * 子菜单
      */
-    private List<SysMenuEntity> children = new ArrayList<SysMenuEntity>();
+    @TableField(exist = false)
+    private List<SysMenuEntity> children = new ArrayList<>();
 
 
     /**
      * 父菜单名称
      * TODO 这个放到dto中
      */
+    @TableField(exist = false)
     private String parentName;
 
 

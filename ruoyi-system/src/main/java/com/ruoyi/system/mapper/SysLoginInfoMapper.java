@@ -2,7 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.common.core.domain.BaseMapper;
 import com.ruoyi.system.domain.entity.SysLoginInfoEntity;
 import com.ruoyi.system.domain.query.SysLoginInfoQuery;
 import org.apache.ibatis.annotations.Mapper;

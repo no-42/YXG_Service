@@ -1,4 +1,4 @@
-package ${packageName}.domain;
+package ${packageName}.domain.entity;
 
 #foreach ($import in $importList)
 import ${import};
@@ -8,13 +8,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
-#if($table.crud || $table.sub)
-import com.ruoyi.common.core.domain.BaseEntity;
-#elseif($table.tree)
-import com.ruoyi.common.core.domain.TreeEntity;
+#if($dateEntity )
+import com.ruoyi.common.core.domain.IdDateEntity
+#else
+import com.ruoyi.common.core.domain.IdEntity
 #end
 
 /**
@@ -23,20 +21,22 @@ import com.ruoyi.common.core.domain.TreeEntity;
  * @author ${author}
  * @date ${datetime}
  */
-#if($dataEntity )
-#set($Entity="IdEntity")
-#elseif($table.tree)
+#if($dateEntity )
 #set($Entity="IdDateEntity")
+#else
+#set($Entity="IdEntity")
 #end
 @Getter
 @Setter
 @ToString
-@TableName(value = "${tableName}",schema = ${schemaName})
-public class ${ClassName} extends ${Entity}{
+@TableName(value = "${tableName}",schema = "${schemaName}")
+public class ${ClassName}Entity extends ${Entity}{
 
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField))
-    /** $column.columnComment */
+    /**
+     *  $column.columnComment 
+     */
 #if($column.list)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
@@ -53,8 +53,9 @@ public class ${ClassName} extends ${Entity}{
     @Excel(name = "${comment}")
 #end
 #end
-    @TableField("$columnName")
+    @TableField("${column.columnName}")
     private $column.javaType $column.javaField;
+    
 #end
 #end
 

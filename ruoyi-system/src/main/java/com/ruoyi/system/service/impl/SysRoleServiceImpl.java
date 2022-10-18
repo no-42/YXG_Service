@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.entity.SysRoleEntity;
 import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.system.utils.SecurityUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.domain.entity.SysRoleDeptEntity;

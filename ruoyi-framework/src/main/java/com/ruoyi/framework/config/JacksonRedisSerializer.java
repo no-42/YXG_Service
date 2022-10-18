@@ -25,7 +25,6 @@ public class JacksonRedisSerializer<T> implements RedisSerializer<T> {
         super();
         this.clazz = clazz;
         mapper = new ObjectMapper();
-//        mapper.activateDefaultTyping(BasicPolymorphicTypeValidator.builder().build());
         mapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         mapper.registerModule(JSONUtils.getDateModule());
         mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);

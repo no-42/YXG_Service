@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Locale;
+
 /**
  * 代码生成业务字段表 gen_table_column
  *
@@ -126,7 +128,7 @@ public class GenTableColumn extends IdDateEntity {
      */
     @TableField("sort")
     private Integer sort;
-    
+
     public boolean isSuperColumn() {
         return isSuperColumn(this.javaField);
     }
@@ -163,5 +165,9 @@ public class GenTableColumn extends IdDateEntity {
         } else {
             return this.columnComment;
         }
+    }
+
+    public String capJavaField() {
+        return javaField.substring(0, 1).toUpperCase() + javaField.substring(1);
     }
 }

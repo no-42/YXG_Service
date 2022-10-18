@@ -1,0 +1,51 @@
+package ${packageName}.domain.query;
+
+import com.ruoyi.common.annotation.QueryField;
+import com.ruoyi.common.core.domain.BaseQuery;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+/**
+ * ${functionName}查询条件
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Getter
+@Setter
+@ToString
+public class ${ClassName}Query extends BaseQuery{
+
+#foreach ($column in $columns)
+    #if($column.isQuery)
+    #set($queryType=$column.queryType)
+    #if($queryType == "EQ")
+        #set($TYPE="EQ")
+    #elseif($queryType == "NE")
+        #set($TYPE="NEQ")
+    #elseif($queryType == "GT")
+        #set($TYPE="GT")
+    #elseif($queryType == "GTE")
+        #set($TYPE="GE")
+    #elseif($queryType == "LT")
+        #set($TYPE="LT")
+    #elseif($queryType == "LTE")
+        #set($TYPE="LE")
+    #elseif($queryType == "LIKE")
+        #set($TYPE="LIKE")
+    #elseif($queryType == "BETWEEN")
+        #set($TYPE="EQ")
+    #else
+        #set($TYPE="EQ")
+    #end
+    
+    /**
+     *  $column.columnComment
+     */
+    @QueryField(type = QueryField.CompareType.$TYPE)
+    private $column.javaType $column.javaField;
+    #end
+    
+#end
+    
+}

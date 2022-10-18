@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 
 import com.ruoyi.system.domain.query.SysDictDataQuery;
 import com.ruoyi.system.domain.query.SysDictTypeQuery;
-import com.ruoyi.system.utils.DictUtils;
+import com.ruoyi.common.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

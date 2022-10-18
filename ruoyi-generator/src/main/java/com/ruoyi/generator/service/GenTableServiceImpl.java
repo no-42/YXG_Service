@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.constant.Constants;
-import com.ruoyi.common.constant.GenConstants;
+import com.ruoyi.generator.constant.GenConstants;
 import com.ruoyi.common.core.text.CharsetKit;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;

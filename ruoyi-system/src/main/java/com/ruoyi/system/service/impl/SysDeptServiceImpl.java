@@ -14,7 +14,7 @@ import com.ruoyi.common.core.entity.SysDeptEntity;
 import com.ruoyi.common.core.entity.SysRoleEntity;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.system.utils.SecurityUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.mapper.SysDeptMapper;

@@ -2,7 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 
-import com.ruoyi.system.domain.entity.SysConfigEntity;
+import com.ruoyi.common.core.entity.SysConfigEntity;
 import com.ruoyi.system.domain.query.SysConfigQuery;
 
 /**

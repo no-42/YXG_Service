@@ -2,8 +2,8 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.core.domain.BaseMapper;
 import com.ruoyi.system.domain.query.SysUserQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

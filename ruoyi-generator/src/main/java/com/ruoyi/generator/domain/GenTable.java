@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.ArrayUtils;
-import com.ruoyi.common.constant.GenConstants;
+import com.ruoyi.generator.constant.GenConstants;
 import com.ruoyi.common.utils.StringUtils;
 
 /**

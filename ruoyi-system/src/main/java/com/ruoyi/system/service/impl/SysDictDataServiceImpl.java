@@ -3,7 +3,7 @@ package com.ruoyi.system.service.impl;
 import java.util.List;
 
 import com.ruoyi.system.domain.query.SysDictDataQuery;
-import com.ruoyi.system.utils.DictUtils;
+import com.ruoyi.common.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.entity.SysDictDataEntity;

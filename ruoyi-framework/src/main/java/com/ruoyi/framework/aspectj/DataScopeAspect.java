@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.BaseQuery;
-import com.ruoyi.system.domain.model.LoginUser;
+import com.ruoyi.common.core.domain.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,7 +15,6 @@ import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.core.entity.SysRoleEntity;
 import com.ruoyi.common.core.entity.SysUserEntity;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.utils.SecurityUtils;
 
 /**
  * 数据过滤处理
@@ -64,7 +64,7 @@ public class DataScopeAspect {
 
     protected void handleDataScope(final JoinPoint joinPoint, DataScope controllerDataScope) {
         // 获取当前的用户
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+        LoginUser<?> loginUser = SecurityUtils.getLoginUser();
         if (StringUtils.isNotNull(loginUser)) {
             if (loginUser.getUser() instanceof SysUserEntity) {
                 SysUserEntity currentUser = (SysUserEntity) loginUser.getUser();

@@ -91,12 +91,14 @@ public class SysDeptEntity extends IdDateEntity {
      * 父部门名称
      * TODO 这个应该移动到dto中
      */
+    @TableField(exist = false)
     private String parentName;
 
     /**
      * 子部门
      * TODO 这个移动
      */
+    @TableField(exist = false)
     private List<SysDeptEntity> children = new ArrayList<>();
 
 }

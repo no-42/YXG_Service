@@ -127,30 +127,35 @@ public class SysUserEntity extends IdDateEntity {
             @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
+    @TableField(exist = false)
     private SysDeptEntity dept;
 
     /**
      * 角色对象
      * TODO 放到DTO
      */
+    @TableField(exist = false)
     private List<SysRoleEntity> roles;
 
     /**
      * 角色组
      * TODO 放到dto
      */
+    @TableField(exist = false)
     private String[] roleIds;
 
     /**
      * 岗位组
      * TODO 放到dto
      */
+    @TableField(exist = false)
     private String[] postIds;
 
     /**
      * 角色ID
      * TODO 放到dto
      */
+    @TableField(exist = false)
     private String roleId;
     
     @JsonIgnore

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.velocity.VelocityContext;
-import com.ruoyi.common.constant.GenConstants;
+import com.ruoyi.generator.constant.GenConstants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.generator.domain.GenTable;
@@ -46,36 +46,37 @@ public class VelocityUtils {
         String functionName = genTable.getFunctionName();
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("tplCategory" , genTable.getTplCategory());
-        velocityContext.put("tableName" , genTable.getTableName());
-        velocityContext.put("functionName" , StringUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
-        velocityContext.put("ClassName" , genTable.getClassName());
-        velocityContext.put("className" , StringUtils.uncapitalize(genTable.getClassName()));
-        velocityContext.put("moduleName" , genTable.getModuleName());
-        velocityContext.put("BusinessName" , StringUtils.capitalize(genTable.getBusinessName()));
-        velocityContext.put("businessName" , genTable.getBusinessName());
-        velocityContext.put("basePackage" , getPackagePrefix(packageName));
-        velocityContext.put("packageName" , packageName);
-        velocityContext.put("author" , genTable.getFunctionAuthor());
-        velocityContext.put("datetime" , DateUtils.getDate());
-        velocityContext.put("pkColumn" , genTable.getPkColumn());
-        velocityContext.put("importList" , getImportList(genTable));
-        velocityContext.put("permissionPrefix" , getPermissionPrefix(moduleName, businessName));
-        velocityContext.put("columns" , genTable.getColumns());
+        velocityContext.put("tplCategory", genTable.getTplCategory());
+        velocityContext.put("tableName", genTable.getTableName());
+        velocityContext.put("schemaName", genTable.getSchemaName());
+        velocityContext.put("functionName", StringUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
+        velocityContext.put("ClassName", genTable.getClassName());
+        velocityContext.put("className", StringUtils.uncapitalize(genTable.getClassName()));
+        velocityContext.put("moduleName", genTable.getModuleName());
+        velocityContext.put("BusinessName", StringUtils.capitalize(genTable.getBusinessName()));
+        velocityContext.put("businessName", genTable.getBusinessName());
+        velocityContext.put("basePackage", getPackagePrefix(packageName));
+        velocityContext.put("packageName", packageName);
+        velocityContext.put("author", genTable.getFunctionAuthor());
+        velocityContext.put("datetime", DateUtils.getDate());
+        velocityContext.put("pkColumn", genTable.getPkColumn());
+        velocityContext.put("importList", getImportList(genTable));
+        velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
+        velocityContext.put("columns", genTable.getColumns());
 
-        boolean dataEntity = false;
+        boolean dateEntity = false;
         if (genTable.getColumns() != null) {
             for (GenTableColumn column : genTable.getColumns()) {
                 if (column.isSuperColumn()) {
-                    dataEntity = true;
+                    dateEntity = true;
                     break;
                 }
             }
         }
-        velocityContext.put("dataEntity" , dataEntity);
+        velocityContext.put("dateEntity", dateEntity);
 
-        velocityContext.put("table" , genTable);
-        velocityContext.put("dicts" , getDicts(genTable));
+        velocityContext.put("table", genTable);
+        velocityContext.put("dicts", getDicts(genTable));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
             setTreeVelocityContext(velocityContext, genTable);
@@ -90,7 +91,7 @@ public class VelocityUtils {
         String options = genTable.getOptions();
 //        J paramsObj = JSON.parseObject(options);
 //        String parentMenuId = getParentMenuId(paramsObj);
-        context.put("parentMenuId" , null);
+        context.put("parentMenuId", null);
     }
 
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable) {
@@ -119,14 +120,14 @@ public class VelocityUtils {
         String subClassName = genTable.getSubTable().getClassName();
         String subTableFkClassName = StringUtils.convertToCamelCase(subTableFkName);
 
-        context.put("subTable" , subTable);
-        context.put("subTableName" , subTableName);
-        context.put("subTableFkName" , subTableFkName);
-        context.put("subTableFkClassName" , subTableFkClassName);
-        context.put("subTableFkclassName" , StringUtils.uncapitalize(subTableFkClassName));
-        context.put("subClassName" , subClassName);
-        context.put("subclassName" , StringUtils.uncapitalize(subClassName));
-        context.put("subImportList" , getImportList(genTable.getSubTable()));
+        context.put("subTable", subTable);
+        context.put("subTableName", subTableName);
+        context.put("subTableFkName", subTableFkName);
+        context.put("subTableFkClassName", subTableFkClassName);
+        context.put("subTableFkclassName", StringUtils.uncapitalize(subTableFkClassName));
+        context.put("subClassName", subClassName);
+        context.put("subclassName", StringUtils.uncapitalize(subClassName));
+        context.put("subImportList", getImportList(genTable.getSubTable()));
     }
 
     /**
@@ -135,8 +136,9 @@ public class VelocityUtils {
      * @return 模板列表
      */
     public static List<String> getTemplateList(String tplCategory) {
-        List<String> templates = new ArrayList<String>();
+        List<String> templates = new ArrayList<>();
         templates.add("vm/java/domain.java.vm");
+        templates.add("vm/java/query.java.vm");
         templates.add("vm/java/mapper.java.vm");
         templates.add("vm/java/service.java.vm");
         templates.add("vm/java/serviceImpl.java.vm");
@@ -146,7 +148,7 @@ public class VelocityUtils {
         templates.add("vm/js/api.js.vm");
         if (GenConstants.TPL_CRUD.equals(tplCategory)) {
             templates.add("vm/vue/index.vue.vm");
-        } 
+        }
         return templates;
     }
 
@@ -165,33 +167,35 @@ public class VelocityUtils {
         // 业务名称
         String businessName = genTable.getBusinessName();
 
-        String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, "." , "/");
+        String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
         String vuePath = "vue";
 
         if (template.contains("domain.java.vm")) {
-            fileName = StringUtils.format("{}/domain/{}.java" , javaPath, className);
+            fileName = StringUtils.format("{}/domain/entity/{}Entity.java", javaPath, className);
         }
         if (template.contains("sub-domain.java.vm") && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory())) {
-            fileName = StringUtils.format("{}/domain/{}.java" , javaPath, genTable.getSubTable().getClassName());
+            fileName = StringUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());
         } else if (template.contains("mapper.java.vm")) {
-            fileName = StringUtils.format("{}/mapper/{}Mapper.java" , javaPath, className);
+            fileName = StringUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
         } else if (template.contains("service.java.vm")) {
-            fileName = StringUtils.format("{}/service/I{}Service.java" , javaPath, className);
+            fileName = StringUtils.format("{}/service/I{}Service.java", javaPath, className);
         } else if (template.contains("serviceImpl.java.vm")) {
-            fileName = StringUtils.format("{}/service/impl/{}ServiceImpl.java" , javaPath, className);
+            fileName = StringUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         } else if (template.contains("controller.java.vm")) {
-            fileName = StringUtils.format("{}/controller/{}Controller.java" , javaPath, className);
+            fileName = StringUtils.format("{}/controller/{}Controller.java", javaPath, className);
         } else if (template.contains("mapper.xml.vm")) {
-            fileName = StringUtils.format("{}/{}Mapper.xml" , mybatisPath, className);
+            fileName = StringUtils.format("{}/{}Mapper.xml", mybatisPath, className);
         } else if (template.contains("sql.vm")) {
             fileName = businessName + "Menu.sql";
         } else if (template.contains("api.js.vm")) {
-            fileName = StringUtils.format("{}/api/{}/{}.js" , vuePath, moduleName, businessName);
+            fileName = StringUtils.format("{}/api/{}/{}.js", vuePath, moduleName, businessName);
         } else if (template.contains("index.vue.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
+            fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
         } else if (template.contains("index-tree.vue.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
+            fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
+        } else if (template.contains("query.java.vm")) {
+            fileName = StringUtils.format("{}/domain/query/{}Query.java", javaPath, className);
         }
         return fileName;
     }
@@ -272,7 +276,7 @@ public class VelocityUtils {
      * @return 返回权限前缀
      */
     public static String getPermissionPrefix(String moduleName, String businessName) {
-        return StringUtils.format("{}:{}" , moduleName, businessName);
+        return StringUtils.format("{}:{}", moduleName, businessName);
     }
 
     /**

@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.admin.web.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import ${packageName}.domain.${ClassName};
+import ${packageName}.domain.entity.${ClassName}Entity;
 import ${packageName}.service.I${ClassName}Service;
+import ${packageName}.domain.query.${ClassName}Query;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -29,8 +30,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/${moduleName}/${businessName}")
-public class ${ClassName}Controller extends BaseController
-{
+public class ${ClassName}Controller extends BaseController {
+    
     @Autowired
     private I${ClassName}Service ${className}Service;
 
@@ -39,9 +40,9 @@ public class ${ClassName}Controller extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
     @GetMapping("/list")
-    public TableDataInfo list(${ClassName} ${className}) {
+    public TableDataInfo list(${ClassName}Query query) {
         startPage();
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        List<${ClassName}Entity> list = ${className}Service.select${ClassName}List(query);
         return getDataTable(list);
     }
 
@@ -51,9 +52,9 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:export')")
     @Log(title = "${functionName}", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, ${ClassName} ${className}) {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
+    public void export(HttpServletResponse response, ${ClassName}Query query) {
+        List<${ClassName}Entity> list = ${className}Service.select${ClassName}List(query);
+        ExcelUtil<${ClassName}Entity> util = new ExcelUtil<${ClassName}Entity>(${ClassName}.class);
         util.exportExcel(response, list, "${functionName}数据");
     }
 
@@ -63,7 +64,7 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:query')")
     @GetMapping(value = "/{${pkColumn.javaField}}")
     public AjaxResult getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField}) {
-        return AjaxResult.success(${className}Service.select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField}));
+        return AjaxResult.success(${className}Service.select${ClassName}By${pkColumn.capJavaField()}(${pkColumn.javaField}));
     }
 
     /**
@@ -72,7 +73,7 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')")
     @Log(title = "${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ${ClassName} ${className}) {
+    public AjaxResult add(@RequestBody ${ClassName}Entity ${className}) {
         return toAjax(${className}Service.insert${ClassName}(${className}));
     }
 
@@ -82,7 +83,7 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ${ClassName} ${className}) {
+    public AjaxResult edit(@RequestBody ${ClassName}Entity ${className}) {
         return toAjax(${className}Service.update${ClassName}(${className}));
     }
 
@@ -93,6 +94,6 @@ public class ${ClassName}Controller extends BaseController
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{${pkColumn.javaField}s}")
     public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
-        return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
+        return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField()}s(${pkColumn.javaField}s));
     }
 }

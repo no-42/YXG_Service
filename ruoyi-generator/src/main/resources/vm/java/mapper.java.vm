@@ -1,8 +1,7 @@
 package ${packageName}.mapper;
 
-import java.util.List;
-import ${packageName}.domain.${ClassName};
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import ${packageName}.domain.entity.${ClassName}Entity;
+import com.ruoyi.common.core.domain.BaseMapper;
 
 /**
  * ${functionName}Mapper接口

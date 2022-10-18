@@ -482,7 +482,7 @@ function resetQuery() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const userIds = row.userId || ids.value;
+  const userIds = row.id || ids.value;
   proxy.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
     return delUser(userIds);
   }).then(() => {
