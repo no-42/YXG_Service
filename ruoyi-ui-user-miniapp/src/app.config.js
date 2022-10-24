@@ -2,8 +2,8 @@ export default defineAppConfig({
     pages: [
         'pages/home/home',
         'pages/shop/shop',
-        'pages/user/user'
-        
+        'pages/user/user',
+        'pages/user/login'
     ],
     tabBar: {
         color: '#000',

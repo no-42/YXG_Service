@@ -37,6 +37,7 @@ public class CacheController {
 
     {
         caches.add(new SysCache(CacheConstants.LOGIN_TOKEN_KEY, "用户信息"));
+        caches.add(new SysCache(CacheConstants.LOGIN_MEMBER_KEY, "会员信息"));
         caches.add(new SysCache(CacheConstants.SYS_CONFIG_KEY, "配置信息"));
         caches.add(new SysCache(CacheConstants.SYS_DICT_KEY, "数据字典"));
         caches.add(new SysCache(CacheConstants.CAPTCHA_CODE_KEY, "验证码"));

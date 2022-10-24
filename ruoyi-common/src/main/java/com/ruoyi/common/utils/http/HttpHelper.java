@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ruoyi
  */
+@Deprecated
 public class HttpHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpHelper.class);
 

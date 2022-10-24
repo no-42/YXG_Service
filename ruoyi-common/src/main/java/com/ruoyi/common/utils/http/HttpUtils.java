@@ -28,6 +28,7 @@ import com.ruoyi.common.utils.StringUtils;
  *
  * @author ruoyi
  */
+@Deprecated
 public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 

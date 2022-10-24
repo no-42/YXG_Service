@@ -10,9 +10,9 @@ import lombok.Setter;
 import lombok.ToString;
 import com.ruoyi.common.annotation.Excel;
 #if($dateEntity )
-import com.ruoyi.common.core.domain.IdDateEntity
+import com.ruoyi.common.core.domain.IdDateEntity;
 #else
-import com.ruoyi.common.core.domain.IdEntity
+import com.ruoyi.common.core.domain.IdEntity;
 #end
 
 /**

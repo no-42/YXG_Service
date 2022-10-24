@@ -9,5 +9,5 @@ import com.ruoyi.common.core.domain.BaseMapper;
  * @author ${author}
  * @date ${datetime}
  */
-public interface ${ClassName}Mapper extends BaseMapper<${ClassName}> {
+public interface ${ClassName}Mapper extends BaseMapper<${ClassName}Entity> {
 }

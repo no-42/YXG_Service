@@ -61,41 +61,41 @@ public class MybatisPlusUtils {
     }
 
     private static <V extends BaseQuery> void eq(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.eq(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.eq(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void neq(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.ne(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.ne(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void gt(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.gt(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.gt(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void lt(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.lt(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.lt(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void like(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.like(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), "_" + getFieldValue(field, query) + "_");
+        wrapper.like(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), "_" + getFieldValue(field, query) + "_");
     }
 
     private static <V extends BaseQuery> void ge(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.ge(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.ge(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void le(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.le(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), getFieldValue(field, query));
+        wrapper.le(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void in(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
         if (Collection.class.isAssignableFrom(field.getType())) {
             Collection<?> collection = getFieldValue(field, query);
-            wrapper.in(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), collection);
+            wrapper.in(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), collection);
         } else if (CharSequence.class.isAssignableFrom(field.getType())) {
             String s = getFieldValue(field, query);
             List<String> list = Arrays.asList(s.split(","));
-            wrapper.in(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), list);
+            wrapper.in(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), list);
         } else {
             throw new RuntimeException(field.getName() + " 错误的数据类型,使用in必须为Collection或者CharSequence的子类");
         }
@@ -104,11 +104,11 @@ public class MybatisPlusUtils {
     private static <V extends BaseQuery> void notIn(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
         if (Collection.class.isAssignableFrom(field.getType())) {
             Collection<?> collection = getFieldValue(field, query);
-            wrapper.notIn(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), collection);
+            wrapper.notIn(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), collection);
         } else if (CharSequence.class.isAssignableFrom(field.getType())) {
             String s = getFieldValue(field, query);
             List<String> list = Arrays.asList(s.split(","));
-            wrapper.notIn(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : field.getName(), list);
+            wrapper.notIn(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), list);
         } else {
             throw new RuntimeException(field.getName() + " 错误的数据类型,使用notIn必须为Collection或者CharSequence的子类");
         }

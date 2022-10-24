@@ -1,6 +1,7 @@
 package com.ruoyi.common.utils;
 
 import com.ruoyi.common.core.domain.LoginUser;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,10 +41,14 @@ public class SecurityUtils {
      * 获取用户
      **/
     public static <T> LoginUser<T> getLoginUser() {
-        try {
-            return (LoginUser<T>) getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            throw new ServiceException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+        if (getAuthentication().isAuthenticated()){
+            Authentication authentication = getAuthentication();
+            if (authentication instanceof AnonymousAuthenticationToken){
+                return null;
+            }
+            return (LoginUser<T>) authentication.getPrincipal();
+        }else {
+            return null;
         }
     }
 

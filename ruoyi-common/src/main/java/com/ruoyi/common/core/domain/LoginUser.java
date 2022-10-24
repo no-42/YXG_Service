@@ -1,6 +1,7 @@
 package com.ruoyi.common.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ruoyi.common.core.entity.MemberLoginInfo;
 import com.ruoyi.common.core.entity.SysUserEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,6 +93,8 @@ public class LoginUser<T> implements UserDetails {
     public String getPassword() {
         if (user instanceof SysUserEntity) {
             return ((SysUserEntity) user).getPassword();
+        } else if (user instanceof MemberLoginInfo) {
+            return ((MemberLoginInfo) user).getName();
         }
         return null;
     }
@@ -101,6 +104,8 @@ public class LoginUser<T> implements UserDetails {
     public String getUsername() {
         if (user instanceof SysUserEntity) {
             return ((SysUserEntity) user).getUserName();
+        } else if (user instanceof MemberLoginInfo) {
+            return ((MemberLoginInfo) user).getName();
         }
         return null;
     }

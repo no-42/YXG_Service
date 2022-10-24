@@ -12,6 +12,11 @@ public class CacheConstants {
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
 
     /**
+     * 小程序登录用户
+     */
+    public static final String LOGIN_MEMBER_KEY = "login_member_tokens:";
+
+    /**
      * 验证码 redis key
      */
     public static final String CAPTCHA_CODE_KEY = "captcha_codes:";

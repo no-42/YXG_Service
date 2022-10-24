@@ -78,6 +78,8 @@ public class Constants {
      */
     public static final String LOGIN_USER_KEY = "login_user_key";
 
+    public static final String LOGIN_MEMBER_KEY = "login_member_key";
+
     /**
      * 用户ID
      */
