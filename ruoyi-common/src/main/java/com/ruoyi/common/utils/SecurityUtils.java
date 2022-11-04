@@ -21,6 +21,7 @@ public class SecurityUtils {
         try {
             return getLoginUser().getUserId();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ServiceException("获取用户ID异常", HttpStatus.UNAUTHORIZED);
         }
     }

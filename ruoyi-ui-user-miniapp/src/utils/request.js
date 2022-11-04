@@ -21,6 +21,7 @@ const errorHandleInterceptor = (chain) => {
                         icon: 'error',
                         duration: 2000
                     })
+                    throw msg;
                 }
             }
             return res.data
@@ -32,8 +33,8 @@ Taro.addInterceptor(errorHandleInterceptor)
 export default function (url, method, data) {
     let header = {};
     let auth = getAuth();
-    if (auth && auth.token) {
-        header.Authorization = "Bearer " + auth.token
+    if (auth) {
+        header.Authorization = "Bearer " + auth
     }
 
     return Taro.request({

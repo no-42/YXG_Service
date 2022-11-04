@@ -10,15 +10,15 @@ import './app.scss'
 
 const App = createApp({
   onShow (options) {},
-  onLaunch(){
-    if (!userStore.init()){
-      userStore.initSession()
+  async onLaunch(){
+    let success = await userStore.init();
+    if (!success){
+      await userStore.initSession()
     }else {
       Taro.checkSession().catch(()=>{
         userStore.initSession()
       })
     }
-    
   }
 })
 

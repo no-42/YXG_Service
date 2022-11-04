@@ -159,6 +159,12 @@ public class TokenService {
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
+    
+    public String createToken(String key){
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(Constants.LOGIN_MEMBER_KEY, key);
+        return createToken(claims);
+    }
 
     /**
      * 从令牌中获取数据声明

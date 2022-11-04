@@ -42,6 +42,11 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>business-member</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>business-market</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

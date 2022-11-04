@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.market.mapper.GoodsInfoMapper">
+
+    <resultMap type="com.ruoyi.market.domain.entity.GoodsInfoEntity" id="GoodsInfoResult">
+        <result property="categoryId" column="category_id"/>
+        <result property="specId" column="spec_id"/>
+        <result property="name" column="name"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="originId" column="origin_id"/>
+        <result property="price" column="price"/>
+        <result property="priceUnit" column="price_unit"/>
+    </resultMap>
+</mapper>

@@ -83,7 +83,7 @@ public class SysMenuController extends BaseController {
     public AjaxResult add(@Validated @RequestBody SysMenuEntity menu) {
         if (UserConstants.NOT_UNIQUE.equals(menuService.checkMenuNameUnique(menu))) {
             return AjaxResult.error("新增菜单'" + menu.getName() + "'失败，菜单名称已存在");
-        } else if (menu.getIsFrame() && !StringUtils.ishttp(menu.getPath())) {
+        } else if (menu.getIsFrame() != null && menu.getIsFrame() && !StringUtils.ishttp(menu.getPath())) {
             return AjaxResult.error("新增菜单'" + menu.getName() + "'失败，地址必须以http(s)://开头");
         }
         menu.setCreateBy(getUsername());

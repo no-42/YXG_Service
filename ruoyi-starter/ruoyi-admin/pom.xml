@@ -72,8 +72,10 @@
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>business-member</artifactId>
-            <version>3.8.3</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>business-market</artifactId>
         </dependency>
 
     </dependencies>

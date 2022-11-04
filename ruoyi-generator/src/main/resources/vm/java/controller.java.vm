@@ -54,7 +54,7 @@ public class ${ClassName}Controller extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, ${ClassName}Query query) {
         List<${ClassName}Entity> list = ${className}Service.select${ClassName}List(query);
-        ExcelUtil<${ClassName}Entity> util = new ExcelUtil<${ClassName}Entity>(${ClassName}.class);
+        ExcelUtil<${ClassName}Entity> util = new ExcelUtil<${ClassName}Entity>(${ClassName}Entity.class);
         util.exportExcel(response, list, "${functionName}数据");
     }
 

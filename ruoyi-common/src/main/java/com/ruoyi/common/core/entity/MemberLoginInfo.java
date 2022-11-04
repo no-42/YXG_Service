@@ -15,6 +15,11 @@ import lombok.ToString;
 public class MemberLoginInfo {
 
     /**
+     * 会员id
+     */
+    private String id;
+
+    /**
      *  用户名称 
      */
     private String name;

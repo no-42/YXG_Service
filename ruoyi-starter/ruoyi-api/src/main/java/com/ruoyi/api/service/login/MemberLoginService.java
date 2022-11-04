@@ -9,6 +9,7 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.JSONUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.api.WechatUtils;
+import com.ruoyi.common.utils.sign.Md5Utils;
 import com.ruoyi.member.constant.MemberConstant;
 import com.ruoyi.common.core.entity.MemberLoginInfo;
 import com.ruoyi.member.domain.entity.MemberInfoEntity;
@@ -21,9 +22,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -40,41 +44,66 @@ public class MemberLoginService {
 
     @Resource
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private HttpServletRequest request;
 
     public WechatSessionResp login(String name, String phone, String password, String openId) {
-        
+
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(phone);
         LoginUser<MemberLoginInfo> loginUser = new LoginUser<>();
         MemberLoginInfo memberLoginInfo = new MemberLoginInfo();
-        BeanUtils.copyProperties(memberInfo,memberLoginInfo);
+        BeanUtils.copyProperties(memberInfo, memberLoginInfo);
         memberLoginInfo.setOpenId(openId);
         loginUser.setUser(memberLoginInfo);
-        
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        
-        tokenService.createToken(loginUser);
-        return buildLoginInfo(loginUser);
+
+       
+        return buildLoginInfo(loginUser, tokenService.createToken(loginUser));
     }
 
-    private WechatSessionResp buildLoginInfo(LoginUser<MemberLoginInfo> loginUser) {
+    private WechatSessionResp buildLoginInfo(LoginUser<MemberLoginInfo> loginUser,String token) {
         WechatSessionResp wechatSessionResp = new WechatSessionResp();
         wechatSessionResp.setOpenId(loginUser.getUser().getOpenId());
-        wechatSessionResp.setToken(loginUser.getToken());
+        wechatSessionResp.setToken(token);
         MemberInfoResp memberInfoResp = new MemberInfoResp();
         BeanUtils.copyProperties(loginUser.getUser(), memberInfoResp);
         wechatSessionResp.setMemberInfo(memberInfoResp);
         return wechatSessionResp;
     }
 
+    public WechatSessionResp getLoginStatus() {
+        LoginUser<MemberLoginInfo> loginUser = SecurityUtils.getLoginUser();
+        if (loginUser == null) {
+            throw new RuntimeException("当前用户未登录");
+        }
+        String token = tokenService.createToken(loginUser.getToken());
+        return buildLoginInfo(loginUser,token);
+    }
+
+    /**
+     * 使用手机号和密码登录
+     *
+     * @param mobile   手机号
+     * @param password 密码
+     */
+    public WechatSessionResp loginWithMobile(String mobile, String password) {
+        MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(mobile);
+        Assert.notNull(memberInfo, "当前会员不存在");
+        if (!SecurityUtils.matchesPassword(memberInfo.getPassword(), password)) {
+            throw new RuntimeException("密码错误");
+        }
+        return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
+    }
+
     public WechatSessionResp getWeChatSession(String code) {
         if (SecurityUtils.getLoginUser() != null) {
             //当前用户已经登录，构造登录信息
-            return buildLoginInfo(SecurityUtils.getLoginUser());
+            String token = tokenService.createToken(SecurityUtils.getLoginUser().getToken());
+            return buildLoginInfo(SecurityUtils.getLoginUser(),token);
         }
         String result = WechatUtils.jsCode2session(code);
         JsonNode node = JSONUtils.parseAsJsonNode(result);
@@ -109,7 +138,7 @@ public class MemberLoginService {
         JsonNode jsonNode = JSONUtils.parseAsJsonNode(result);
         JsonNode phoneInfo = jsonNode.get("phone_info");
         String phone = phoneInfo.get("purePhoneNumber").asText();
-        if (!"86".equals(phoneInfo.get("countryCode").asText())){
+        if (!"86".equals(phoneInfo.get("countryCode").asText())) {
             throw new RuntimeException("不支持非国内的手机号");
         }
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByOpenInfo(MemberConstant.MEMBER_OPEN_TYPE_WECHAT, openId);

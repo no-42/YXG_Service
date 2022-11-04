@@ -6,15 +6,12 @@ import com.ruoyi.api.web.ApiController;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Anonymous
 @RequestMapping("/login")
-public class ApiLoginController extends ApiController {
+public class LoginApiController extends ApiController {
 
     @Autowired
     private MemberLoginService memberLoginService;
@@ -28,7 +25,7 @@ public class ApiLoginController extends ApiController {
     public R<WechatSessionResp> loginWithWeChat(@RequestParam("code") String code,
                                                 @RequestParam("openId") String openId) {
         //TODO 关于前端undefined 的处理
-        return R.ok(memberLoginService.wechatLogin(code,openId));
+        return R.ok(memberLoginService.wechatLogin(code, openId));
     }
 
     @PostMapping("/wechatSession")
@@ -36,9 +33,21 @@ public class ApiLoginController extends ApiController {
         return R.ok(memberLoginService.getWeChatSession(code));
     }
 
-    @PostMapping("/alipay")
-    public void loginWithAlipay() {
+    @PostMapping("/mobile")
+    public R<WechatSessionResp> loginWithMobile(@RequestPart("mobile") String mobile,
+                                                @RequestPart("password") String password,
+                                                @RequestPart(value = "verifyCode", required = false) String verifyCode) {
+        return R.ok(memberLoginService.loginWithMobile(mobile,password));
+    }
 
+    @GetMapping("/status")
+    public R<WechatSessionResp> loginStatus() {
+        return R.ok(memberLoginService.getLoginStatus());
+    }
+
+    @PostMapping("/alipay")
+    public R<String> loginWithAlipay() {
+        return R.fail("不支持的方法");
     }
 
 

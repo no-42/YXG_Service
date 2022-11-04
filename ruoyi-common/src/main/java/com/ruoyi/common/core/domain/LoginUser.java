@@ -152,4 +152,14 @@ public class LoginUser<T> implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
+
+    public String getUserId() {
+        if (user instanceof MemberLoginInfo){
+            return ((MemberLoginInfo) user).getId();
+        }else if (user instanceof SysUserEntity){
+            return ((SysUserEntity) user).getId();
+        }else {
+            throw new RuntimeException("未知的用户id");
+        }
+    }
 }
