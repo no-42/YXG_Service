@@ -102,7 +102,7 @@
 </template>
 
 <script setup name="Origin">
-import {getCurrentInstance, ref, toRefs} from 'vue';
+import {getCurrentInstance, ref, toRefs,reactive} from 'vue';
 import {listOrigin, getOrigin, delOrigin, addOrigin, updateOrigin} from "@/api/market/origin";
 
 const {proxy} = getCurrentInstance();
@@ -125,8 +125,8 @@ const data = reactive({
     name: null
   },
   rules: {
-    id: [
-      {required: true, message: "id不能为空", trigger: "blur"}
+    name: [
+      {required: true, message: "名称不能为空", trigger: "blur"}
     ],
   }
 });
@@ -173,7 +173,7 @@ function resetQuery() {
 // 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.id);
-  single.value = selection.length != 1;
+  single.value = selection.length !== 1;
   multiple.value = !selection.length;
 }
 

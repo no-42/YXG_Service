@@ -30,6 +30,13 @@ public class GoodsInfoQuery extends BaseQuery {
      */
     @QueryField(type = QueryField.CompareType.LIKE)
     private String name;
+
+    /**
+     * 分类名称
+     */
+    private String categoryName;
+    
+    
     
 
 }

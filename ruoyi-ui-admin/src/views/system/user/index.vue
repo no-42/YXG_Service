@@ -445,7 +445,7 @@ watch(deptName, val => {
 });
 
 /** 查询部门下拉树结构 */
-function getTreeselect() {
+function getTreeSelect() {
   treeSelect().then(response => {
     deptOptions.value = response.data;
   });
@@ -668,6 +668,6 @@ function submitForm() {
   });
 };
 
-getTreeselect();
+getTreeSelect();
 getList();
 </script>

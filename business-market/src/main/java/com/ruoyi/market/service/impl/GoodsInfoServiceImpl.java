@@ -3,6 +3,7 @@ package com.ruoyi.market.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ruoyi.market.domain.dto.GoodsInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.market.mapper.GoodsInfoMapper;
@@ -22,13 +23,13 @@ public class GoodsInfoServiceImpl implements IGoodsInfoService {
     private GoodsInfoMapper goodsInfoMapper;
 
     @Override
-    public GoodsInfoEntity selectGoodsInfoByCategoryId(String categoryId) {
-        return goodsInfoMapper.selectById(categoryId);
+    public GoodsInfoDto selectGoodsInfoByCategoryId(String categoryId) {
+        return goodsInfoMapper.selectGoodsInfoDtoById(categoryId);
     }
 
     @Override
-    public List<GoodsInfoEntity> selectGoodsInfoList(GoodsInfoQuery query) {
-        return goodsInfoMapper.selectListByQuery(query);
+    public List<GoodsInfoDto> selectGoodsInfoList(GoodsInfoQuery query) {
+        return goodsInfoMapper.selectGoodsInfoDtoList(query);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class GoodsInfoServiceImpl implements IGoodsInfoService {
     public int updateGoodsInfo(GoodsInfoEntity goodsInfo) {
         return goodsInfoMapper.updateById(goodsInfo);
     }
-    
+
     @Override
     public int deleteGoodsInfoByCategoryIds(String[] categoryIds) {
         return goodsInfoMapper.deleteBatchIds(Arrays.asList(categoryIds));

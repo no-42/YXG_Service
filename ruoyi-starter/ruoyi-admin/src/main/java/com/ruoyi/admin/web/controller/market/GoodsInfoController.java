@@ -3,6 +3,7 @@ package com.ruoyi.admin.web.controller.market;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.market.domain.dto.GoodsInfoDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class GoodsInfoController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(GoodsInfoQuery query) {
         startPage();
-        List<GoodsInfoEntity> list = goodsInfoService.selectGoodsInfoList(query);
+        List<GoodsInfoDto> list = goodsInfoService.selectGoodsInfoList(query);
         return getDataTable(list);
     }
 
@@ -54,8 +55,8 @@ public class GoodsInfoController extends BaseController {
     @Log(title = "商品信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, GoodsInfoQuery query) {
-        List<GoodsInfoEntity> list = goodsInfoService.selectGoodsInfoList(query);
-        ExcelUtil<GoodsInfoEntity> util = new ExcelUtil<GoodsInfoEntity>(GoodsInfoEntity.class);
+        List<GoodsInfoDto> list = goodsInfoService.selectGoodsInfoList(query);
+        ExcelUtil<GoodsInfoDto> util = new ExcelUtil<>(GoodsInfoDto.class);
         util.exportExcel(response, list, "商品信息数据");
     }
 

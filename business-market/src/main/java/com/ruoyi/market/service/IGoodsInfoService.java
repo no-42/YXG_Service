@@ -1,6 +1,8 @@
 package com.ruoyi.market.service;
 
 import java.util.List;
+
+import com.ruoyi.market.domain.dto.GoodsInfoDto;
 import com.ruoyi.market.domain.entity.GoodsInfoEntity;
 import com.ruoyi.market.domain.query.GoodsInfoQuery;
 
@@ -17,7 +19,7 @@ public interface IGoodsInfoService {
      * @param categoryId 商品信息主键
      * @return 商品信息
      */
-    GoodsInfoEntity selectGoodsInfoByCategoryId(String categoryId);
+    GoodsInfoDto selectGoodsInfoByCategoryId(String categoryId);
 
     /**
      * 查询商品信息列表
@@ -25,7 +27,7 @@ public interface IGoodsInfoService {
      * @param query 查询条件
      * @return 商品信息集合
      */
-    List<GoodsInfoEntity> selectGoodsInfoList(GoodsInfoQuery query);
+    List<GoodsInfoDto> selectGoodsInfoList(GoodsInfoQuery query);
 
     /**
      * 新增商品信息

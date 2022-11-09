@@ -96,7 +96,7 @@
 </template>
 
 <script setup name="Supplier">
-import {getCurrentInstance, ref, toRefs} from 'vue';
+import {getCurrentInstance, ref, toRefs,reactive} from 'vue';
 import { listSupplier, getSupplier, delSupplier, addSupplier, updateSupplier } from "@/api/market/supplier";
 
 const { proxy } = getCurrentInstance();
@@ -170,7 +170,7 @@ function resetQuery() {
 // 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.id);
-  single.value = selection.length != 1;
+  single.value = selection.length !== 1;
   multiple.value = !selection.length;
 }
 

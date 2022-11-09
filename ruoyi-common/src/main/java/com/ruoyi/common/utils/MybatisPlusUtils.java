@@ -16,6 +16,25 @@ public class MybatisPlusUtils {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         for (Field field : fields) {
             QueryField queryField = field.getAnnotation(QueryField.class);
+            if (queryField.condition() != QueryField.ActiveCondition.ALL) {
+                //判断是否满足查询条件
+                Object value = getFieldValue(field, query);
+                if (queryField.condition() == QueryField.ActiveCondition.NOT_NULL) {
+                    if (value == null) {
+                        continue;
+                    }
+                } else if (queryField.condition() == QueryField.ActiveCondition.NOT_EMPTY) {
+                    if (value == null) {
+                        continue;
+                    }
+                    if (value instanceof String && StringUtils.isEmpty((String) value)) {
+                        continue;
+                    }
+                    if (value instanceof Collection && ((Collection) value).isEmpty()) {
+                        continue;
+                    }
+                }
+            }
             if (queryField != null) {
                 switch (queryField.type()) {
                     case EQ:
@@ -77,7 +96,7 @@ public class MybatisPlusUtils {
     }
 
     private static <V extends BaseQuery> void like(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
-        wrapper.like(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), "_" + getFieldValue(field, query) + "_");
+        wrapper.like(StringUtils.isNotEmpty(queryField.column()) ? queryField.column() : StringUtils.toUnderScoreCase(field.getName()), getFieldValue(field, query));
     }
 
     private static <V extends BaseQuery> void ge(QueryWrapper<?> wrapper, QueryField queryField, Field field, V query) {
@@ -126,7 +145,7 @@ public class MybatisPlusUtils {
         Class<?> superClass = query;
         List<Field> queryFields = new ArrayList<>();
         while (superClass != Object.class) {
-            queryFields.addAll(Arrays.asList(query.getFields()));
+            queryFields.addAll(Arrays.asList(query.getDeclaredFields()));
             superClass = superClass.getSuperclass();
         }
         if (!SpringUtils.isDev()) {

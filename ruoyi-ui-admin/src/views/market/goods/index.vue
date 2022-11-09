@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="商品名称" prop="name">
+        <el-input v-model="queryParams.name" clearable placeholder="请输入商品名称"/>
+      </el-form-item>
+      <el-form-item label="分类名称" prop="categoryName">
+        <el-input v-model="queryParams.categoryName" clearable placeholder="请输入商品分类"/>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -55,13 +61,16 @@
 
     <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="商品分类" align="center" prop="categoryId"/>
-      <el-table-column label="商品规格" align="center" prop="specId"/>
-      <el-table-column label="商品名称" align="center" prop="name"/>
-      <el-table-column label="商品所属供应商" align="center" prop="supplierId"/>
-      <el-table-column label="商品来源" align="center" prop="originId"/>
-      <el-table-column label="商品价格" align="center" prop="price"/>
-      <el-table-column label="商品价格单位" align="center" prop="priceUnit"/>
+      <el-table-column label="名称" align="center" prop="name"/>
+      <el-table-column label="价格" align="center" prop="price">
+        <template #default="{row}">
+          {{row.price}} / {{row.priceUnit}}
+        </template>
+      </el-table-column>
+      <el-table-column label="分类" align="center" prop="categoryName"/>
+      <el-table-column label="规格" align="center" prop="specName"/>
+      <el-table-column label="供应商" align="center" prop="supplierName"/>
+      <el-table-column label="产地" align="center" prop="originName"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
@@ -91,14 +100,52 @@
     />
 
     <!-- 添加或修改商品信息对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="goodsRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入商品名称"/>
-        </el-form-item>
-        <el-form-item label="商品价格单位" prop="priceUnit">
-          <el-input v-model="form.priceUnit" placeholder="请输入商品价格单位"/>
-        </el-form-item>
+    <el-dialog :title="title" v-model="open" width="800px" append-to-body>
+      <el-form ref="goodsRef" :model="form" :rules="rules" label-width="100px">
+        <el-row>
+          <el-form-item label="商品名称" prop="name">
+            <el-input v-model="form.name" placeholder="请输入商品名称"/>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-col :sm="12">
+            <el-form-item label="商品价格" prop="name">
+              <el-input v-model="form.price" placeholder="请输入商品价格"/>
+            </el-form-item>
+          </el-col>
+          <el-col :sm="12">
+            <el-form-item label="价格单位" prop="priceUnit">
+              <el-input v-model="form.priceUnit" placeholder="请输入商品价格单位"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :sm="12">
+            <el-form-item label="分类" property="categoryId">
+              <goods-category-select v-model="form.categoryId" :model-name="form.categoryName"></goods-category-select>
+            </el-form-item>
+
+          </el-col>
+          <el-col :sm="12">
+            <el-form-item label="规格" property="specId">
+              <goods-spec-select v-model="form.specId" :model-name="form.specName"></goods-spec-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :sm="12">
+            <el-form-item label="供应商" property="supplierId">
+              <goods-supplier-select v-model="form.supplierId" :model-name="form.supplierName"></goods-supplier-select>
+            </el-form-item>
+          </el-col>
+          <el-col :sm="12">
+            <el-form-item label="产地" property="originId">
+              <goods-origin-select v-model="form.originId" :model-name="form.originName"></goods-origin-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -111,8 +158,12 @@
 </template>
 
 <script setup name="Goods">
-import {getCurrentInstance, ref, toRefs} from 'vue';
+import {getCurrentInstance, ref, toRefs, reactive} from 'vue';
 import {listGoods, getGoods, delGoods, addGoods, updateGoods} from "@/api/market/goods";
+import GoodsSpecSelect from '@/components/CreatableSelect/goodsSpecSelect'
+import GoodsOriginSelect from '@/components/CreatableSelect/goodsOriginSelect'
+import GoodsCategorySelect from '@/components/CreatableSelect/goodsCategorySelect'
+import GoodsSupplierSelect from '@/components/CreatableSelect/goodsSupplierSelect'
 
 const {proxy} = getCurrentInstance();
 
@@ -131,7 +182,7 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    categoryId: null,
+    categoryName: null,
     name: null,
   },
   rules: {}
@@ -158,6 +209,7 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
+    id: null,
     categoryId: null,
     specId: null,
     name: null,
@@ -183,8 +235,8 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.categoryId);
-  single.value = selection.length != 1;
+  ids.value = selection.map(item => item.id);
+  single.value = selection.length !== 1;
   multiple.value = !selection.length;
 }
 
@@ -198,8 +250,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _categoryId = row.categoryId || ids.value
-  getGoods(_categoryId).then(response => {
+  const goodsId = row.id || ids.value
+  getGoods(goodsId).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改商品信息";
@@ -210,7 +262,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["goodsRef"].validate(valid => {
     if (valid) {
-      if (form.value.categoryId != null) {
+      if (form.value.id != null) {
         updateGoods(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -229,9 +281,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _categoryIds = row.categoryId || ids.value;
-  proxy.$modal.confirm('是否确认删除商品信息编号为"' + _categoryIds + '"的数据项？').then(function () {
-    return delGoods(_categoryIds);
+  const goodsId = row.id || ids.value;
+  proxy.$modal.confirm('是否确认删除商品信息编号为"' + goodsId + '"的数据项？').then(function () {
+    return delGoods(goodsId);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

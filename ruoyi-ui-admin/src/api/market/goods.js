@@ -10,9 +10,9 @@ export function listGoods(query) {
 }
 
 // 查询商品信息详细
-export function getGoods(categoryId) {
+export function getGoods(id) {
   return request({
-    url: '/market/goods/' + categoryId,
+    url: '/market/goods/' + id,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateGoods(data) {
 }
 
 // 删除商品信息
-export function delGoods(categoryId) {
+export function delGoods(id) {
   return request({
-    url: '/market/goods/' + categoryId,
+    url: '/market/goods/' + id,
     method: 'delete'
   })
 }
