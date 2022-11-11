@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import Taro from '@tarojs/taro'
 import NutUI from "@nutui/nutui-taro"
 import {userStore} from "@/store/user"
@@ -9,17 +9,18 @@ import '@nutui/nutui-taro/dist/styles/themes/default.scss';
 import './app.scss'
 
 const App = createApp({
-  onShow (options) {},
-  async onLaunch(){
-    let success = await userStore.init();
-    if (!success){
-      await userStore.initSession()
-    }else {
-      Taro.checkSession().catch(()=>{
-        userStore.initSession()
-      })
+    onShow(options) {
+    },
+    async onLaunch() {
+        let success = await userStore.init();
+        if (!success) {
+            userStore.initSession()
+        } else {
+            Taro.checkSession().catch(() => {
+                userStore.initSession()
+            })
+        }
     }
-  }
 })
 
 App.use(NutUI)

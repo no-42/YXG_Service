@@ -6,10 +6,12 @@ import com.ruoyi.api.domain.resp.login.WechatSessionResp;
 import com.ruoyi.api.service.TokenService;
 import com.ruoyi.common.core.domain.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.user.UserException;
 import com.ruoyi.common.utils.JSONUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.api.WechatUtils;
 import com.ruoyi.common.utils.sign.Md5Utils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.member.constant.MemberConstant;
 import com.ruoyi.common.core.entity.MemberLoginInfo;
 import com.ruoyi.member.domain.entity.MemberInfoEntity;
@@ -91,11 +93,14 @@ public class MemberLoginService {
      * @param password 密码
      */
     public WechatSessionResp loginWithMobile(String mobile, String password) {
+        if(!SpringUtils.isDev()){
+            throw new RuntimeException("仅测试环境支持");
+        }
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(mobile);
         Assert.notNull(memberInfo, "当前会员不存在");
-        if (!SecurityUtils.matchesPassword(memberInfo.getPassword(), password)) {
-            throw new RuntimeException("密码错误");
-        }
+//        if (!SecurityUtils.matchesPassword(memberInfo.getPassword(), password)) {
+//            throw new RuntimeException("密码错误");
+//        }
         return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
     }
 

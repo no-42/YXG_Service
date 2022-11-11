@@ -14,13 +14,17 @@ public class PageUtils extends PageHelper {
     /**
      * 设置请求分页数据
      */
-    public static void startPage() {
+    public static void startPage(boolean count) {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
         Boolean reasonable = pageDomain.getReasonable();
-        PageHelper.startPage(pageNum, pageSize, orderBy).setReasonable(reasonable);
+        PageHelper.startPage(pageNum, pageSize, orderBy).setCount(count).setReasonable(reasonable);
+    }
+
+    public static void startPage() {
+        startPage(true);
     }
 
     /**

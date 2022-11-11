@@ -1,6 +1,7 @@
 package com.ruoyi.api.web;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.PageUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
@@ -18,5 +19,10 @@ public abstract class ApiController {
                 setValue(DateUtils.parseDate(text));
             }
         });
+    }
+
+
+    protected void startPage() {
+        PageUtils.startPage(false);
     }
 }

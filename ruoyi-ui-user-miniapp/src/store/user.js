@@ -1,6 +1,6 @@
 import {reactive} from "vue";
 import {getAuth, saveAuth, clearAuth} from "../utils/auth";
-import {getWechatSession, getLoginStatus, wechatLoginWithMobile} from "@/api/login"
+import {getWechatSession, getLoginStatus, wechatLoginWithMobile, loginWithMobile} from "@/api/login"
 import Taro from '@tarojs/taro'
 
 /**
@@ -35,7 +35,7 @@ export const userStore = reactive({
         }
         return true
     },
-    async initSession() {
+    initSession() {
         Taro.login().then(wxRes => {
             getWechatSession(wxRes['code']).then(res => {
                 let session = res.data;
@@ -48,12 +48,21 @@ export const userStore = reactive({
     isLogin() {
         return !!this.token
     },
-    async loginWithWxMobile(code) {
+    loginWithWxMobile(code) {
         wechatLoginWithMobile(code, this.openId).then(res => {
             let session = res.data;
             this._saveSession(session)
         }).catch(res => {
             console.error("手机登录失败", res)
+            clearAuth()
+        })
+    },
+    login() {
+        loginWithMobile('17714353449', '121', null).then(res => {
+            let session = res.data;
+            this._saveSession(session)
+        }).catch(res => {
+            console.error("手机号登录失败", res)
             clearAuth()
         })
     },

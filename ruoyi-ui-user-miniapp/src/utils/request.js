@@ -6,7 +6,7 @@ const errorHandleInterceptor = (chain) => {
     const requestParams = chain.requestParams
     return chain.proceed(requestParams)
         .then(res => {
-            if (res.errMsg !== 'request:ok') {
+            if (res.statusCode !== 200) {
                 Taro.showToast({
                     title: '网络异常',
                     icon: 'error',

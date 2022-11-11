@@ -76,12 +76,7 @@ function onUserLogin(e) {
   if (process.env.TARO_ENV === "weapp") {
     return
   }
-  //非微信端的登录方式
-  Taro.showToast({
-    title: '不支持的登录方式',
-    icon: 'error',
-    duration: 2000
-  })
+  userStore.login()
 }
 
 </script>
@@ -120,6 +115,11 @@ function onUserLogin(e) {
       width: 80px;
       border-radius: 80px;
       display: inline-block;
+      
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 package com.ruoyi.api.web.login;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ruoyi.api.domain.resp.login.WechatSessionResp;
 import com.ruoyi.api.service.login.MemberLoginService;
 import com.ruoyi.api.web.ApiController;
@@ -7,6 +8,8 @@ import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @Anonymous
@@ -34,10 +37,8 @@ public class LoginApiController extends ApiController {
     }
 
     @PostMapping("/mobile")
-    public R<WechatSessionResp> loginWithMobile(@RequestPart("mobile") String mobile,
-                                                @RequestPart("password") String password,
-                                                @RequestPart(value = "verifyCode", required = false) String verifyCode) {
-        return R.ok(memberLoginService.loginWithMobile(mobile,password));
+    public R<WechatSessionResp> loginWithMobile(@RequestBody JsonNode  json) {
+        return R.ok(memberLoginService.loginWithMobile(json.get("mobile").asText(),json.get("password").asText()));
     }
 
     @GetMapping("/status")

@@ -100,7 +100,7 @@
     />
 
     <!-- 添加或修改商品信息对话框 -->
-    <el-dialog :title="title" v-model="open" width="800px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="800px" append-to-body :close-on-click-modal="false">
       <el-form ref="goodsRef" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-form-item label="商品名称" prop="name">
