@@ -51,7 +51,6 @@ public class MemberLoginService {
     private HttpServletRequest request;
 
     public WechatSessionResp login(String name, String phone, String password, String openId) {
-
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(phone);
         LoginUser<MemberLoginInfo> loginUser = new LoginUser<>();
         MemberLoginInfo memberLoginInfo = new MemberLoginInfo();
@@ -63,11 +62,11 @@ public class MemberLoginService {
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-       
+
         return buildLoginInfo(loginUser, tokenService.createToken(loginUser));
     }
 
-    private WechatSessionResp buildLoginInfo(LoginUser<MemberLoginInfo> loginUser,String token) {
+    private WechatSessionResp buildLoginInfo(LoginUser<MemberLoginInfo> loginUser, String token) {
         WechatSessionResp wechatSessionResp = new WechatSessionResp();
         wechatSessionResp.setOpenId(loginUser.getUser().getOpenId());
         wechatSessionResp.setToken(token);
@@ -83,7 +82,7 @@ public class MemberLoginService {
             throw new RuntimeException("当前用户未登录");
         }
         String token = tokenService.createToken(loginUser.getToken());
-        return buildLoginInfo(loginUser,token);
+        return buildLoginInfo(loginUser, token);
     }
 
     /**
@@ -93,14 +92,14 @@ public class MemberLoginService {
      * @param password 密码
      */
     public WechatSessionResp loginWithMobile(String mobile, String password) {
-        if(!SpringUtils.isDev()){
+        if (!SpringUtils.isDev()) {
             throw new RuntimeException("仅测试环境支持");
         }
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(mobile);
         Assert.notNull(memberInfo, "当前会员不存在");
-//        if (!SecurityUtils.matchesPassword(memberInfo.getPassword(), password)) {
-//            throw new RuntimeException("密码错误");
-//        }
+        if (!SecurityUtils.matchesPassword(password, memberInfo.getPassword())) {
+            throw new RuntimeException("密码错误");
+        }
         return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
     }
 
@@ -108,7 +107,7 @@ public class MemberLoginService {
         if (SecurityUtils.getLoginUser() != null) {
             //当前用户已经登录，构造登录信息
             String token = tokenService.createToken(SecurityUtils.getLoginUser().getToken());
-            return buildLoginInfo(SecurityUtils.getLoginUser(),token);
+            return buildLoginInfo(SecurityUtils.getLoginUser(), token);
         }
         String result = WechatUtils.jsCode2session(code);
         JsonNode node = JSONUtils.parseAsJsonNode(result);

@@ -1,6 +1,6 @@
 import {reactive} from "vue";
 import {getAuth, saveAuth, clearAuth} from "../utils/auth";
-import {getWechatSession, getLoginStatus, wechatLoginWithMobile, loginWithMobile} from "@/api/login"
+import {getWechatSession, getLoginStatus, wechatLoginWithMobile, loginWithMobile, loginOut} from "@/api/login"
 import Taro from '@tarojs/taro'
 
 /**
@@ -36,19 +36,21 @@ export const userStore = reactive({
         return true
     },
     initSession() {
-        Taro.login().then(wxRes => {
-            getWechatSession(wxRes['code']).then(res => {
-                let session = res.data;
-                this._saveSession(session)
-            }).catch(() => {
-                this.loginOut()
+        if (process.env.TARO_ENV === "weapp") {
+            Taro.login().then(wxRes => {
+                getWechatSession(wxRes['code']).then(res => {
+                    let session = res.data;
+                    this._saveSession(session)
+                }).catch(() => {
+                    this.loginOut()
+                })
             })
-        })
+        }
     },
     isLogin() {
         return !!this.token
     },
-    loginWithWxMobile(code) {
+    async loginWithWxMobile(code) {
         wechatLoginWithMobile(code, this.openId).then(res => {
             let session = res.data;
             this._saveSession(session)
@@ -57,20 +59,25 @@ export const userStore = reactive({
             clearAuth()
         })
     },
-    login() {
-        loginWithMobile('17714353449', '121', null).then(res => {
+    async login(mobile, password, verifyCode) {
+        try {
+            let res = await loginWithMobile(mobile, password, verifyCode);
             let session = res.data;
             this._saveSession(session)
-        }).catch(res => {
-            console.error("手机号登录失败", res)
+        } catch (error) {
+            console.error("手机号登录失败", error)
             clearAuth()
-        })
+            throw error
+        }
     },
     loginOut() {
-        this.openId = null
-        this.userInfo = null
-        this.token = null
-        this.unionId = null
-        clearAuth()
+        loginOut().finally(() => {
+            this.openId = null
+            this.userInfo = null
+            this.token = null
+            this.unionId = null
+            clearAuth()
+        })
+
     }
 })

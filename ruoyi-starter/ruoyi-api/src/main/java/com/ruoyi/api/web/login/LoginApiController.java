@@ -37,8 +37,8 @@ public class LoginApiController extends ApiController {
     }
 
     @PostMapping("/mobile")
-    public R<WechatSessionResp> loginWithMobile(@RequestBody JsonNode  json) {
-        return R.ok(memberLoginService.loginWithMobile(json.get("mobile").asText(),json.get("password").asText()));
+    public R<WechatSessionResp> loginWithMobile(@RequestBody JsonNode json) {
+        return R.ok(memberLoginService.loginWithMobile(json.get("mobile").asText(), json.get("password").asText()));
     }
 
     @GetMapping("/status")
@@ -50,6 +50,5 @@ public class LoginApiController extends ApiController {
     public R<String> loginWithAlipay() {
         return R.fail("不支持的方法");
     }
-
 
 }

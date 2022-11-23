@@ -10,20 +10,52 @@
           <text>{{ userStore.userInfo.name }}</text>
         </view>
         <view class="user-update">
-          <nut-button size="mini" plain type="info" @tap="onUpdateMemberInfo">更新会员信息</nut-button>
+          <nut-button size="mini" plain type="info"
+                      v-if="userStore.userInfo && !userStore.userInfo.avatar"
+                      @tap="onUpdateMemberInfo">
+            更新会员信息
+          </nut-button>
         </view>
       </view>
       <view v-else class="user-login-container">
-        <nut-button class="login-button" type="info" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"
-                    @click="onUserLogin">微信登录
+        <!-- <nut-button v-if="PLATFORM === 'weapp'"
+                    class="login-button"
+                    type="info"
+                    open-type="getPhoneNumber"
+                    @getphonenumber="getPhoneNumber"
+        >微信登录
+        </nut-button> v-else -->
+        <nut-button 
+                    class="login-button"
+                    type="info"
+                    @click="goLoginByPhone">登录
         </nut-button>
       </view>
     </view>
     <view class="system_menu">
       <nut-cell-group>
-        <nut-cell title="联系客服"></nut-cell>
-        <nut-cell title="联系地址" desc="江苏省南京市"></nut-cell>
-        <nut-cell title="联系电话" desc="17714353449"></nut-cell>
+        <nut-cell title="联系客服" is-link>
+          <template #link>
+            <text/>
+          </template>
+        </nut-cell>
+        <nut-cell title="联系地址" is-link desc="江苏省南京市">
+          <template #link>
+            <text/>
+          </template>
+        </nut-cell>
+        <nut-cell title="联系电话" is-link desc="17714353449">
+          <template #link>
+            <text/>
+          </template>
+        </nut-cell>
+      </nut-cell-group>
+      <nut-cell-group v-if="userStore.isLogin()">
+        <nut-cell title="退出登录" is-link @click="logout">
+          <template #link>
+            <image class="exit" :src='exitIcon'/>
+          </template>
+        </nut-cell>
       </nut-cell-group>
     </view>
   </view>
@@ -34,8 +66,10 @@ import Taro from '@tarojs/taro'
 import {userStore} from "@/store/user"
 import {computed} from 'vue'
 import defaultAvatar from "@/img/avatar.png"
+import exitIcon from '@/img/exit.png'
 import {updateMemberInfo} from '@/api/member'
 
+const PLATFORM = process.env.TARO_ENV
 const userAvatar = computed(() => {
   if (userStore.userInfo && userStore.userInfo.avatar) {
     return userStore.userInfo.avatar
@@ -46,8 +80,9 @@ const userAvatar = computed(() => {
 
 function onUpdateMemberInfo() {
   Taro.getUserProfile({
-    desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+    desc: '用于完善会员资料',
     success: (res) => {
+      console.log("当前会员信息", res)
       updateMemberInfo({
         name: res.userInfo.nickName,
         avatar: res.userInfo.avatarUrl
@@ -56,6 +91,10 @@ function onUpdateMemberInfo() {
       })
     }
   })
+}
+
+function logout() {
+  userStore.loginOut()
 }
 
 
@@ -72,11 +111,10 @@ function getPhoneNumber(e) {
   console.log(e)
 }
 
-function onUserLogin(e) {
-  if (process.env.TARO_ENV === "weapp") {
-    return
-  }
-  userStore.login()
+function goLoginByPhone() {
+  Taro.navigateTo({
+    url: '/pages/user/login'
+  })
 }
 
 </script>
@@ -87,7 +125,7 @@ function onUserLogin(e) {
   min-height: 100%;
 
   .system_menu {
-    padding-top: 0.1rem;
+    padding-top: 10px;
     background-color: #f7f8fa;
     width: 95%;
     border-radius: 5px;
@@ -97,7 +135,7 @@ function onUserLogin(e) {
 
   .user_header {
     background-color: #1ab394;
-    height: 10rem;
+    min-height: 180px;
   }
 
   .user-info-container {
@@ -115,8 +153,8 @@ function onUserLogin(e) {
       width: 80px;
       border-radius: 80px;
       display: inline-block;
-      
-      img{
+
+      img {
         width: 100%;
         height: 100%;
       }
@@ -131,13 +169,22 @@ function onUserLogin(e) {
     text-align: center;
     height: 100%;
     line-height: 100%;
-    padding-top: 3rem;
-
+    padding-top: 80px;
   }
 
   .user-update {
-    padding-top: 0.6rem;
+    padding-top: 10px;
     text-align: center;
+  }
+
+  .exit {
+    width: 20px;
+    height: 20px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>

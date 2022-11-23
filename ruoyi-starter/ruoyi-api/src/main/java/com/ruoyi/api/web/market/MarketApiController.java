@@ -61,7 +61,8 @@ public class MarketApiController extends ApiController {
     @GetMapping("/goods")
     public R<List<GoodsInfoDto>> selectGoodsList(GoodsInfoQuery query) {
         startPage();
-        return R.ok(goodsInfoService.selectGoodsInfoList(query));
+        List<GoodsInfoDto> value = goodsInfoService.selectGoodsInfoList(query);
+        return R.ok(value);
     }
 
 }

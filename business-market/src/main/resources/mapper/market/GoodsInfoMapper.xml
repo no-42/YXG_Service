@@ -64,6 +64,23 @@
             <if test="categoryName != null and categoryName != ''">
                 and category.name like '%' || #{categoryName} || '%'
             </if>
+            <if test="specId != null and specId != ''">
+                and spec.id = #{specId}
+            </if>
+            <if test="originId != null and originId != ''">
+                and origin.id = #{originId}
+            </if>
+            <if test="supplierId != null and supplierId != ''">
+                and supplier.id = #{supplierId}
+            </if>
+            <if test="search != null and search != ''">
+                and (
+                category.name like '%' || #{search} || '%'
+                or spec.name like '%' || #{search} || '%'
+                or origin.name like '%' || #{search} || '%'
+                or supplier.name like '%' || #{search} || '%'
+                )
+            </if>
         </where>
     </select>
     <select id="selectGoodsInfoDtoById" resultMap="GoodsInfoDtoResult">

@@ -32,6 +32,7 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+        <docker.maven.version>0.40.2</docker.maven.version>
     </properties>
 	
     <!-- 依赖声明 -->
@@ -207,9 +208,9 @@
         <module>ruoyi-system</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>ruoyi-starter</module>
         <module>business-member</module>
         <module>business-market</module>
+        <module>ruoyi-api-service</module>
     </modules>
     <packaging>pom</packaging>
 

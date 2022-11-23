@@ -8,19 +8,12 @@
         <version>3.8.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ruoyi-starter</artifactId>
-    <description>主要的启动器</description>
-    <packaging>pom</packaging>
+
+    <artifactId>ruoyi-api-service</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-    
-    <modules>
-        <module>ruoyi-admin</module>
-        <module>ruoyi-api</module>
-        <module>ruoyi-quartz</module>
-    </modules>
 
 </project>

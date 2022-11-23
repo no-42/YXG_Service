@@ -42,6 +42,22 @@ public class BaseController {
                 setValue(DateUtils.parseDate(text));
             }
         });
+        // String 移除空格，忽略null和undefined
+        binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                if (text == null || text.length() == 0 || text.trim().length() == 0) {
+                    setValue(null);
+                    return;
+                }
+                text = StringUtils.trim(text);
+                if ("null".equals(text) || "undefiend".equals(text)) {
+                    setValue(null);
+                    return;
+                }
+                setValue(text);
+            }
+        });
     }
 
     /**

@@ -21,22 +21,38 @@ public class GoodsInfoQuery extends BaseQuery {
     /**
      * 商品分类
      */
-    @QueryField(type = QueryField.CompareType.EQ)
     private String categoryId;
 
 
     /**
      * 商品名称
      */
-    @QueryField(type = QueryField.CompareType.LIKE)
     private String name;
+
+    /**
+     * 供应商id
+     */
+    private String supplierId;
+
+    /**
+     * 规则id
+     */
+    private String specId;
+
+    /**
+     * 产地id
+     */
+    private String originId;
 
     /**
      * 分类名称
      */
     private String categoryName;
-    
-    
-    
+
+    /**
+     * 搜索字段
+     */
+    private String search;
+
 
 }

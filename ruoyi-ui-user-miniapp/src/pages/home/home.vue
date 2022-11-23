@@ -2,7 +2,7 @@
   <view class="index">
     <!--  搜索栏   -->
     <view class="header">
-      <nut-searchbar  @tap="goSearch" @click="goSearch" placeholder="请输入关键词进行搜索">
+      <nut-searchbar @tap="goSearch" @click="goSearch" placeholder="请输入关键词进行搜索">
         <template #leftin>
           <nut-icon size="14" name="search2"></nut-icon>
         </template>
@@ -22,7 +22,7 @@
       <nut-skeleton :loading="categoryLoad" height="15px" width="300px" row="5" title animated>
         <nut-empty image="empty" description="暂时没有内容" v-if="categoryList.length===0"></nut-empty>
         <nut-grid class="category-main" :border="false" :column-num="3" v-if="categoryList.length!==0">
-          <nut-grid-item v-for="category in categoryList">
+          <nut-grid-item @click="categoryStore.goCategory(category.id)" v-for="category in categoryList">
             <view class="category-item">
               {{ category.name }}
             </view>
@@ -51,6 +51,8 @@
 import {ref} from 'vue';
 import {loadDict} from '@/api/common'
 import {getAllCategory} from '@/api/market'
+import {useDidShow} from '@tarojs/taro'
+import {categoryStore} from "@/store/category"
 import Taro from "@tarojs/taro";
 
 const categoryLoad = ref(true)
@@ -59,31 +61,33 @@ const swiperList = ref([])
 const noticeList = ref([])
 const categoryList = ref([])
 
-loadDict("miniapp_swiper").then(res => {
-  let dict = res.data;
-  let value = []
-  for (let dictElement of dict) {
-    value.push(dictElement.value)
-  }
-  swiperList.value = value
-})
-
-loadDict("miniapp_notice").then(res => {
-  noticeLoad.value = false
-  noticeList.value = res.data
-})
-
-getAllCategory().then(res => {
-  categoryList.value = res.data
-  categoryLoad.value = false
-})
-
-function goSearch(){
+function goSearch() {
   Taro.navigateTo({
-    url:'pages/home/search/search'
+    url: '/pages/home/search/search'
   })
 }
 
+
+useDidShow(() => {
+  getAllCategory().then(res => {
+    categoryList.value = res.data
+    categoryLoad.value = false
+  })
+
+  loadDict("miniapp_swiper").then(res => {
+    let dict = res.data;
+    let value = []
+    for (let dictElement of dict) {
+      value.push(dictElement.value)
+    }
+    swiperList.value = value
+  })
+
+  loadDict("miniapp_notice").then(res => {
+    noticeLoad.value = false
+    noticeList.value = res.data
+  })
+})
 
 </script>
 
@@ -138,26 +142,31 @@ function goSearch(){
     padding: 10px;
 
     .notice-main {
-      .notice-item{
+      .notice-item {
         margin: 5px;
         padding: 10px 10px 20px 10px;
         background-color: #f7f7f7;
         border-radius: 5px;
-        
-        
-        .notice-title{
+
+
+        .notice-title {
           font-size: 16px;
         }
-        
-        .notice-des{
+
+        .notice-des {
           margin-top: 10px;
           font-size: 14px;
         }
       }
-      
-      
+
 
     }
+  }
+
+  //加载动画
+  .skeleton {
+    display: block;
+    margin-top: 5px;
   }
 
 }

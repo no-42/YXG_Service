@@ -34,5 +34,9 @@ function loginWithMobile(mobile, password, verifyCode) {
     return request("/login/mobile", "POST", {mobile, password, verifyCode})
 }
 
+function loginOut() {
+    return request("/logout", "POST", null)
+}
 
-export {getWechatSession, wechatLoginWithMobile, getLoginStatus, loginWithMobile}
+
+export {getWechatSession, wechatLoginWithMobile, getLoginStatus, loginWithMobile, loginOut}
