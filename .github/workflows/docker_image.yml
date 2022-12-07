@@ -19,8 +19,8 @@ jobs:
         run: mvn --batch-mode --update-snapshots package
       - name: Copy file
         run: | 
-            copy ruoyi-starter/ruoyi-admin/target/ruoyi-admin.jar docker/admin
-            copy ruoyi-starter/ruoyi-api/target/ruoyi-api.jar docker/api
+            cp ruoyi-starter/ruoyi-admin/target/ruoyi-admin.jar docker/admin
+            cp ruoyi-starter/ruoyi-api/target/ruoyi-api.jar docker/api
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to DockerHub
