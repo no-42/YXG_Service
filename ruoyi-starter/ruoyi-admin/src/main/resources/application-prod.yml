@@ -3,9 +3,9 @@ spring:
   datasource:
     # 主库数据源
     master:
-      jdbcUrl: jdbc:postgresql://43.140.198.24:5432/shop?stringtype=unspecified
-      username: postgres
-      password: 5ZwHkMb3yXZ7DAxIvqWmyI1K
+      jdbcUrl: jdbc:postgresql://${RUOYI_POSTGRESL_HOST:43.140.198.24}:${RUOYI_POSTGRES_PORT:5432}/shop?stringtype=unspecified
+      username: ${RUOYI_POSTGRES_USERNAME:postgres}
+      password: ${RUOYI_POSTGRES_PASSWORD:5ZwHkMb3yXZ7DAxIvqWmyI1K}
     # 从库数据源
     slave:
       # 从数据源开关/默认关闭
