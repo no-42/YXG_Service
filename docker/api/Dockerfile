@@ -9,7 +9,7 @@ VOLUME /home/ruoyi/data
 USER ruoyi
 WORKDIR /home/ruoyi
 ENV TZ=Asia/Shanghai
-EXPOSE 8080
+EXPOSE 8081
 #服务器健康检查
-HEALTHCHECK --interval=1m --timeout=3s CMD curl -f http://localhost:8081/ || exit 1
+HEALTHCHECK --interval=1m --timeout=3s CMD curl -f http://localhost:8081 || exit 1
 ENTRYPOINT ["java","-jar","ruoyi-api.jar"]

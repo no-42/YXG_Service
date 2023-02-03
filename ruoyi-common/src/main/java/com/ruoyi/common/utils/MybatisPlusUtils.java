@@ -16,6 +16,9 @@ public class MybatisPlusUtils {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         for (Field field : fields) {
             QueryField queryField = field.getAnnotation(QueryField.class);
+            if (queryField == null) {
+                continue;
+            }
             if (queryField.condition() != QueryField.ActiveCondition.ALL) {
                 //判断是否满足查询条件
                 Object value = getFieldValue(field, query);
@@ -145,7 +148,7 @@ public class MybatisPlusUtils {
         Class<?> superClass = query;
         List<Field> queryFields = new ArrayList<>();
         while (superClass != Object.class) {
-            queryFields.addAll(Arrays.asList(query.getDeclaredFields()));
+            queryFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
             superClass = superClass.getSuperclass();
         }
         if (!SpringUtils.isDev()) {

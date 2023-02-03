@@ -1,2 +1,2 @@
-export const baseUrl = "https://z0unnysh3.neiwangyun.net"
+export const baseUrl = "http://43.140.198.24:9001"
 

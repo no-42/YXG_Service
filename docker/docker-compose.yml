@@ -1,0 +1,14 @@
+version: '3'
+services: 
+  admin-api:
+    image: registry.cn-hangzhou.aliyuncs.com/thetbw/shop-admin
+    volumes:
+      - admin-api-data:/home/ruoyi/data
+    environment:
+      RUOYI_REDIS_HOST: {{RUOYI_REDIS_HOST}}
+    ports:
+      - "9000:8080"
+volumes: 
+  admin-api-data:
+    
+           
