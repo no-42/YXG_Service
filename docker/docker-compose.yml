@@ -2,6 +2,7 @@ version: '3'
 services: 
   admin-api:
     image: registry.cn-hangzhou.aliyuncs.com/thetbw/shop-admin
+    pull_policy: always
     volumes:
       - admin-api-data:/home/ruoyi/data
     environment:
