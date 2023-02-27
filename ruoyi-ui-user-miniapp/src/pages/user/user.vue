@@ -18,14 +18,14 @@
         </view>
       </view>
       <view v-else class="user-login-container">
-        <!-- <nut-button v-if="PLATFORM === 'weapp'"
+        <nut-button v-if="PLATFORM === 'weapp'"
                     class="login-button"
                     type="info"
                     open-type="getPhoneNumber"
                     @getphonenumber="getPhoneNumber"
         >微信登录
-        </nut-button> v-else -->
-        <nut-button 
+        </nut-button> 
+        <nut-button v-else 
                     class="login-button"
                     type="info"
                     @click="goLoginByPhone">登录

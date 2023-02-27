@@ -50,7 +50,7 @@ public class MemberLoginService {
     @Autowired
     private HttpServletRequest request;
 
-    public WechatSessionResp login(String name, String phone, String password, String openId) {
+    private WechatSessionResp login(String name, String phone, String password, String openId) {
         MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(phone);
         LoginUser<MemberLoginInfo> loginUser = new LoginUser<>();
         MemberLoginInfo memberLoginInfo = new MemberLoginInfo();

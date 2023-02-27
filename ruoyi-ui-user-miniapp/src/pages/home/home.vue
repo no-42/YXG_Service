@@ -11,7 +11,7 @@
         </template>
       </nut-searchbar>
       <!-- 轮播 -->
-      <nut-swiper :pagination-visible="true" pagination-color="#426543" auto-play="3000">
+      <nut-swiper v-if="swiperList && swiperList.length > 0" :pagination-visible="true" pagination-color="#426543" auto-play="3000">
         <nut-swiper-item v-for="item in swiperList" :key="item">
           <img :src="item" alt=""/>
         </nut-swiper-item>
@@ -20,7 +20,7 @@
     <view class="category-list">
       <text class="title">产品分类</text>
       <nut-skeleton :loading="categoryLoad" height="15px" width="300px" row="5" title animated>
-        <nut-empty image="empty" description="暂时没有内容" v-if="categoryList.length===0"></nut-empty>
+        <nut-empty image="empty" description="暂时没有内容" v-if="categoryList && categoryList.length===0"></nut-empty>
         <nut-grid class="category-main" :border="false" :column-num="3" v-if="categoryList.length!==0">
           <nut-grid-item @click="categoryStore.goCategory(category.id)" v-for="category in categoryList">
             <view class="category-item">
@@ -33,7 +33,7 @@
     <view class="notice-list">
       <text class="title">公司动态</text>
       <nut-skeleton :loading="noticeLoad" height="15px" width="300px" row="5" title animated>
-        <nut-empty image="empty" description="暂时没有内容" v-if="noticeList.length===0"></nut-empty>
+        <nut-empty image="empty" description="暂时没有内容" v-if="noticeList && noticeList.length===0"></nut-empty>
         <view class="notice-main">
           <view class="notice-item" v-for="notice in noticeList">
             <view class="notice-title">{{ notice.label }}</view>
@@ -77,8 +77,10 @@ useDidShow(() => {
   loadDict("miniapp_swiper").then(res => {
     let dict = res.data;
     let value = []
-    for (let dictElement of dict) {
-      value.push(dictElement.value)
+    if(dict){
+        for (let dictElement of dict) {
+          value.push(dictElement.value)
+        }
     }
     swiperList.value = value
   })

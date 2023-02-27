@@ -1,5 +1,4 @@
 import Taro from '@tarojs/taro'
-import {baseUrl} from '../config'
 import {getAuth} from './auth'
 
 const errorHandleInterceptor = (chain) => {
@@ -38,7 +37,8 @@ export default function (url, method, data) {
     }
 
     return Taro.request({
-        url: baseUrl + url,
+        //BASE_URL在 /config中的dev.js和prod.js中配置
+        url: BASE_URL + url,
         method: method,
         data: data,
         header: {
