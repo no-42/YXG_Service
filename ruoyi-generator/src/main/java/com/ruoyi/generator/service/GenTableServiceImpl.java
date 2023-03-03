@@ -204,6 +204,7 @@ public class GenTableServiceImpl implements IGenTableService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         generatorCode(tableName, zip);
+        System.out.println("233");
         IOUtils.closeQuietly(zip);
         return outputStream.toByteArray();
     }

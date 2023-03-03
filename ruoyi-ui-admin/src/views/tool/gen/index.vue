@@ -228,7 +228,7 @@ onActivated(() => {
 /** 查询表集合 */
 function getList() {
   loading.value = true;
-  listTable(queryParams).then(response => {
+  listTable(queryParams.value).then(response => {
     tableList.value = response.rows;
     total.value = response.total;
     loading.value = false;

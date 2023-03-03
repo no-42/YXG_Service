@@ -35,22 +35,29 @@ export const userStore = reactive({
         }
         return true
     },
-    initSession() {
-        if (process.env.TARO_ENV === "weapp") {
-            Taro.login().then(wxRes => {
-                getWechatSession(wxRes['code']).then(res => {
-                    let session = res.data;
-                    this._saveSession(session)
-                }).catch(() => {
-                    this.loginOut()
+    async initSession() {
+        return new Promise((resolve, reject) =>{
+            if (process.env.TARO_ENV === "weapp") {
+                Taro.login().then(wxRes => {
+                    getWechatSession(wxRes['code']).then(res => {
+                        let session = res.data;
+                        this._saveSession(session)
+                        resolve()
+                    }).catch((e) => {
+                        reject(e)
+                        this.loginOut()
+                    })
                 })
-            })
-        }
+            }
+        })
     },
     isLogin() {
         return !!this.token
     },
     async loginWithWxMobile(code) {
+        if (!this.openId){
+            await this.initSession()
+        }
         wechatLoginWithMobile(code, this.openId).then(res => {
             let session = res.data;
             this._saveSession(session)

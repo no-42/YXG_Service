@@ -105,13 +105,13 @@
         AND pTables.schemaname NOT LIKE 'pg_%'
 
         AND (pTables.tablename NOT IN (select "table_name" from "system".gen_table)
-        AND pTables.schemaname NOT IN (select "schema_name" from "system".gen_table)
+        AND pTables.schemaname != 'information_schema'
         )
         <if test="tableName != null and tableName != ''">
-            AND pTables.tablename like concat('%', #{tableName}, '%')
+            AND pTables.tablename like '%' ||  #{tableName} || '%'
         </if>
         <if test="tableComment != null and tableComment != ''">
-            AND table_comment like concat('%', #{tableComment}, '%')
+            AND table_comment like '%' || #{tableComment} ||  '%'
         </if>
     </select>
 
@@ -129,7 +129,7 @@
         AND pTables.schemaname NOT LIKE 'pg_%'
 
         AND (pTables.tablename NOT IN (select "table_name" from "system".gen_table)
-        AND pTables.schemaname NOT IN (select "schema_name" from "system".gen_table)
+        AND pTables.schemaname != 'information_schema'
         )
         and pTables.tablename in
         <foreach collection="array" item="name" open="(" separator="," close=")">

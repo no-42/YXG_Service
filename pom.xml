@@ -210,6 +210,7 @@
         <module>ruoyi-common</module>
         <module>business-member</module>
         <module>business-market</module>
+        <module>business-order</module>
     </modules>
     <packaging>pom</packaging>
 

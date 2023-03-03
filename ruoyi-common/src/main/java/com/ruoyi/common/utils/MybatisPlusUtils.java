@@ -33,41 +33,39 @@ public class MybatisPlusUtils {
                     if (value instanceof String && StringUtils.isEmpty((String) value)) {
                         continue;
                     }
-                    if (value instanceof Collection && ((Collection) value).isEmpty()) {
+                    if (value instanceof Collection && ((Collection<?>) value).isEmpty()) {
                         continue;
                     }
                 }
             }
-            if (queryField != null) {
-                switch (queryField.type()) {
-                    case EQ:
-                        eq(wrapper, queryField, field, query);
-                        break;
-                    case NEQ:
-                        neq(wrapper, queryField, field, query);
-                        break;
-                    case GT:
-                        gt(wrapper, queryField, field, query);
-                        break;
-                    case LT:
-                        lt(wrapper, queryField, field, query);
-                        break;
-                    case LIKE:
-                        like(wrapper, queryField, field, query);
-                        break;
-                    case GE:
-                        ge(wrapper, queryField, field, query);
-                        break;
-                    case LE:
-                        le(wrapper, queryField, field, query);
-                        break;
-                    case IN:
-                        in(wrapper, queryField, field, query);
-                        break;
-                    case NIN:
-                        notIn(wrapper, queryField, field, query);
-                        break;
-                }
+            switch (queryField.type()) {
+                case EQ:
+                    eq(wrapper, queryField, field, query);
+                    break;
+                case NEQ:
+                    neq(wrapper, queryField, field, query);
+                    break;
+                case GT:
+                    gt(wrapper, queryField, field, query);
+                    break;
+                case LT:
+                    lt(wrapper, queryField, field, query);
+                    break;
+                case LIKE:
+                    like(wrapper, queryField, field, query);
+                    break;
+                case GE:
+                    ge(wrapper, queryField, field, query);
+                    break;
+                case LE:
+                    le(wrapper, queryField, field, query);
+                    break;
+                case IN:
+                    in(wrapper, queryField, field, query);
+                    break;
+                case NIN:
+                    notIn(wrapper, queryField, field, query);
+                    break;
             }
         }
         return wrapper;

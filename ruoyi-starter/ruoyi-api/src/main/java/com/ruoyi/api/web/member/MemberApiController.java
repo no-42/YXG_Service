@@ -1,7 +1,5 @@
 package com.ruoyi.api.web.member;
 
-import com.ruoyi.api.domain.resp.login.MemberInfoResp;
-import com.ruoyi.api.domain.resp.login.WechatSessionResp;
 import com.ruoyi.api.service.TokenService;
 import com.ruoyi.api.web.ApiController;
 import com.ruoyi.common.core.domain.LoginUser;
@@ -24,6 +22,9 @@ public class MemberApiController extends ApiController {
     @Autowired
     private TokenService tokenService;
 
+    /**
+     * 更新会员信息
+     */
     @PutMapping
     public R<MemberLoginInfo> updateMemberInfo(@RequestBody MemberInfoEntity memberInfo) {
         memberInfo.setId(SecurityUtils.getUserId());

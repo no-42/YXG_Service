@@ -77,6 +77,10 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>business-market</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>business-order</artifactId>
+        </dependency>
 
     </dependencies>
 
