@@ -276,7 +276,7 @@
                     :key="item.id"
                     :label="item.name"
                     :value="item.id"
-                    :disabled="item.enable"
+                    :disabled="!item.enable"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -289,7 +289,7 @@
                     :key="item.id"
                     :label="item.name"
                     :value="item.id"
-                    :disabled="item.enable"
+                    :disabled="!item.enable"
                 ></el-option>
               </el-select>
             </el-form-item>

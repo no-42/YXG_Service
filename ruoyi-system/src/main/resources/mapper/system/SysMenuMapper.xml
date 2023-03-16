@@ -158,7 +158,7 @@
         from "system".sys_menu m
                  left join "system".sys_role_menu rm on m.id = rm.menu_id
                  left join "system".sys_user_role ur on rm.role_id = ur.role_id
-                 left join "system".sys_role r on r.role_id = ur.role_id
+                 left join "system".sys_role r on r.id = ur.role_id
         where m.enable = true
           and r.enable = true
           and ur.user_id = #{userId}::uuid
