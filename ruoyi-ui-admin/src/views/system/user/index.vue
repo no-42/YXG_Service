@@ -477,6 +477,7 @@ function handleQuery() {
 function resetQuery() {
   dateRange.value = [];
   proxy.resetForm("queryRef");
+  queryParams.value.depId = null;
   handleQuery();
 };
 
