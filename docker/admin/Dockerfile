@@ -11,5 +11,5 @@ WORKDIR /home/ruoyi
 ENV TZ=Asia/Shanghai
 EXPOSE 8080
 #服务器健康检查
-HEALTHCHECK --interval=1m --timeout=3s CMD curl -f http://localhost:8080 || exit 1
+HEALTHCHECK --interval=1m --timeout=3s CMD curl -f http://localhost:8080/api || exit 1
 ENTRYPOINT ["java","-jar","ruoyi-admin.jar"]
