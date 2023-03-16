@@ -98,8 +98,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
     public String checkDeptNameUnique(SysDeptEntity dept) {
         String deptId = StringUtils.isNotEmpty(dept.getId()) ? dept.getId() : null;
         SysDeptEntity info = deptMapper.checkDeptNameUnique(dept.getName(), dept.getParentId());
-        if (StringUtils.isNotNull(info) && info.getId().equals(deptId)) {
-            return UserConstants.NOT_UNIQUE;
+        if (StringUtils.isNotNull(info)) {
+            return info.getId().equals(deptId) ? UserConstants.UNIQUE : UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
     }
@@ -123,7 +123,13 @@ public class SysDeptServiceImpl implements ISysDeptService {
         if (!info.getEnable()) {
             throw new ServiceException("部门停用，不允许新增");
         }
-        dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
+        if (dept.getParentId() == null) {
+            dept.setAncestors(null);
+        } else if (info.getAncestors() == null) {
+            dept.setAncestors(dept.getParentId());
+        } else {
+            dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
+        }
         return deptMapper.insertDept(dept);
     }
 
@@ -132,14 +138,19 @@ public class SysDeptServiceImpl implements ISysDeptService {
         SysDeptEntity newParentDept = deptMapper.selectDeptById(dept.getParentId());
         SysDeptEntity oldDept = deptMapper.selectDeptById(dept.getId());
         if (StringUtils.isNotNull(newParentDept) && StringUtils.isNotNull(oldDept)) {
-            String newAncestors = newParentDept.getAncestors() + "," + newParentDept.getId();
+            String newAncestors;
+            if (newParentDept.getAncestors() == null) {
+                newAncestors = newParentDept.getId();
+            } else {
+                newAncestors = newParentDept.getAncestors() + "," + newParentDept.getId();
+            }
             String oldAncestors = oldDept.getAncestors();
             dept.setAncestors(newAncestors);
             updateDeptChildren(dept.getId(), newAncestors, oldAncestors);
         }
         int result = deptMapper.updateDept(dept);
         if (dept.getEnable() && StringUtils.isNotEmpty(dept.getAncestors())
-                && !StringUtils.equals("0" , dept.getAncestors())) {
+                && !StringUtils.equals("0", dept.getAncestors())) {
             // 如果该部门是启用状态，则启用该部门的所有上级部门
             updateParentDeptStatusNormal(dept);
         }

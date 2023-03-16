@@ -104,12 +104,12 @@
     </select>
 
     <insert id="insertRole" parameterType="com.ruoyi.common.core.entity.SysRoleEntity" useGeneratedKeys="true"
-            keyProperty="roleId">
+            keyProperty="id">
         insert into "system".sys_role(
         <if test="id != null and id != ''">id,</if>
         <if test="name != null and name != ''">name,</if>
         <if test="key != null and key != ''">key,</if>
-        <if test="sort != null and sort != ''">sort,</if>
+        <if test="sort != null">sort,</if>
         <if test="dataScope != null and dataScope != ''">data_scope,</if>
         <if test="menuCheckStrictly != null">menu_check_strictly,</if>
         <if test="deptCheckStrictly != null">dept_check_strictly,</if>
@@ -121,7 +121,7 @@
         <if test="id != null and id != ''">#{id}::uuid,</if>
         <if test="name != null and name != ''">#{name},</if>
         <if test="key != null and key != ''">#{key},</if>
-        <if test="sort != null and sort != ''">#{sort},</if>
+        <if test="sort != null">#{sort},</if>
         <if test="dataScope != null and dataScope != ''">#{dataScope},</if>
         <if test="menuCheckStrictly != null">#{menuCheckStrictly},</if>
         <if test="deptCheckStrictly != null">#{deptCheckStrictly},</if>

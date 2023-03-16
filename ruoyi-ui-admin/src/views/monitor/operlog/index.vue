@@ -220,7 +220,9 @@ const data = reactive({
     title: undefined,
     operName: undefined,
     businessType: undefined,
-    status: undefined
+    status: undefined,
+    orderByColumn: 'operTime',
+    isAsc: 'descending'
   }
 });
 

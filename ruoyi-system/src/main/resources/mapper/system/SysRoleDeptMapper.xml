@@ -28,7 +28,7 @@
         </foreach>
     </delete>
 
-    <insert id="batchRoleDept">
+    <insert id="batchRoleDept" keyProperty="id">
         insert into "system".sys_role_dept(role_id, dept_id) values
         <foreach item="item" index="index" collection="list" separator=",">
             (#{item.roleId}::uuid,#{item.deptId}::uuid)

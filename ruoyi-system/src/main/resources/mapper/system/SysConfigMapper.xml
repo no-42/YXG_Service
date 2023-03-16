@@ -75,7 +75,7 @@
         where "key" = #{key} limit 1
     </select>
 
-    <insert id="insertConfig" parameterType="com.ruoyi.common.core.entity.SysConfigEntity">
+    <insert id="insertConfig" parameterType="com.ruoyi.common.core.entity.SysConfigEntity" keyProperty="id">
         insert into "system".sys_config (
         <if test="name != null and name != '' ">"name",</if>
         <if test="key != null and key != '' ">"key",</if>

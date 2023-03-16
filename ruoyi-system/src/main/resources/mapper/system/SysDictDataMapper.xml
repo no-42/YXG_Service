@@ -114,7 +114,7 @@
         where type = #{oldDictType}
     </update>
 
-    <insert id="insertDictData" parameterType="com.ruoyi.common.core.entity.SysDictDataEntity">
+    <insert id="insertDictData" parameterType="com.ruoyi.common.core.entity.SysDictDataEntity" keyProperty="id">
         insert into "system".sys_dict_data(
         <if test="sort != null">sort,</if>
         <if test="label != null and label != ''">label,</if>

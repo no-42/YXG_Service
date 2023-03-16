@@ -94,7 +94,7 @@
     </update>
 
     <insert id="insertPost" parameterType="com.ruoyi.system.domain.entity.SysPostEntity" useGeneratedKeys="true"
-            keyProperty="postId">
+            keyProperty="id">
         insert into "system".sys_post(
         <if test="id != null and id != ''">id,</if>
         <if test="code != null and code != ''">code,</if>

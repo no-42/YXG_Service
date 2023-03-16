@@ -52,7 +52,7 @@
         </where>
     </select>
 
-    <insert id="insertNotice" parameterType="com.ruoyi.system.domain.entity.SysNoticeEntity">
+    <insert id="insertNotice" parameterType="com.ruoyi.system.domain.entity.SysNoticeEntity" keyProperty="id">
         insert into "system".sys_notice (
         <if test="title != null and title != '' ">title,</if>
         <if test="type != null and type != '' ">type,</if>

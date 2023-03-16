@@ -87,7 +87,7 @@
         where id = #{id}::uuid
     </update>
 
-    <insert id="insertDictType" parameterType="com.ruoyi.common.core.entity.SysDictTypeEntity">
+    <insert id="insertDictType" parameterType="com.ruoyi.common.core.entity.SysDictTypeEntity" keyProperty="id">
         insert into "system".sys_dict_type(
         <if test="name != null and name != ''">name,</if>
         <if test="type != null and type != ''">type,</if>

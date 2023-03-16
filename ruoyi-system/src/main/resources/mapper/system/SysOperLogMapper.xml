@@ -43,7 +43,7 @@
         from "system".sys_oper_log
     </sql>
 
-    <insert id="insertOperlog" parameterType="com.ruoyi.system.domain.entity.SysOperLogEntity">
+    <insert id="insertOperlog" parameterType="com.ruoyi.system.domain.entity.SysOperLogEntity" keyProperty="id">
         insert into "system".sys_oper_log(title, business_type, method, request_method, operator_type, oper_name,
                                           dept_name,
                                           oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg,

@@ -41,7 +41,7 @@
     <select id="selectDeptList" parameterType="com.ruoyi.system.domain.query.SysDeptQuery"
             resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
-        where d.del_flag = '0'
+        where d.del_flag = false
         <if test="id != null and id != ''">
             AND id = #{id}
         </if>
@@ -80,34 +80,33 @@
         select count(1)
         from "system".sys_user
         where id = #{id}::uuid
-          and del_flag = '0'
+          and del_flag = false
     </select>
 
     <select id="hasChildByDeptId" parameterType="String" resultType="int">
         select count(1)
         from "system".sys_dept
-        where del_flag = '0'
+        where del_flag = false
           and parent_id = #{deptId} limit 1
     </select>
 
     <select id="selectChildrenDeptById" parameterType="String" resultMap="SysDeptResult">
         select *
         from "system".sys_dept
-        where find_in_set(#{deptId}, ancestors)
-        <!-- TODO 这里 -->
+        where #{deptId} = ANY(STRING_TO_ARRAY(ancestors, ','))
     </select>
 
     <select id="selectNormalChildrenDeptById" parameterType="String" resultType="int">
         select count(*)
         from "system".sys_dept
-        where status = 0
-          and del_flag = '0'
-          and find_in_set(#{deptId}, ancestors)
+        where enable = true
+          and del_flag = false
+          and #{deptId} = ANY(STRING_TO_ARRAY(ancestors, ','))
     </select>
 
     <select id="checkDeptNameUnique" resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
-        where "name"=#{name} and parent_id = #{parentId}::uuid and del_flag = '0' limit 1
+        where "name"=#{name} and parent_id = #{parentId}::uuid and del_flag = false limit 1
     </select>
 
     <insert id="insertDept" parameterType="com.ruoyi.common.core.entity.SysDeptEntity" useGeneratedKeys="true"
@@ -141,17 +140,17 @@
         update "system".sys_dept
         <set>
             <if test="parentId != null and parentId != ''">parent_id = #{parentId}::uuid,</if>
-            <if test="name != null and name != ''">dept_name = #{deptName},</if>
+            <if test="name != null and name != ''">"name" = #{name},</if>
             <if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
             <if test="orderNum != null">order_num = #{orderNum},</if>
             <if test="leader != null">leader = #{leader},</if>
             <if test="phone != null">phone = #{phone},</if>
             <if test="email != null">email = #{email},</if>
-            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="enable != null">enable = #{enable},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = now()
         </set>
-        where id = #{id}:uuid
+        where id = #{id}::uuid
     </update>
 
     <update id="updateDeptChildren" parameterType="java.util.List">

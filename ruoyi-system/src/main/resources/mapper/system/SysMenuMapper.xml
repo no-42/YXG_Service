@@ -203,7 +203,7 @@
         where id = #{id}::uuid
     </update>
 
-    <insert id="insertMenu" parameterType="com.ruoyi.system.domain.entity.SysMenuEntity">
+    <insert id="insertMenu" parameterType="com.ruoyi.system.domain.entity.SysMenuEntity" keyProperty="id">
         insert into "system".sys_menu(
         <if test="id != null and id != ''">id,</if>
         <if test="parentId != null and parentId != ''">parent_id,</if>

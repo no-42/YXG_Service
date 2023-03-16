@@ -53,7 +53,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户名称" align="center" prop="name" />
       <el-table-column label="用户手机号" align="center" prop="phone" />
-      <el-table-column label="用户头像url" align="center" prop="avatar" />
+      <!--<el-table-column label="用户头像url" align="center" prop="avatar" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button

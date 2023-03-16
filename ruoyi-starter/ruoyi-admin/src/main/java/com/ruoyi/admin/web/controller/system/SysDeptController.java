@@ -111,9 +111,9 @@ public class SysDeptController extends BaseController {
         deptService.checkDeptDataScope(dept.getId());
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
             return AjaxResult.error("修改部门'" + dept.getName() + "'失败，部门名称已存在");
-        } else if (dept.getParentId().equals(dept.getId())) {
+        } else if (dept.getParentId() != null && dept.getParentId().equals(dept.getId())) {
             return AjaxResult.error("修改部门'" + dept.getName() + "'失败，上级部门不能是自己");
-        } else if (dept.getEnable() && deptService.selectNormalChildrenDeptById(dept.getId()) > 0) {
+        } else if (!dept.getEnable() && deptService.selectNormalChildrenDeptById(dept.getId()) > 0) {
             return AjaxResult.error("该部门包含未停用的子部门！");
         }
         dept.setUpdateBy(getUsername());

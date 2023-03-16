@@ -16,7 +16,7 @@
         <result property="loginTime" column="login_time"/>
     </resultMap>
 
-    <insert id="insertLoginInfo" parameterType="com.ruoyi.system.domain.entity.SysLoginInfoEntity">
+    <insert id="insertLoginInfo" parameterType="com.ruoyi.system.domain.entity.SysLoginInfoEntity" keyProperty="id">
         insert into "system".sys_login_info (user_name, status, ipaddr, login_location, browser, os, msg, login_time)
         values (#{userName}, #{status}, #{ipaddr}, #{loginLocation}, #{browser}, #{os}, #{msg}, now())
     </insert>

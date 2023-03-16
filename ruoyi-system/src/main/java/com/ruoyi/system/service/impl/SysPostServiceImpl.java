@@ -49,8 +49,8 @@ public class SysPostServiceImpl implements ISysPostService {
     @Override
     public String checkPostNameUnique(SysPostEntity post) {
         SysPostEntity info = postMapper.checkPostNameUnique(post.getName());
-        if (StringUtils.isNotNull(info) && !info.getId().equals(post.getId())) {
-            return UserConstants.NOT_UNIQUE;
+        if (StringUtils.isNotNull(info)) {
+            return info.getId().equals(post.getId()) ? UserConstants.UNIQUE : UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
     }
@@ -89,7 +89,7 @@ public class SysPostServiceImpl implements ISysPostService {
     public int insertPost(SysPostEntity post) {
         return postMapper.insertPost(post);
     }
-    
+
     @Override
     public int updatePost(SysPostEntity post) {
         return postMapper.updatePost(post);
