@@ -2,7 +2,6 @@ package com.ruoyi.common.utils;
 
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.core.redis.RedisCache;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.common.core.entity.SysDictDataEntity;
 
@@ -36,7 +35,7 @@ public class DictUtils {
      * @param key 参数键
      * @return dictDatas 字典数据列表
      */
-    public static List<SysDictDataEntity> getDictCache(String key) {
+    public static List<SysDictDataEntity> getDict(String key) {
         return SpringUtils.getBean(RedisCache.class).getCacheObject(getCacheKey(key));
     }
 
@@ -72,7 +71,7 @@ public class DictUtils {
      */
     public static String getDictLabel(String dictType, String dictValue, String separator) {
         StringBuilder propertyString = new StringBuilder();
-        List<SysDictDataEntity> datas = getDictCache(dictType);
+        List<SysDictDataEntity> datas = getDict(dictType);
 
         if (StringUtils.isNotNull(datas)) {
             if (StringUtils.containsAny(separator, dictValue)) {
@@ -105,7 +104,7 @@ public class DictUtils {
      */
     public static String getDictValue(String dictType, String dictLabel, String separator) {
         StringBuilder propertyString = new StringBuilder();
-        List<SysDictDataEntity> datas = getDictCache(dictType);
+        List<SysDictDataEntity> datas = getDict(dictType);
 
         if (StringUtils.containsAny(separator, dictLabel) && StringUtils.isNotEmpty(datas)) {
             for (SysDictDataEntity dict : datas) {

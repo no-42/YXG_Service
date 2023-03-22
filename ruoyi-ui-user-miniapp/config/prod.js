@@ -3,7 +3,7 @@ module.exports = {
     NODE_ENV: '"production"'
   },
   defineConstants: {
-    BASE_URL:'`https://api.tbwlj.com`'
+    BASE_URL: '\'https://api.tbwlj.com\''
   },
   mini: {},
   h5: {

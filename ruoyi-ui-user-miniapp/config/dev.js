@@ -3,7 +3,7 @@ module.exports = {
     NODE_ENV: '"development"'
   },
   defineConstants: {
-    BASE_URL:'`http://localhost:8081`'
+    BASE_URL: '\'http://w4ppj1sh3.neiwangyun.net\''
   },
   mini: {},
   h5: {}

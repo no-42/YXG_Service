@@ -34,7 +34,11 @@
       </nut-menu>
     </view>
     <view class="content">
-      <nut-empty image="empty" description="暂时没有内容" v-if="goodsList.length===0"></nut-empty>
+      <nut-empty image="empty" description="暂时没有内容" v-if="goodsList.length===0">
+        <div style="margin-top: 10px" v-if="queryParams.categoryId || queryParams.originId || queryParams.specId">
+          <nut-button icon="refresh" type="primary" @click="resetQuery()">查看全部</nut-button>
+        </div>
+      </nut-empty>
       <scroll-view class="scroll-view" v-else :style="{height:scrollHeight}" :scroll-y="true" :enhanced="true"
                    @scrolltolower="nextPage">
         <view class="goods-item" v-for="goods in goodsList">
@@ -42,7 +46,7 @@
             {{ goods.categoryName }} {{ goods.specName }}
           </view>
           <view class="goods-des">
-            Q235B
+            {{ goods.supplierName }}
             <text class="goods-origin">{{ goods.originName }}</text>
             <!--            <text class="goods-supplier">{{ goods.supplierName }}</text>-->
           </view>
@@ -163,6 +167,14 @@ function refreshList() {
   getList()
 }
 
+function resetQuery() {
+  queryParams.categoryId = null;
+  queryParams.specId = null
+  queryParams.originId = null
+  searchStore.searchValue = null;
+  refreshList()
+}
+
 function getList() {
   Taro.showLoading({
     title: '加载中',
@@ -226,7 +238,7 @@ Taro.onWindowResize(initSize)
 
       .category-button-text {
         font-size: 10px;
-        margin-top: -10px;
+        margin-top: -5px;
       }
 
     }

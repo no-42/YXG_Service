@@ -24,8 +24,8 @@
                     open-type="getPhoneNumber"
                     @getphonenumber="getPhoneNumber"
         >微信登录
-        </nut-button> 
-        <nut-button v-else 
+        </nut-button>
+        <nut-button v-else
                     class="login-button"
                     type="info"
                     @click="goLoginByPhone">登录
@@ -34,17 +34,17 @@
     </view>
     <view class="system_menu">
       <nut-cell-group>
-        <nut-cell title="联系客服" is-link>
+        <nut-cell title="联系客服" open-type="contact" is-link>
           <template #link>
             <text/>
           </template>
         </nut-cell>
-        <nut-cell title="联系地址" is-link desc="江苏省南京市">
+        <nut-cell title="联系地址" is-link :desc="appInfo.address">
           <template #link>
             <text/>
           </template>
         </nut-cell>
-        <nut-cell title="联系电话" is-link desc="17714353449">
+        <nut-cell title="联系电话" is-link @click="jumpToSystemPhone()" :desc="appInfo.phone">
           <template #link>
             <text/>
           </template>
@@ -64,10 +64,25 @@
 <script setup name="User">
 import Taro from '@tarojs/taro'
 import {userStore} from "@/store/user"
-import {computed} from 'vue'
+import {computed, reactive} from 'vue'
 import defaultAvatar from "@/img/avatar.png"
 import exitIcon from '@/img/exit.png'
 import {updateMemberInfo} from '@/api/member'
+import {loadConfig} from '@/api/common'
+
+const appInfo = reactive({
+  address: null,
+  phone: null
+})
+
+loadConfig("miniapp_baseinfo").then(res=>{
+  if (res.data){
+    let baseInfo = JSON.parse(res.data);
+    appInfo.address= baseInfo.address
+    appInfo.phone = baseInfo.phone
+  }
+})
+
 
 const PLATFORM = process.env.TARO_ENV
 const userAvatar = computed(() => {
@@ -115,6 +130,15 @@ function goLoginByPhone() {
   Taro.navigateTo({
     url: '/pages/user/login'
   })
+}
+
+function jumpToSystemPhone() {
+  if (appInfo.phone){
+    Taro.makePhoneCall({
+      phoneNumber: appInfo.phone //仅为示例，并非真实的电话号码
+    })
+  }
+
 }
 
 </script>

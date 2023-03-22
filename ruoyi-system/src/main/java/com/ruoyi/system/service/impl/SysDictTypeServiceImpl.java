@@ -55,7 +55,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
 
     @Override
     public List<SysDictDataEntity> selectDictDataByType(String dictType) {
-        List<SysDictDataEntity> dictDatas = DictUtils.getDictCache(dictType);
+        List<SysDictDataEntity> dictDatas = DictUtils.getDict(dictType);
         if (StringUtils.isNotEmpty(dictDatas)) {
             return dictDatas;
         }
