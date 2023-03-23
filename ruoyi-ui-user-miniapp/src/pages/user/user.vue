@@ -34,10 +34,9 @@
     </view>
     <view class="system_menu">
       <nut-cell-group>
-        <nut-cell title="联系客服" open-type="contact" is-link>
-          <template #link>
-            <text/>
-          </template>
+
+        <nut-cell title="联系客服" >
+          <button class="contact-button" open-type="contact">联系客服</button>
         </nut-cell>
         <nut-cell title="联系地址" is-link :desc="appInfo.address">
           <template #link>
@@ -75,10 +74,10 @@ const appInfo = reactive({
   phone: null
 })
 
-loadConfig("miniapp_baseinfo").then(res=>{
-  if (res.data){
+loadConfig("miniapp_baseinfo").then(res => {
+  if (res.data) {
     let baseInfo = JSON.parse(res.data);
-    appInfo.address= baseInfo.address
+    appInfo.address = baseInfo.address
     appInfo.phone = baseInfo.phone
   }
 })
@@ -133,7 +132,7 @@ function goLoginByPhone() {
 }
 
 function jumpToSystemPhone() {
-  if (appInfo.phone){
+  if (appInfo.phone) {
     Taro.makePhoneCall({
       phoneNumber: appInfo.phone //仅为示例，并非真实的电话号码
     })
@@ -146,7 +145,7 @@ function jumpToSystemPhone() {
 <style lang="scss">
 .user-container {
   background-color: #f7f8fa;
-  min-height: 100%;
+  min-height: 100vh;
 
   .system_menu {
     padding-top: 10px;
@@ -154,6 +153,29 @@ function jumpToSystemPhone() {
     width: 95%;
     border-radius: 5px;
     margin: 0 auto 0;
+
+
+    //  联系客服按钮设置
+    .contact-button{
+      position: initial;
+      margin-left: initial;
+      margin-right: initial;
+      padding-left: initial;
+      padding-right: initial;
+      border-width: initial;
+      border-radius: initial;
+      font-size: inherit;
+      text-align: left;
+      color: inherit;
+      line-height: initial;
+
+      
+
+    }
+
+    .contact-button::after {
+      border: none;
+    }
   }
 
 

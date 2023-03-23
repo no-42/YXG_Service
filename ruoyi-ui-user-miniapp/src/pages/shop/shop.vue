@@ -159,19 +159,25 @@ function nextPage() {
   }
 }
 
+let refreshTimer = null;
 
 function refreshList() {
-  page.pageNum = 1;
-  page.hasNext = true;
-  goodsList.value = []
-  getList()
+  if (refreshTimer) {
+    clearTimeout(refreshTimer)
+  }
+  refreshTimer = setTimeout(() => {
+    page.pageNum = 1;
+    page.hasNext = true;
+    goodsList.value = []
+    getList()
+  }, 100)
 }
 
 function resetQuery() {
   queryParams.categoryId = null;
   queryParams.specId = null
   queryParams.originId = null
-  searchStore.searchValue = null;
+  searchStore.searchValue = '';
   refreshList()
 }
 
@@ -222,7 +228,7 @@ Taro.onWindowResize(initSize)
 @import "src/app";
 
 .shop {
-  height: 100%;
+  height: 100vh;
 
   .header {
 
