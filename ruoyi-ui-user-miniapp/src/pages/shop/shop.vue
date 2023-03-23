@@ -1,6 +1,6 @@
 <template>
-  <view class="shop">
-    <view class="header">
+  <view class="shop" :style="{height:pageHeight}">
+    <view class="header" id="header">
       <nut-searchbar v-model="searchStore.searchValue"
                      @click-input="goSearch"
                      @change="refreshList"
@@ -78,6 +78,7 @@ import {$} from '@tarojs/extend'
 import {getWindowHeight} from '@/utils/app'
 import {categoryStore} from "@/store/category"
 
+let pageHeight = process.env.TARO_ENV === 'h5'?' calc(100% - 10px)':'100vh'
 const scrollHeight = ref("500px")
 const categorySelectOpen = ref(false);
 const categoryList = ref([{
@@ -211,15 +212,18 @@ function goLogin() {
 async function initSize() {
   let total = getWindowHeight()
   console.log("t", total)
-  let header = await $(".header").height()
+  let header = await $("#header").height()
   console.log("h", header)
-  scrollHeight.value = (total - header - 10) + "px";
+  scrollHeight.value = (total - header - 15) + "px";
 }
 
 useDidShow(() => {
   init()
-  initSize()
   refreshList()
+  setTimeout(()=>{
+    initSize()
+  },50)
+  
 })
 Taro.onWindowResize(initSize)
 
@@ -228,7 +232,7 @@ Taro.onWindowResize(initSize)
 @import "src/app";
 
 .shop {
-  height: 100vh;
+
 
   .header {
 
