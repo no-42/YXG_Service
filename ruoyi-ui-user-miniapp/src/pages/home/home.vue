@@ -135,6 +135,13 @@ useDidShow(() => {
         width: 100%;
         height: 35px;
         background-color: #f7f7f7;
+        
+        @media (max-width: 300px) {
+          font-size: 11px;
+          padding: 1px 2px;
+          border-radius: 3px;
+          height: 24px;
+        }
       }
     }
   }

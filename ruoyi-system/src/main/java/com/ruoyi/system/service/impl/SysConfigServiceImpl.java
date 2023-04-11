@@ -53,15 +53,15 @@ public class SysConfigServiceImpl implements ISysConfigService {
      */
     @Override
     public String selectConfigByKey(String configKey) {
-        String configValue = Convert.toStr(redisCache.getCacheObject(getCacheKey(configKey)));
-        if (StringUtils.isNotEmpty(configValue)) {
-            return configValue;
-        }
+//        String configValue = Convert.toStr(redisCache.getCacheObject(getCacheKey(configKey)));
+//        if (StringUtils.isNotEmpty(configValue)) {
+//            return configValue;
+//        }
         SysConfigEntity config = new SysConfigEntity();
         config.setKey(configKey);
         SysConfigEntity retConfig = configMapper.selectConfig(config);
         if (StringUtils.isNotNull(retConfig)) {
-            redisCache.setCacheObject(getCacheKey(configKey), retConfig.getValue());
+//            redisCache.setCacheObject(getCacheKey(configKey), retConfig.getValue());
             return retConfig.getValue();
         }
         return StringUtils.EMPTY;

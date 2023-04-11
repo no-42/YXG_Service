@@ -37,6 +37,7 @@ public class CommonApiController extends ApiController {
     public R<List<SysDictDataEntity>> getDict(@PathVariable("type") String dictType) {
         SysDictDataQuery query = new SysDictDataQuery();
         query.setType(dictType);
+        query.setEnable(true);
         if (!dictType.startsWith("miniapp")){
             return R.ok();
         }

@@ -34,7 +34,7 @@
       </nut-menu>
     </view>
     <view class="content">
-      <nut-empty image="empty" description="暂时没有内容" v-if="goodsList.length===0">
+      <nut-empty image="empty" description="暂时没有内容" v-if="goodsList.length===0 && !loading">
         <div style="margin-top: 10px" v-if="queryParams.categoryId || queryParams.originId || queryParams.specId">
           <nut-button icon="refresh" type="primary" @click="resetQuery()">查看全部</nut-button>
         </div>
@@ -81,6 +81,7 @@ import {categoryStore} from "@/store/category"
 let pageHeight = process.env.TARO_ENV === 'h5'?' calc(100% - 10px)':'100vh'
 const scrollHeight = ref("500px")
 const categorySelectOpen = ref(false);
+const loading = ref(true)
 const categoryList = ref([{
   text: "全部",
   value: null
@@ -183,6 +184,7 @@ function resetQuery() {
 }
 
 function getList() {
+  loading.value = true
   Taro.showLoading({
     title: '加载中',
   })
@@ -194,6 +196,7 @@ function getList() {
     goodsList.value.push(...res.data)
   }).finally(() => {
     Taro.hideLoading()
+    loading.value = false
   })
 }
 
@@ -286,7 +289,11 @@ Taro.onWindowResize(initSize)
       margin: 10px;
       background-color: white;
       position: relative;
-
+      font-size: 15px;
+      
+      @media (max-width: 300px) {
+        font-size: 13px;
+      }
 
       .goods-title {
         font-weight: 700;
@@ -295,6 +302,10 @@ Taro.onWindowResize(initSize)
       .goods-des {
         margin-top: 10px;
         font-size: 14px;
+
+        @media (max-width: 300px) {
+          font-size: 11px;
+        }
       }
 
       .goods-origin {
@@ -312,9 +323,7 @@ Taro.onWindowResize(initSize)
         text-align: center;
 
         .price {
-
           color: #0785ff;
-          font-size: 20px;
         }
       }
     }
