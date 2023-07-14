@@ -34,10 +34,6 @@ public class WechatUtils {
             return;
         }
         Map<String, Object> params = new HashMap<>();
-//        params.put("appId", ConfigUtils.getConfigByKey(ConfigConstants.WECHAT_APP_ID));
-//        params.put("secret", ConfigUtils.getConfigByKey(ConfigConstants.WECHAT_APP_SECRET));
-        params.put("appId","wxb5b5e8bdf47062b1");
-        params.put("secret", "214bde2c89e5bf5a268a2b65e855e39b");
 
         params.put("grant_type", "client_credential");
         String resultS = HttpUtil.get("https://api.weixin.qq.com/cgi-bin/token", params);
@@ -52,10 +48,6 @@ public class WechatUtils {
      */
     public static String jsCode2session(String code) {
         Map<String, Object> params = new HashMap<>();
-//        params.put("appId", ConfigUtils.getConfigByKey(ConfigConstants.WECHAT_APP_ID));
-//        params.put("secret", ConfigUtils.getConfigByKey(ConfigConstants.WECHAT_APP_SECRET));
-        params.put("appId","wxb5b5e8bdf47062b1");
-        params.put("secret", "214bde2c89e5bf5a268a2b65e855e39b");
         params.put("js_code", code);
         params.put("grant_type", "authorization_code");
         return HttpUtil.get("https://api.weixin.qq.com/sns/jscode2session", params);
