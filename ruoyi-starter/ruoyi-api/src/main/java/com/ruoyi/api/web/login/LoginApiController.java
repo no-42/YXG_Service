@@ -1,12 +1,14 @@
 package com.ruoyi.api.web.login;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.ruoyi.api.domain.resp.login.WebLoginWithName;
 import com.ruoyi.api.domain.resp.login.WechatSessionResp;
 import com.ruoyi.api.service.login.MemberLoginService;
 import com.ruoyi.api.web.ApiController;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -49,6 +51,11 @@ public class LoginApiController extends ApiController {
     @PostMapping("/alipay")
     public R<String> loginWithAlipay() {
         return R.fail("不支持的方法");
+    }
+
+    @PostMapping("/WithName")
+    public R<WebLoginWithName> loginWithName(@PathVariable("number")String number,@PathVariable("password") String passwprd){
+        return R.ok(memberLoginService.loginWithName(number,passwprd));
     }
 
 }

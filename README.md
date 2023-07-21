@@ -1,3 +1,5 @@
+# 加代码请加注释,加注释请加代码
+
 #### 要求
 
 * java: 11^
@@ -18,4 +20,10 @@
 * [business-member](./business-member): 会员业务模块
 * [business-market](./business-market): 主商城模块
 
-#### 其他
+#### [ruoyi-starter]层下的ruoyi-api层项目结构分析
+```angular2html
+1.config层,主要是配置一些工具,例如返回的数据修改封装,安全设置
+2.domain层,主要是类似pojo层的功能,设置数据的实体类
+3.service层,主要是写的一些服务
+4.web层,都是一些controller处理器
+```

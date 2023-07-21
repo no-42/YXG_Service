@@ -2,6 +2,7 @@ package com.ruoyi.api.service.login;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ruoyi.api.domain.resp.login.MemberInfoResp;
+import com.ruoyi.api.domain.resp.login.WebLoginWithName;
 import com.ruoyi.api.domain.resp.login.WechatSessionResp;
 import com.ruoyi.api.service.TokenService;
 import com.ruoyi.common.core.domain.LoginUser;
@@ -48,6 +49,9 @@ public class MemberLoginService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    /**
+     * 一般说来,HttpServletRequest是用于表单提交的数据进行处理的工具类,此处不知意义何为
+     */
     private HttpServletRequest request;
 
     private WechatSessionResp login(String name, String phone, String password, String openId) {
@@ -92,6 +96,18 @@ public class MemberLoginService {
      * @param password 密码
      */
     public WechatSessionResp loginWithMobile(String mobile, String password) {
+        if (!SpringUtils.isDev()) {
+            throw new RuntimeException("仅测试环境支持");
+        }
+        MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(mobile);
+        Assert.notNull(memberInfo, "当前会员不存在");
+        if (!SecurityUtils.matchesPassword(password, memberInfo.getPassword())) {
+            throw new RuntimeException("密码错误");
+        }
+        return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
+    }
+
+    public WebLoginWithName loginWithName(String mobile, String password) {
         if (!SpringUtils.isDev()) {
             throw new RuntimeException("仅测试环境支持");
         }
