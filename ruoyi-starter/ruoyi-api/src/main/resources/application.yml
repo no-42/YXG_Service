@@ -110,6 +110,7 @@ mybatis:
 mybatis-plus:
   configuration:
     mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # PageHelper分页插件
 pagehelper:
   helperDialect: postgresql

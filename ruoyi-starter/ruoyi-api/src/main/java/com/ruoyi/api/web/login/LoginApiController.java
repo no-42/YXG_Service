@@ -1,8 +1,10 @@
 package com.ruoyi.api.web.login;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ruoyi.api.domain.resp.login.WebLoginWithName;
 import com.ruoyi.api.domain.resp.login.WechatSessionResp;
+import com.ruoyi.api.service.login.Impl.LoginService;
 import com.ruoyi.api.service.login.MemberLoginService;
 import com.ruoyi.api.web.ApiController;
 import com.ruoyi.common.annotation.Anonymous;
@@ -20,6 +22,9 @@ public class LoginApiController extends ApiController {
 
     @Autowired
     private MemberLoginService memberLoginService;
+
+    @Autowired
+    private LoginService loginService;
 
     @PostMapping
     public R<String> defaultLogin() {
@@ -55,7 +60,12 @@ public class LoginApiController extends ApiController {
 
     @PostMapping("/WithName")
     public R<WebLoginWithName> loginWithName(@PathVariable("number")String number,@PathVariable("password") String passwprd){
-        return R.ok(memberLoginService.loginWithName(number,passwprd));
+        LambdaQueryWrapper<WebLoginWithName> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(WebLoginWithName::getPasswordId,passwprd);
+        lambdaQueryWrapper.eq(WebLoginWithName::getNumber,number);
+        loginService.getOne(lambdaQueryWrapper);
+        return R.ok();
     }
+
 
 }

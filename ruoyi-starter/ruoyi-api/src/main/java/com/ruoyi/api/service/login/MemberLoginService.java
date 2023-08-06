@@ -107,17 +107,6 @@ public class MemberLoginService {
         return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
     }
 
-    public WebLoginWithName loginWithName(String mobile, String password) {
-        if (!SpringUtils.isDev()) {
-            throw new RuntimeException("仅测试环境支持");
-        }
-        MemberInfoEntity memberInfo = memberInfoService.selectMemberInfoByPhone(mobile);
-        Assert.notNull(memberInfo, "当前会员不存在");
-        if (!SecurityUtils.matchesPassword(password, memberInfo.getPassword())) {
-            throw new RuntimeException("密码错误");
-        }
-        return login(memberInfo.getName(), memberInfo.getPhone(), memberInfo.getPassword(), null);
-    }
 
     public WechatSessionResp getWeChatSession(String code) {
         if (SecurityUtils.getLoginUser() != null) {

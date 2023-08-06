@@ -53,6 +53,12 @@
             <artifactId>ruoyi-system</artifactId>
         </dependency>
 
+        <!--添加mybatis-plus的依赖-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.1</version>
+        </dependency>
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
